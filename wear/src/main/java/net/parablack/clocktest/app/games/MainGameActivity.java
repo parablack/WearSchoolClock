@@ -8,4 +8,8 @@ public abstract class MainGameActivity extends WearableActivity{
 
     public abstract String getName();
 
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

@@ -19,6 +19,14 @@ import java.util.Locale;
 
 public class WatchFaceDrawer {
 
+    private static final int LINE_OFFSET_BEGIN = 80;
+    private static final int LINE_OFFSET_END = 120;
+
+    private static final int LINE_SECOND_OFFSET_BEGIN = 120;
+    private static final int LINE_SECOND_OFFSET_END = 130;
+
+    private static final long SECOND_LINE_WIDTH = 320 / 60;
+
     private static final String DOUBLE_COLON = ":";
 
     private boolean drawAsText = false;
@@ -26,6 +34,8 @@ public class WatchFaceDrawer {
     Paint hourPaint = new Paint(), minutePaint = new Paint(), secondPaint = new Paint();
 
     Paint datePaint = new Paint();
+
+    Paint greenPaint = new Paint(), redPaint = new Paint();
 
     Paint doubleColonPaintHours = new Paint();
     float doubleColonWidthHours;
@@ -57,6 +67,8 @@ public class WatchFaceDrawer {
         datePaint.setColor(Color.WHITE);
         datePaint.setTextSize(35);
 
+        greenPaint.setColor(Color.GREEN);
+        redPaint.setColor(Color.RED);
 
         scheduleTextPaint.setColor(Color.GREEN);
         scheduleTextPaint.setTextSize(25);
@@ -133,33 +145,54 @@ public class WatchFaceDrawer {
                 if (toEnd < 0) System.out.println("Woa, toEnd < 0, this should never happen!");
 
                 toEnd /= 1000;
-                long s = toEnd % 60;
-                toEnd -= s;
+                int sec = (int) (toEnd % 60);
+                toEnd -= sec;
                 toEnd /= 60;
-                long min = toEnd % 60;
+                int min = (int) (toEnd % 60);
                 toEnd -= min;
-                long h = toEnd / 60;
+                int h = (int) (toEnd / 60);
 
                 if (drawAsText) {
-                    String text = String.format("%01d:%02d:%02d", h, min, s);
+                    String text = String.format("%01d:%02d:%02d", h, min, sec);
                     canvas.drawText(text, width - (scheduleTimePaint.measureText(text) + 10), centerX + 120, scheduleTimePaint);
                 }
                 else{
                     // Draw as matches
                     if(engine.getMainSchedule().getCurrent() instanceof  JSONEvent){
-                        Log.i("SchoolWear", "onDraw In drawAsSymbol");
+                  //      Log.i("SchoolWear", "onDraw In drawAsSymbol");
                         JSONEvent jse = (JSONEvent) engine.getMainSchedule().getCurrent();
                         long begin = jse.getTimeFromBeginning();
-                        long minutesFromBegin = (begin / 1000) / 60;
-                        long minTotal = minutesFromBegin + min;
-                        System.out.println("minTotal = " + minTotal);
+                        int minutesFromBegin = (int) ((begin / 1000) / 60);
+                        int minTotal =  (minutesFromBegin + min) + 1;
+                 //       System.out.println("minTotal = " + minTotal);
                         if(minTotal < 100){  // Too big
-                            System.out.println("minTotal #2 = " + minTotal);
+                //            System.out.println("minTotal #2 = " + minTotal);
                             long lineWidth = width / (minTotal);
-                            System.out.println("lineWidth = " + lineWidth);
+                //            System.out.println("lineWidth = " + lineWidth);
+                            System.out.println("tB = " + minutesFromBegin + " tE = " + min + " tM = " + minTotal);
 
-                            for(int j = 0; j < minTotal; j++) {
-                                canvas.drawLine(j * lineWidth, centerX + 120, j * lineWidth, centerX + 160, secondPaint);
+                            for(int j = 1; j <= minutesFromBegin; j++) {
+                                long x = ((j - 1) * lineWidth) + lineWidth / 2;
+                                canvas.drawLine(x, centerX + LINE_OFFSET_BEGIN, x, centerX + LINE_OFFSET_END, greenPaint);
+                            }
+                            long xy = ((minutesFromBegin) * lineWidth) + lineWidth / 2; // (minutesFromBegin + 1) * lineWidth
+                            canvas.drawLine(xy, centerX + LINE_OFFSET_BEGIN, xy, centerX + LINE_OFFSET_END, secondPaint); // well secondPaint is yellow
+                            for(int j = minTotal - min; j <= minTotal; j++) {
+                              long x =   ((j -1) * lineWidth) + lineWidth / 2;
+                                canvas.drawLine(x, centerX + LINE_OFFSET_BEGIN, x, centerX + LINE_OFFSET_END, redPaint);
+                            }
+
+                            // Draw Seconds
+                            {
+                                for(int j = 1; j < (60 -sec); j++) {
+                                    canvas.drawLine(j * SECOND_LINE_WIDTH, centerX + LINE_SECOND_OFFSET_BEGIN, j * SECOND_LINE_WIDTH, centerX + LINE_SECOND_OFFSET_END, greenPaint);
+                                }
+                                long temp_1 = (60 - sec) * SECOND_LINE_WIDTH;
+                                canvas.drawLine(temp_1, centerX + LINE_SECOND_OFFSET_BEGIN, temp_1, centerX + LINE_SECOND_OFFSET_END, secondPaint); // well secondPaint is yellow
+                                for(int j = (60 - sec); j <= 60; j++) {
+                                    canvas.drawLine(j * SECOND_LINE_WIDTH, centerX + LINE_SECOND_OFFSET_BEGIN, j * SECOND_LINE_WIDTH, centerX + LINE_SECOND_OFFSET_END, redPaint);
+                                }
+
                             }
 
                         } else drawAsText = true;
@@ -185,4 +218,7 @@ public class WatchFaceDrawer {
     }
 
 
+    public void setDrawAsText(boolean drawAsText) {
+        this.drawAsText = drawAsText;
+    }
 }
