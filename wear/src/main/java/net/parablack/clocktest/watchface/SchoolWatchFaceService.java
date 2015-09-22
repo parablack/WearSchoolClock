@@ -100,6 +100,7 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
                             BACKGROUND_VISIBILITY_INTERRUPTIVE)
                     .setShowSystemUiTime(false)
                     .setStatusBarGravity(4)
+                    .setAcceptsTapEvents(true)
                     .build());
 
 
@@ -146,7 +147,7 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
 //            if (inAmbientMode) {
 //
 //            }
-
+            alreadyTapped = 0;
             invalidate();
             updateTimer();
 
@@ -207,6 +208,24 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
             if (shouldTimerBeRunning()) {
                 mUpdateTimeHandler.sendEmptyMessage(MSG_UPDATE_TIME);
             }
+        }
+
+        int alreadyTapped = 0;
+        @Override
+        public void onTapCommand(int tapType, int x, int y, long eventTime) {
+            super.onTapCommand(tapType, x, y, eventTime);
+
+            if(x < 100 && y < 100 && alreadyTapped < 3){
+                alreadyTapped++;
+            } else
+            if(alreadyTapped == 3 && x > 200 && y > 200){
+                System.out.println("Activating other view!");
+                drawer.setDrawAsText(!drawer.isDrawAsText());
+
+                alreadyTapped = 0;
+                invalidate();
+            }
+
         }
 
         public Calendar getCalendar() {

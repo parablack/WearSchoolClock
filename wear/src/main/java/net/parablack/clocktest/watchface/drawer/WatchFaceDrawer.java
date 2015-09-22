@@ -221,4 +221,8 @@ public class WatchFaceDrawer {
     public void setDrawAsText(boolean drawAsText) {
         this.drawAsText = drawAsText;
     }
+
+    public boolean isDrawAsText() {
+        return drawAsText;
+    }
 }
