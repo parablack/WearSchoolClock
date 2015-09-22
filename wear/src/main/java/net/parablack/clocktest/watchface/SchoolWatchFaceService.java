@@ -1,0 +1,235 @@
+package net.parablack.clocktest.watchface;
+
+import android.graphics.Canvas;
+import android.graphics.Rect;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.wearable.watchface.CanvasWatchFaceService;
+import android.view.SurfaceHolder;
+
+import net.parablack.clocktest.json.InvalidDataException;
+import net.parablack.clocktest.json.JSONReader;
+import net.parablack.clocktest.json.JSONSchedule;
+import net.parablack.clocktest.watchface.drawer.WatchFaceDrawer;
+
+import java.util.Calendar;
+import java.util.TimeZone;
+
+import static android.support.wearable.watchface.WatchFaceStyle.BACKGROUND_VISIBILITY_INTERRUPTIVE;
+import static android.support.wearable.watchface.WatchFaceStyle.Builder;
+import static android.support.wearable.watchface.WatchFaceStyle.PEEK_MODE_SHORT;
+
+
+public class SchoolWatchFaceService extends CanvasWatchFaceService {
+
+    private Engine watchEngine;
+
+    @Override
+    public Engine onCreateEngine() {
+        /* provide your watch face implementation */
+        watchEngine = new Engine();
+        return watchEngine;
+    }
+
+    public Engine getWatchEngine() {
+        return watchEngine;
+    }
+
+    /* implement service callback methods */
+    public class Engine extends CanvasWatchFaceService.Engine {
+
+        static final int MSG_UPDATE_TIME = 0;
+        private static final int INTERACTIVE_UPDATE_RATE_MS = 1000;
+
+        private JSONReader mainReader;
+        private JSONSchedule mainSchedule;
+        private boolean scheduleEnabled = true;
+
+//        private WearEvent currentEvent;
+//        private WearEvent nextEvent;
+
+        private WatchFaceDrawer drawer;
+
+        Calendar calendar;
+
+
+        boolean burnInProtection, lowBitAmbient;
+
+        final Handler mUpdateTimeHandler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                switch (msg.what) {
+                    case MSG_UPDATE_TIME:
+                        invalidate();
+                        if (shouldTimerBeRunning()) {
+                            long timeMs = System.currentTimeMillis();
+                            long delayMs = INTERACTIVE_UPDATE_RATE_MS
+                                    - (timeMs % INTERACTIVE_UPDATE_RATE_MS);
+                            mUpdateTimeHandler
+                                    .sendEmptyMessageDelayed(MSG_UPDATE_TIME, delayMs);
+                        }
+                        break;
+                }
+                return true;
+            }
+        }
+        );
+
+
+        @Override
+        public void onCreate(SurfaceHolder holder) {
+            super.onCreate(holder);
+            /* initialize your watch face */
+
+            drawer = new WatchFaceDrawer(SchoolWatchFaceService.this);
+
+            try {
+                mainReader = new JSONReader(getAssets());
+                mainSchedule = mainReader.getSchedule();
+            } catch (InvalidDataException e) {
+                scheduleEnabled = false;
+                e.printStackTrace();
+            }
+
+            calendar = Calendar.getInstance();
+
+            setWatchFaceStyle(new Builder(SchoolWatchFaceService.this)
+                    .setCardPeekMode(PEEK_MODE_SHORT)
+                    .setBackgroundVisibility(
+                            BACKGROUND_VISIBILITY_INTERRUPTIVE)
+                    .setShowSystemUiTime(false)
+                    .setStatusBarGravity(4)
+                    .build());
+
+
+        }
+
+//        public ScheduleProvider.SchoolHour currentScheduleHour(){
+//            Calendar c = WeeklySchedule.currentCalendar();
+//            String wName = new SimpleDateFormat("EEEE").format(c.getTime());
+//            wName = wName.toUpperCase();
+//            WeeklySchedule ws = WeeklySchedule.valueOf(wName);
+//            return ws.getLast();
+//        }
+
+        @Override
+        public void onPropertiesChanged(Bundle properties) {
+
+            super.onPropertiesChanged(properties);
+            /* get device features (burn-in, low-bit ambient) */
+
+            burnInProtection = properties.getBoolean(PROPERTY_BURN_IN_PROTECTION,
+                    false);
+            lowBitAmbient = properties.getBoolean(PROPERTY_LOW_BIT_AMBIENT, false);
+            System.out.println("burnInProtection = " + burnInProtection + "; lowBitAmbient = " + lowBitAmbient);
+        }
+
+
+        @Override
+        public void onTimeTick() {
+            super.onTimeTick();
+            /* the time changed */
+
+            invalidate();
+        }
+
+        @Override
+        public void onAmbientModeChanged(boolean inAmbientMode) {
+            super.onAmbientModeChanged(inAmbientMode);
+            /* the wearable switched between modes */
+
+            if (lowBitAmbient) {
+                boolean antiAlias = !inAmbientMode;
+                drawer.setAntiAlias(antiAlias);
+            }
+//            if (inAmbientMode) {
+//
+//            }
+
+            invalidate();
+            updateTimer();
+
+        }
+
+        //   boolean alreadyVibrated = false;
+
+        @Override
+        public void onDraw(Canvas canvas, Rect bounds) {
+            /* draw your watch face */
+            drawer.onDraw(canvas, bounds);
+
+
+        }
+
+        @Override
+        public void onVisibilityChanged(boolean visible) {
+            super.onVisibilityChanged(visible);
+            /* the watch face became visible or invisible */
+
+
+            if (visible) {
+
+                // Update time zone in case it changed while we weren't visible.
+                calendar.setTimeZone(TimeZone.getDefault());
+            }
+//            else {
+//                //           unregisterReceiver();
+//            }
+
+            // Whether the timer should be running depends on whether we're visible and
+            // whether we're in ambient mode, so we may need to start or stop the timer
+            updateTimer();
+
+        }
+
+//        private void refreshSchedule() {
+//            if (scheduleEnabled) {
+//                mainSchedule.reload();
+//
+//                currentEvent = mainSchedule.getCurrent();
+//                nextEvent = mainSchedule.getNext();
+//                alreadyVibrated = false;
+//            }
+//        }
+
+
+        public JSONSchedule getMainSchedule() {
+            return mainSchedule;
+        }
+
+        public boolean shouldTimerBeRunning() {
+            return isVisible() && !isInAmbientMode();
+        }
+
+        private void updateTimer() {
+            mUpdateTimeHandler.removeMessages(MSG_UPDATE_TIME);
+            if (shouldTimerBeRunning()) {
+                mUpdateTimeHandler.sendEmptyMessage(MSG_UPDATE_TIME);
+            }
+        }
+
+        public Calendar getCalendar() {
+            return calendar;
+        }
+
+        public boolean isScheduleEnabled() {
+            return scheduleEnabled;
+        }
+
+        // handler to update the time once a second in interactive mode
+
+
+        // receiver to update the time zone
+//        final BroadcastReceiver mTimeZoneReceiver = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                calendar.setTimeZone(TimeZone.getDefault());
+//                invalidate();
+//            }
+//        };
+
+    }
+
+
+}

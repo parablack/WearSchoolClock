@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ClockTest</string>
+    <string name="hello_world">Hello World!</string>
+    <string name="school_face_name">Schule</string>
+    <string name="button_play">Play</string>
+    <string name="play_button_desc">Dies ist ein toller Button der dir viel offenbaren wird wenn du auf ihn klickst!</string>
+</resources>

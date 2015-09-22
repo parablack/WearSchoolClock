@@ -1,0 +1,65 @@
+{
+  "subjects": [
+    {
+      "teacher": "Gul",
+      "name": "Mathe",
+      "id": "1"
+    },
+    {
+      "teacher": "Heu",
+      "name": "Deutsch",
+      "id": "2"
+    },
+    {
+      "teacher": "Her",
+      "name": "Englisch",
+      "id": "3"
+    },
+    {
+      "teacher": "Rep",
+      "name": "Physik",
+      "id": "4"
+    },
+    {
+      "teacher": "Wen",
+      "name": "Wirtschaft",
+      "id": "5"
+    },
+    {
+      "teacher": "Rec",
+      "name": "Geschichte",
+      "id": "6"
+    },
+    {
+      "teacher": "Häb",
+      "name": "Sport",
+      "id": "7"
+    },
+    {
+      "teacher": "Jel",
+      "name": "Informatik",
+      "id": "8"
+    },
+    {
+      "teacher": "SaK",
+      "name": "BK",
+      "id": "9"
+    },
+    {
+      "teacher": "Käm",
+      "name": "Reli",
+      "id": "10"
+    },
+    {
+      "teacher": "WeG",
+      "name": "NWT",
+      "id": "11"
+    },
+    {
+      "teacher": "Wel",
+      "name": "GK",
+      "id": "12"
+    }
+  ],
+  "checksum": "$subjectPreset_TkIhUZ28"
+}

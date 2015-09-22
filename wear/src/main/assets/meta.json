@@ -1,0 +1,23 @@
+{
+  "metas": [
+    {
+      "name": "3x kurze Vibration",
+      "id": "defaultMeta",
+      "vibration": {
+        "duration": 50,
+        "count": 3,
+        "time": 3
+      }
+    },
+    {
+      "name": "Keine Vibration",
+      "id": "noVibration",
+      "vibration": {
+        "duration": 0,
+        "count": 0,
+        "time": 0
+      }
+    }
+  ],
+  "checksum": "$metas_TkIhUZ28"
+}
