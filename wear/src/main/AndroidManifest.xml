@@ -27,7 +27,17 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".app.MenuActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.DeviceDefault.Light" >
+        </activity>
 
+        <activity
+            android:name=".app.games.repeat.RepeatGame"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.DeviceDefault.Light" >
+        </activity>
 
 
         <service
