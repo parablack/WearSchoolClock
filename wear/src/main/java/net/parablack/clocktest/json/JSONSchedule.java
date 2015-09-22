@@ -35,6 +35,9 @@ public class JSONSchedule implements WearSchedule {
     @Override
     public void reload() {
         Calendar c = currentCalendar();
+        tomorrowEvents.clear();
+        events.clear();
+
         try {
             // --------------------- TODAY ----------------
             {
@@ -211,7 +214,7 @@ public class JSONSchedule implements WearSchedule {
 
     private ArrayList<JSONEvent> getForDayNumber(int number) throws JSONException {
 
-        final ArrayList<JSONEvent> toR = new ArrayList();
+        final ArrayList<JSONEvent> toR = new ArrayList<>();
         // 1 SUNDAY 2 MONDAY --> 7 SATURDAY
         String dayId = "d" + number;
 
