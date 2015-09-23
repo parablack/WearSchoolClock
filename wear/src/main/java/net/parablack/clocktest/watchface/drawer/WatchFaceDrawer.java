@@ -98,6 +98,11 @@ public class WatchFaceDrawer {
         String minuteString = String.format("%02d", minute);
         String secondString = String.format("%02d", engine.getCalendar().get(Calendar.SECOND));
 
+        if(hourOfDay == 0 && minute == 1){
+            engine.getMainSchedule().reload();
+
+        }
+
         String dateString = new SimpleDateFormat("EEE, dd. MMM", Locale.GERMANY).format(engine.getCalendar().getTime());
         //      String dateString2 = new SimpleDateFormat("MMMM yyyy").format(calendar.getTime());
 

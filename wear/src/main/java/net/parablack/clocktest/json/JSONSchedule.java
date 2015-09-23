@@ -94,6 +94,7 @@ public class JSONSchedule implements WearSchedule {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        reloadEvents();
 
     }
 
