@@ -26,7 +26,7 @@
         "subject_preset": "1",
         "meta": "defaultMeta",
         "additional": {
-          "room": "PhÜ"
+          "room": "R8d"
         },
         "id": 4,
         "time_preset": "h3"
@@ -36,7 +36,7 @@
         "subject_preset": "1",
         "meta": "defaultMeta",
         "additional": {
-          "room": "PhÜ"
+          "room": "R8d"
         },
         "id": 4,
         "time_preset": "h4"
@@ -64,110 +64,80 @@
     "schedule": [
       {
         "shown": true,
-        "subject_preset": "1",
+        "subject_preset": "5",
         "meta": "defaultMeta",
         "additional": {
-          "room": "RFR"
+          "room": "MFR"
         },
         "id": 5,
         "time_preset": "h1"
       },
       {
         "shown": true,
-        "subject_preset": "1",
+        "subject_preset": "5",
         "meta": "defaultMeta",
         "additional": {
-          "room": "RFR"
+          "room": "MFR"
         },
         "id": 5,
         "time_preset": "h2"
       },
       {
         "shown": true,
-        "subject_preset": "1",
+        "subject_preset": "2",
         "meta": "defaultMeta",
         "additional": {
-          "room": "RFR"
+          "room": "EFR"
         },
         "id": 5,
         "time_preset": "h3"
       },
       {
         "shown": true,
-        "subject_preset": "1",
+        "subject_preset": "2",
         "meta": "defaultMeta",
         "additional": {
-          "room": "RFR"
+          "room": "EFR"
         },
         "id": 5,
         "time_preset": "h4"
       },
       {
         "shown": true,
-        "subject_preset": "1",
+        "subject_preset": "11",
         "meta": "defaultMeta",
         "additional": {
-          "room": "RFR"
-        },
-        "id": 5,
-        "time_preset": "h5"
-      },
-      {
-        "shown": true,
-        "subject_preset": "1",
-        "meta": "defaultMeta",
-        "additional": {
-          "room": "RFR"
-        },
-        "id": 5,
-        "time_preset": "h6"
-      },
-      {
-        "shown": true,
-        "subject_preset": "1",
-        "meta": "defaultMeta",
-        "additional": {
-          "room": "RFR"
-        },
-        "id": 5,
-        "time_preset": "h7"
-      },
-      {
-        "shown": true,
-        "subject_preset": "1",
-        "meta": "defaultMeta",
-        "additional": {
-          "room": "RFR"
+          "room": "NFR"
         },
         "id": 5,
         "time_preset": "h8"
       },
       {
         "shown": true,
-        "subject_preset": "1",
+        "subject_preset": "11",
         "meta": "defaultMeta",
         "additional": {
-          "room": "RFR"
+          "room": "NFR"
         },
         "id": 5,
         "time_preset": "h9"
       },
       {
         "shown": true,
-        "subject_preset": "1",
+        "subject_preset": "12",
         "meta": "defaultMeta",
         "additional": {
-          "room": "RFR"
+          "room": "EFR"
         },
         "id": 5,
         "time_preset": "h10"
       },
       {
         "shown": true,
-        "subject_preset": "1",
+        "subject_preset": "12",
         "meta": "defaultMeta",
         "additional": {
-          "room": "RFR"
+          "room": "EFR"
         },
         "id": 5,
         "time_preset": "h11"
@@ -179,14 +149,6 @@
         "id": "b1",
         "display_name": "Pause 1",
         "time_preset": "b1"
-      },
-      {
-        "shown": true,
-        "subject_preset": "NONE",
-        "meta": "noVibration",
-        "id": "b2",
-        "display_name": "Pause 2",
-        "time_preset": "b2"
       },
       {
         "shown": true,
@@ -208,14 +170,6 @@
         "shown": true,
         "subject_preset": "NONE",
         "meta": "noVibration",
-        "id": "sb2",
-        "display_name": "Kleine Pause 2",
-        "time_preset": "sb2"
-      },
-      {
-        "shown": true,
-        "subject_preset": "NONE",
-        "meta": "noVibration",
         "id": "sb3",
         "display_name": "Kleine Pause 3",
         "time_preset": "sb3"
@@ -227,14 +181,6 @@
         "id": "sb4",
         "display_name": "Kleine Pause 4",
         "time_preset": "sb4"
-      },
-      {
-        "shown": true,
-        "subject_preset": "NONE",
-        "meta": "defaultMeta",
-        "id": "t1",
-        "display_name": "Test 1",
-        "time_preset": "t1"
       }
     ],
     "id": 5
