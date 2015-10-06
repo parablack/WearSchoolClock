@@ -9,11 +9,11 @@ import net.parablack.clocktest.watchface.drawer.mode.wrapper.SuperTimeWrapper;
 
 public class SingeLineDrawer extends ModeFaceDrawer<SuperTimeWrapper> {
 
-    private static final int LINE_OFFSET_BEGIN = 80;
-    private static final int LINE_OFFSET_END = 120;
+    private static final int LINE_OFFSET_BEGIN = 75;
+    private static final int LINE_OFFSET_END = 115;
 
-    private static final int LINE_SECOND_OFFSET_BEGIN = 120;
-    private static final int LINE_SECOND_OFFSET_END = 130;
+    private static final int LINE_SECOND_OFFSET_BEGIN = 115;
+    private static final int LINE_SECOND_OFFSET_END = 125;
 
     private static final long SECOND_LINE_WIDTH = 320 / 60;
 

@@ -25,7 +25,7 @@ public class TextDrawer extends ModeFaceDrawer<String> {
     @Override
     protected void onDraw(Canvas c, String text) {
 
-        c.drawText(text, width - (scheduleTimePaint.measureText(text) + 10), centerX + 120, scheduleTimePaint);
+        c.drawText(text, centerX - (scheduleTimePaint.measureText(text) / 2), centerX + 115, scheduleTimePaint);
 
     }
 

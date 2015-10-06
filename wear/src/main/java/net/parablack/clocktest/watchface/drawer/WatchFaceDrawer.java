@@ -34,7 +34,7 @@ public class WatchFaceDrawer {
     private static final Paint datePaint = new Paint();
 
 
-    private static final Paint scheduleTextPaint = new Paint(), scheduleSubjectPaint = new Paint(),  scheduleNextPaint = new Paint();
+    private static final Paint scheduleSubjectPaint = new Paint(),  scheduleNextPaint = new Paint();
 
 
     private static final float doubleColonWidthHours;
@@ -50,22 +50,17 @@ public class WatchFaceDrawer {
         minutePaint.setColor(Color.WHITE);
         minutePaint.setTextSize(100);
 
-        secondPaint.setColor(Color.YELLOW);
+        secondPaint.setColor(Color.parseColor("#0A63F2")); // 09ED0D
         secondPaint.setTextSize(60);
 
         datePaint.setColor(Color.WHITE);
         datePaint.setTextSize(35);
 
+        scheduleSubjectPaint.setColor(Color.parseColor("#FF9100")); // #F2D70A
+        scheduleSubjectPaint.setTextSize(32);
 
-        scheduleTextPaint.setColor(Color.GREEN);
-        scheduleTextPaint.setTextSize(25);
-
-
-        scheduleSubjectPaint.setColor(Color.GREEN);
-        scheduleSubjectPaint.setTextSize(40);
-
-        scheduleNextPaint.setColor(Color.MAGENTA);
-        scheduleNextPaint.setTextSize(20);
+        scheduleNextPaint.setColor(Color.parseColor("#FF9100"));
+        scheduleNextPaint.setTextSize(22);
 
         doubleColonWidthHours = doubleColonPaintHours.measureText(DOUBLE_COLON);
     }
@@ -130,10 +125,12 @@ public class WatchFaceDrawer {
         if (engine.isScheduleEnabled()) {
             WearEvent currentEvent = engine.getMainSchedule().getCurrent();
 
-            canvas.drawText("Aktuelle Stunde:", 10, centerY + 35, scheduleTextPaint);
-            canvas.drawText(currentEvent.getName(), 10, centerY + 70, scheduleSubjectPaint);
+          //  canvas.drawText("Aktuelle Stunde:", 10, centerY + 35, scheduleTextPaint);
+            float halfCurrentWidth = scheduleSubjectPaint.measureText(currentEvent.getName()) / 2;
+            canvas.drawText(currentEvent.getName(), centerX - halfCurrentWidth, centerY + 60, scheduleSubjectPaint);
 
-            canvas.drawText("Danach: " + engine.getMainSchedule().getNext().getName(), 10, centerY + 150, scheduleNextPaint);
+            float halfW =  centerX - (scheduleNextPaint.measureText(engine.getMainSchedule().getNext().getName()) / 2);
+            canvas.drawText(engine.getMainSchedule().getNext().getName(), halfW, centerY + 150, scheduleNextPaint);
 
             if (currentEvent instanceof JSONEvent) {
                 JSONEvent e = (JSONEvent) currentEvent;
@@ -213,7 +210,6 @@ public class WatchFaceDrawer {
         secondPaint.setAntiAlias(antiAlias);
         scheduleNextPaint.setAntiAlias(antiAlias);
         scheduleSubjectPaint.setAntiAlias(antiAlias);
-        scheduleTextPaint.setAntiAlias(antiAlias);
     }
 
 
