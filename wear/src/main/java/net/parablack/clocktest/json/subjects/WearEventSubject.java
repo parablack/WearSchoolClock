@@ -5,8 +5,8 @@ package net.parablack.clocktest.json.subjects;
  */
 public interface WearEventSubject {
 
-    public String getId();
+    String getId();
 
-    public String getDisplayName();
+    String getDisplayName();
 
 }

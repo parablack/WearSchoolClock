@@ -48,7 +48,7 @@
             android:permission="android.permission.BIND_WALLPAPER" >
             <meta-data
                 android:name="com.google.android.wearable.watchface.preview"
-                android:resource="@drawable/ic_full_cancel" />
+                android:resource="@drawable/main_logo" />
             <meta-data
                 android:name="android.service.wallpaper"
                 android:resource="@xml/watch_face" />

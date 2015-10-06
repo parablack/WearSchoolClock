@@ -1,14 +1,12 @@
 package net.parablack.clocktest.json.subjects;
 
-import net.parablack.clocktest.json.subjects.WearEventSubject;
-
 /**
  * Created by Simon on 16.09.2015.
  */
 public class SimpleSubject implements WearEventSubject{
     private String text;
 
-    public SimpleSubject(String text) {
+    public SimpleSubject(@SuppressWarnings("SameParameterValue") String text) {
         this.text = text;
     }
 

@@ -29,10 +29,9 @@ public interface WearEvent {
         //    System.out.println("tti = " + tti);
             if (tti < -3666000) { // Ends on next day (more than one hour backwards)
                 long millisToday = 24 * 60 * 60 * 1000 - dayMillis;
-                long restTime = millisToday + timeEnd;
-        //        System.out.println("In if statement returned " + restTime );
+                //        System.out.println("In if statement returned " + restTime );
 
-                return restTime;
+                return millisToday + timeEnd;
             }
 
 

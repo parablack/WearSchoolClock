@@ -19,11 +19,6 @@ public class MainActivityWear extends WearableActivity {
    //     System.out.println(co + " " + co.getTimeTillEnd());
     }
 
-    @Override
-    public void onEnterAmbient(Bundle ambientDetails) {
-        super.onEnterAmbient(ambientDetails);
-    }
-
 
     public void onMasterButtonClick(View v){
         System.out.println("Clicked! Du Penne Tagliatelle");

@@ -1,7 +1,5 @@
 package net.parablack.clocktest.json.subjects;
 
-import net.parablack.clocktest.json.subjects.WearEventSubject;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 

@@ -33,7 +33,6 @@ public class RepeatView extends View {
         canvas.drawLine(centerW, 0, centerW, getHeight(), linePaint);
         linePaint.setStyle(Paint.Style.FILL);
         canvas.drawLine(0, centerH, getWidth(), centerH + 1, linePaint);
-
     }
 
 

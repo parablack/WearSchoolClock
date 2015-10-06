@@ -14,8 +14,6 @@ import org.json.JSONObject;
  * Created by Simon on 16.09.2015.
  */
 public class JSONEvent implements WearEvent, Comparable<JSONEvent>{
-    private JSONObject object;
-    private String id;
 
 
     private WearEventSubject subject;
@@ -31,8 +29,8 @@ public class JSONEvent implements WearEvent, Comparable<JSONEvent>{
     private EventAdditionalInformation addInfos;
 
     public JSONEvent(JSONObject object, JSONReader reader) throws JSONException {
-        this.object = object;
-        id = object.getString("id");
+        JSONObject object1 = object;
+        String id = object.getString("id");
 
         String subjectString = object.getString("subject_preset");
         if(subjectString.equals("NONE")){
@@ -58,9 +56,8 @@ public class JSONEvent implements WearEvent, Comparable<JSONEvent>{
     @Override
     public long getTimeTilEnd() {
         long dayMillis = TimeUtils.dayMillis();
-        long tti = time.getEnd() - dayMillis;
 
-        return tti;
+        return time.getEnd() - dayMillis;
     }
 
     public long getTimeFromBeginning(){

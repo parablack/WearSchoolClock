@@ -48,7 +48,6 @@ public class JSONSchedule implements WearSchedule {
 
 
                 JSONObject day = rootObject.getJSONObject(dayId);
-
                 JSONArray schedule = day.getJSONArray("schedule");
                 JSONReaderUtil.fetchArray(schedule, new JSONReaderUtil.ScheduleInitCallback() {
                     @Override
@@ -105,7 +104,6 @@ public class JSONSchedule implements WearSchedule {
         _current = _loadCurrent();
     }
 
-    private int finalWeekDay = 2;
     private WearEvent _loadCurrent(){
         long dayMillis = dayMillis();
 
@@ -158,7 +156,7 @@ public class JSONSchedule implements WearSchedule {
                 }
                 ArrayList<JSONEvent> ar2 = getForDayNumber(weekDay);
                 System.out.println("ar2 ("+weekDay+")= " + ar2);
-                finalWeekDay = weekDay;
+                int finalWeekDay = weekDay;
                 return ar2.get(0);
             } catch (JSONException e) {
                 e.printStackTrace();

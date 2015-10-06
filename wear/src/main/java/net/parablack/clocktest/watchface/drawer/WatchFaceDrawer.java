@@ -11,6 +11,11 @@ import android.util.Log;
 import net.parablack.clocktest.watchface.SchoolWatchFaceService;
 import net.parablack.clocktest.watchface.WearEvent;
 import net.parablack.clocktest.json.JSONEvent;
+import net.parablack.clocktest.watchface.drawer.mode.ModeFaceDrawer;
+import net.parablack.clocktest.watchface.drawer.mode.ScheduleDrawException;
+import net.parablack.clocktest.watchface.drawer.mode.SingeLineDrawer;
+import net.parablack.clocktest.watchface.drawer.mode.TextDrawer;
+import net.parablack.clocktest.watchface.drawer.mode.wrapper.SuperTimeWrapper;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -19,39 +24,23 @@ import java.util.Locale;
 
 public class WatchFaceDrawer {
 
-    private static final int LINE_OFFSET_BEGIN = 80;
-    private static final int LINE_OFFSET_END = 120;
 
-    private static final int LINE_SECOND_OFFSET_BEGIN = 120;
-    private static final int LINE_SECOND_OFFSET_END = 130;
-
-    private static final long SECOND_LINE_WIDTH = 320 / 60;
 
     private static final String DOUBLE_COLON = ":";
 
-    private boolean drawAsText = false;
 
-    Paint hourPaint = new Paint(), minutePaint = new Paint(), secondPaint = new Paint();
+    private static final Paint hourPaint = new Paint(), minutePaint = new Paint(), secondPaint = new Paint(), doubleColonPaintHours = new Paint();
 
-    Paint datePaint = new Paint();
-
-    Paint greenPaint = new Paint(), redPaint = new Paint();
-
-    Paint doubleColonPaintHours = new Paint();
-    float doubleColonWidthHours;
-
-    Paint scheduleTextPaint = new Paint(), scheduleSubjectPaint = new Paint(), scheduleTimePaint = new Paint(), scheduleNextPaint = new Paint();
-
-    private SchoolWatchFaceService.Engine engine;
-
-    private Vibrator vibrator;
-
-    public WatchFaceDrawer(SchoolWatchFaceService service) {
-        engine = service.getWatchEngine();
-
-        vibrator = (Vibrator) service.getSystemService(Context.VIBRATOR_SERVICE);
+    private static final Paint datePaint = new Paint();
 
 
+    private static final Paint scheduleTextPaint = new Paint(), scheduleSubjectPaint = new Paint(),  scheduleNextPaint = new Paint();
+
+
+    private static final float doubleColonWidthHours;
+
+
+    static{
         hourPaint.setColor(Color.WHITE);
         hourPaint.setTextSize(100);
 
@@ -67,14 +56,10 @@ public class WatchFaceDrawer {
         datePaint.setColor(Color.WHITE);
         datePaint.setTextSize(35);
 
-        greenPaint.setColor(Color.GREEN);
-        redPaint.setColor(Color.RED);
 
         scheduleTextPaint.setColor(Color.GREEN);
         scheduleTextPaint.setTextSize(25);
 
-        scheduleTimePaint.setColor(Color.RED);
-        scheduleTimePaint.setTextSize(60);
 
         scheduleSubjectPaint.setColor(Color.GREEN);
         scheduleSubjectPaint.setTextSize(40);
@@ -83,6 +68,27 @@ public class WatchFaceDrawer {
         scheduleNextPaint.setTextSize(20);
 
         doubleColonWidthHours = doubleColonPaintHours.measureText(DOUBLE_COLON);
+    }
+
+
+
+    private boolean drawAsText = false;
+
+    private SchoolWatchFaceService.Engine engine;
+
+    private final Vibrator vibrator;
+
+    private final ModeFaceDrawer<String> textDrawer = new TextDrawer(this);
+    private final ModeFaceDrawer<SuperTimeWrapper> singleLineDrawer = new SingeLineDrawer(this);
+
+
+    public WatchFaceDrawer(SchoolWatchFaceService service) {
+        engine = service.getWatchEngine();
+
+        vibrator = (Vibrator) service.getSystemService(Context.VIBRATOR_SERVICE);
+
+
+
 
     }
 
@@ -159,50 +165,39 @@ public class WatchFaceDrawer {
 
                 if (drawAsText) {
                     String text = String.format("%01d:%02d:%02d", h, min, sec);
-                    canvas.drawText(text, width - (scheduleTimePaint.measureText(text) + 10), centerX + 120, scheduleTimePaint);
+                    try {
+                        textDrawer.draw(canvas, bounds, text);
+                    } catch (ScheduleDrawException e) {
+                        e.printStackTrace();
+                        // This can never happen!
+                    }
+
                 }
                 else{
                     // Draw as matches
+
                     if(engine.getMainSchedule().getCurrent() instanceof  JSONEvent){
-                  //      Log.i("SchoolWear", "onDraw In drawAsSymbol");
                         JSONEvent jse = (JSONEvent) engine.getMainSchedule().getCurrent();
+
+                        SuperTimeWrapper.TimeWrapper ttE = new SuperTimeWrapper.TimeWrapper(h, min, sec);
                         long begin = jse.getTimeFromBeginning();
                         int minutesFromBegin = (int) ((begin / 1000) / 60);
-                        int minTotal =  (minutesFromBegin + min) + 1;
-                 //       System.out.println("minTotal = " + minTotal);
-                        if(minTotal < 100){  // Too big
-                //            System.out.println("minTotal #2 = " + minTotal);
-                            long lineWidth = width / (minTotal);
-                //            System.out.println("lineWidth = " + lineWidth);
-                            System.out.println("tB = " + minutesFromBegin + " tE = " + min + " tM = " + minTotal);
 
-                            for(int j = 1; j <= minutesFromBegin; j++) {
-                                long x = ((j - 1) * lineWidth) + lineWidth / 2;
-                                canvas.drawLine(x, centerX + LINE_OFFSET_BEGIN, x, centerX + LINE_OFFSET_END, greenPaint);
-                            }
-                            long xy = ((minutesFromBegin) * lineWidth) + lineWidth / 2; // (minutesFromBegin + 1) * lineWidth
-                            canvas.drawLine(xy, centerX + LINE_OFFSET_BEGIN, xy, centerX + LINE_OFFSET_END, secondPaint); // well secondPaint is yellow
-                            for(int j = minTotal - min; j <= minTotal; j++) {
-                              long x =   ((j -1) * lineWidth) + lineWidth / 2;
-                                canvas.drawLine(x, centerX + LINE_OFFSET_BEGIN, x, centerX + LINE_OFFSET_END, redPaint);
-                            }
+                        SuperTimeWrapper.TimeWrapper fromBegin = new SuperTimeWrapper.TimeWrapper(-1, minutesFromBegin, -1);  // Hours and seconds are never needed
 
-                            // Draw Seconds
-                            {
-                                for(int j = 1; j < (60 -sec); j++) {
-                                    canvas.drawLine(j * SECOND_LINE_WIDTH, centerX + LINE_SECOND_OFFSET_BEGIN, j * SECOND_LINE_WIDTH, centerX + LINE_SECOND_OFFSET_END, greenPaint);
-                                }
-                                long temp_1 = (60 - sec) * SECOND_LINE_WIDTH;
-                                canvas.drawLine(temp_1, centerX + LINE_SECOND_OFFSET_BEGIN, temp_1, centerX + LINE_SECOND_OFFSET_END, secondPaint); // well secondPaint is yellow
-                                for(int j = (60 - sec); j <= 60; j++) {
-                                    canvas.drawLine(j * SECOND_LINE_WIDTH, centerX + LINE_SECOND_OFFSET_BEGIN, j * SECOND_LINE_WIDTH, centerX + LINE_SECOND_OFFSET_END, redPaint);
-                                }
+                        try {
+                            singleLineDrawer.draw(canvas, bounds, new SuperTimeWrapper(fromBegin, ttE));
+                        } catch (ScheduleDrawException e) {
+                            Log.i("Schedule", "ScheduleDrawException : " + e.getMessage());
+                            drawAsText = true; // Can happen, simply change to default view!
+                        }
 
-                            }
 
-                        } else drawAsText = true;
                     }
-                    else drawAsText = true;
+                    else{
+                        Log.i("Schedule", "ScheduleDrawException : " + "No JSON Event");
+                        drawAsText = true; // Can happen, simply change to default view!
+                    }
 
                 }
 
@@ -219,7 +214,6 @@ public class WatchFaceDrawer {
         scheduleNextPaint.setAntiAlias(antiAlias);
         scheduleSubjectPaint.setAntiAlias(antiAlias);
         scheduleTextPaint.setAntiAlias(antiAlias);
-        scheduleTimePaint.setAntiAlias(antiAlias);
     }
 
 
