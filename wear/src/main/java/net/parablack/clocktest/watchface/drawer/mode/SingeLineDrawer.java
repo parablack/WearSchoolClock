@@ -9,70 +9,93 @@ import net.parablack.clocktest.watchface.drawer.mode.wrapper.SuperTimeWrapper;
 
 public class SingeLineDrawer extends ModeFaceDrawer<SuperTimeWrapper> {
 
-    private static final int LINE_OFFSET_BEGIN = 75;
-    private static final int LINE_OFFSET_END = 115;
 
-    private static final int LINE_SECOND_OFFSET_BEGIN = 115;
-    private static final int LINE_SECOND_OFFSET_END = 125;
+    private static final int LINE_HEIGHT = 45;
+    private static final float LINE_START = 160 + 70; // Saving power, it is (center / 2) + 70
+
+    private static final int SECOND_START = 160 + 115;
+    private static final int SECOND_HEIGHT = 10;
 
     private static final long SECOND_LINE_WIDTH = 320 / 60;
 
-    static Paint greenPaint = new Paint(), redPaint = new Paint(), secondPaint = new Paint();
+    static Paint greenPaint = new Paint(), redPaint = new Paint(), yellowPaint = new Paint();
 
     static {
         greenPaint.setColor(Color.GREEN);
         redPaint.setColor(Color.RED);
-        secondPaint.setColor(Color.YELLOW);
+        yellowPaint.setColor(Color.YELLOW);
+        yellowPaint.setTextSize(100);
     }
 
 
     public SingeLineDrawer(WatchFaceDrawer drawer) {
         super(drawer);
+
     }
 
 
     @Override
-    protected void onDraw(Canvas canvas, SuperTimeWrapper args) throws ScheduleDrawException {
+    protected void onDraw(Canvas canvas, SuperTimeWrapper superTimeWrapper) throws ScheduleDrawException {
         //      Log.i("SchoolWear", "onDraw In drawAsSymbol");
-        SuperTimeWrapper.TimeWrapper begin = args.getBegin();
-        SuperTimeWrapper.TimeWrapper end = args.getEnd();
+        SuperTimeWrapper.TimeWrapper begin = superTimeWrapper.getBegin();
+        SuperTimeWrapper.TimeWrapper end = superTimeWrapper.getEnd();
 
 
-        int minTotal = begin.getMinutes() + end.getMinutes();
+        int minTotal = superTimeWrapper.getTotalMinutes(); // The current one!
+        initDrawCalc(minTotal);
 
+        System.out.println("minTotal: " + minTotal + " , begin:" + begin + " , end: " + end);
 
-        //       System.out.println("minTotal = " + minTotal);
         if (minTotal < 130) {  // Too big
-            //            System.out.println("minTotal #2 = " + minTotal);
-            long lineWidth = width / (minTotal);
-            //            System.out.println("lineWidth = " + lineWidth);
             System.out.println("tB = " + begin.getMinutes() + " tE = " + end.getMinutes() + " tM = " + minTotal);
 
             for (int j = 1; j <= begin.getMinutes(); j++) {
-                long x = ((j - 1) * lineWidth) + lineWidth / 2;
-                canvas.drawLine(x, centerX + LINE_OFFSET_BEGIN, x, centerX + LINE_OFFSET_END, greenPaint);
+
+                drawLine(canvas, (j - 1), LINE_START, LINE_HEIGHT, greenPaint);
+
             }
-            long xy = ((begin.getMinutes()) * lineWidth) + lineWidth / 2; // (minutesFromBegin + 1) * lineWidth
-            canvas.drawLine(xy, centerX + LINE_OFFSET_BEGIN, xy, centerX + LINE_OFFSET_END, secondPaint); // well secondPaint is yellow
-            for (int j = minTotal - end.getMinutes(); j <= minTotal; j++) {
-                long x = ((j - 1) * lineWidth) + lineWidth / 2;
-                canvas.drawLine(x, centerX + LINE_OFFSET_BEGIN, x, centerX + LINE_OFFSET_END, redPaint);
+
+            drawLine(canvas, begin.getMinutes(), LINE_START, LINE_HEIGHT,  yellowPaint);
+
+            for (int j = (minTotal - end.getMinutes()) + 1; j <= minTotal; j++) {
+                drawLine(canvas, (j - 1), LINE_START, LINE_HEIGHT, redPaint);
             }
 
             // Draw Seconds
+            initDrawCalc(60);
             {
                 for (int j = 1; j < (60 - end.getSeconds()); j++) {
-                    canvas.drawLine(j * SECOND_LINE_WIDTH, centerX + LINE_SECOND_OFFSET_BEGIN, j * SECOND_LINE_WIDTH, centerX + LINE_SECOND_OFFSET_END, greenPaint);
+                    drawLine(canvas, (j - 1), SECOND_START, SECOND_HEIGHT, greenPaint);
                 }
-                long temp_1 = (60 - end.getSeconds()) * SECOND_LINE_WIDTH;
-                canvas.drawLine(temp_1, centerX + LINE_SECOND_OFFSET_BEGIN, temp_1, centerX + LINE_SECOND_OFFSET_END, secondPaint); // well secondPaint is yellow
+
                 for (int j = (60 - end.getSeconds()); j <= 60; j++) {
-                    canvas.drawLine(j * SECOND_LINE_WIDTH, centerX + LINE_SECOND_OFFSET_BEGIN, j * SECOND_LINE_WIDTH, centerX + LINE_SECOND_OFFSET_END, redPaint);
+                    drawLine(canvas, (j - 1), SECOND_START,SECOND_HEIGHT, redPaint);
                 }
+                drawLine(canvas, (60 - end.getSeconds() - 1), SECOND_START, SECOND_HEIGHT, yellowPaint);
 
             }
 
         } else throw new ScheduleDrawException("Time too big! Drawing failed!");
+    }
+
+    private int minTotal;
+    private int lineWidth, lineWidthMod;
+    private void initDrawCalc(int minTotal){
+        this.minTotal = minTotal;
+        lineWidth = width / (minTotal);
+        lineWidthMod = width % minTotal;
+    }
+
+    /**
+     * Paints the line to the clock
+     * @param idNum The line from 0 on
+     * @param paint The paint to draw with
+     */
+    private void drawLine(Canvas c, int idNum, float y, float height, Paint paint){
+
+        int absoluteFromLeft = (lineWidthMod / 2) + (lineWidth / 2) + (lineWidth * idNum);
+        c.drawLine(absoluteFromLeft, y, absoluteFromLeft, y + height, paint);
+
     }
 
 }

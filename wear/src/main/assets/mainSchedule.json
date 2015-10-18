@@ -289,7 +289,18 @@
   "checksum": "$mainSchedule_TkIhUZ28",
   "encoding": "^^!\"&/()=",
   "d1": {
-    "schedule": [],
+    "schedule": [
+      {
+        "shown": true,
+        "subject_preset": "6",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "EFR"
+        },
+        "id": 2,
+        "time_preset": "h9"
+      }
+    ],
     "id": 1
   },
   "d2": {

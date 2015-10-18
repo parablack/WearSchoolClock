@@ -57,7 +57,7 @@ public class WatchFaceDrawer {
         datePaint.setTextSize(35);
 
         scheduleSubjectPaint.setColor(Color.parseColor("#FF9100")); // #F2D70A
-        scheduleSubjectPaint.setTextSize(32);
+        scheduleSubjectPaint.setTextSize(28);
 
         scheduleNextPaint.setColor(Color.parseColor("#FF9100"));
         scheduleNextPaint.setTextSize(22);
@@ -103,6 +103,8 @@ public class WatchFaceDrawer {
             engine.getMainSchedule().reload();
 
         }
+
+
 
         String dateString = new SimpleDateFormat("EEE, dd. MMM", Locale.GERMANY).format(engine.getCalendar().getTime());
         //      String dateString2 = new SimpleDateFormat("MMMM yyyy").format(calendar.getTime());
@@ -211,7 +213,6 @@ public class WatchFaceDrawer {
         scheduleNextPaint.setAntiAlias(antiAlias);
         scheduleSubjectPaint.setAntiAlias(antiAlias);
     }
-
 
     public void setDrawAsText(boolean drawAsText) {
         this.drawAsText = drawAsText;

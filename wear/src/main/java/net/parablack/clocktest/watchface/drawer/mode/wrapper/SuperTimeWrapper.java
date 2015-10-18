@@ -18,6 +18,13 @@ public class SuperTimeWrapper {
         return end;
     }
 
+    public int getTotalMinutes(){
+        return getBegin().getMinutes() + getEnd().getMinutes() + 1;           // CURRENT ONE!
+    }
+
+
+    // Simple TW
+
     public static class TimeWrapper {
 
         private int hours, minutes, seconds;
@@ -41,5 +48,11 @@ public class SuperTimeWrapper {
             return seconds;
         }
 
+
+        @Override
+        public String toString() {
+            return "TimeWrapper[h:" + getHours() + ";m=" + getMinutes() + ";s=" + getSeconds();
+        }
     }
+
 }
