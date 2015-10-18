@@ -49,6 +49,12 @@ public abstract class ModeFaceDrawer<T> {
 
     // Internal draw part
 
+    public enum ModeFaceDrawers{
+        TEXT,
+        SINGLE_LINE,
+        FULL_LINE
+
+    }
 
 
 

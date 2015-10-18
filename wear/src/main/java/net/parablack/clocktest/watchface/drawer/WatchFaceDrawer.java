@@ -11,6 +11,7 @@ import android.util.Log;
 import net.parablack.clocktest.watchface.SchoolWatchFaceService;
 import net.parablack.clocktest.watchface.WearEvent;
 import net.parablack.clocktest.json.JSONEvent;
+import net.parablack.clocktest.watchface.drawer.mode.FullLineDrawer;
 import net.parablack.clocktest.watchface.drawer.mode.ModeFaceDrawer;
 import net.parablack.clocktest.watchface.drawer.mode.ScheduleDrawException;
 import net.parablack.clocktest.watchface.drawer.mode.SingeLineDrawer;
@@ -67,7 +68,7 @@ public class WatchFaceDrawer {
 
 
 
-    private boolean drawAsText = false;
+    private ModeFaceDrawer.ModeFaceDrawers currentDrawer = ModeFaceDrawer.ModeFaceDrawers.TEXT;
 
     private SchoolWatchFaceService.Engine engine;
 
@@ -75,6 +76,7 @@ public class WatchFaceDrawer {
 
     private final ModeFaceDrawer<String> textDrawer = new TextDrawer(this);
     private final ModeFaceDrawer<SuperTimeWrapper> singleLineDrawer = new SingeLineDrawer(this);
+    private final ModeFaceDrawer<SuperTimeWrapper> fullLineDrawer = new FullLineDrawer(this);
 
 
     public WatchFaceDrawer(SchoolWatchFaceService service) {
@@ -162,7 +164,7 @@ public class WatchFaceDrawer {
                 toEnd -= min;
                 int h = (int) (toEnd / 60);
 
-                if (drawAsText) {
+                if (currentDrawer == ModeFaceDrawer.ModeFaceDrawers.TEXT) {
                     String text = String.format("%01d:%02d:%02d", h, min, sec);
                     try {
                         textDrawer.draw(canvas, bounds, text);
@@ -172,7 +174,7 @@ public class WatchFaceDrawer {
                     }
 
                 }
-                else{
+                else {
                     // Draw as matches
 
                     if(engine.getMainSchedule().getCurrent() instanceof  JSONEvent){
@@ -185,17 +187,22 @@ public class WatchFaceDrawer {
                         SuperTimeWrapper.TimeWrapper fromBegin = new SuperTimeWrapper.TimeWrapper(-1, minutesFromBegin, -1);  // Hours and seconds are never needed
 
                         try {
+
+                            if(currentDrawer == ModeFaceDrawer.ModeFaceDrawers.SINGLE_LINE)
                             singleLineDrawer.draw(canvas, bounds, new SuperTimeWrapper(fromBegin, ttE));
+
+                            if(currentDrawer == ModeFaceDrawer.ModeFaceDrawers.FULL_LINE)
+                                fullLineDrawer.draw(canvas, bounds, new SuperTimeWrapper(fromBegin, ttE));
                         } catch (ScheduleDrawException e) {
                             Log.i("Schedule", "ScheduleDrawException : " + e.getMessage());
-                            drawAsText = true; // Can happen, simply change to default view!
+                            currentDrawer = ModeFaceDrawer.ModeFaceDrawers.TEXT; // Can happen, simply change to default view!
                         }
 
 
                     }
                     else{
                         Log.i("Schedule", "ScheduleDrawException : " + "No JSON Event");
-                        drawAsText = true; // Can happen, simply change to default view!
+                        currentDrawer = ModeFaceDrawer.ModeFaceDrawers.TEXT; // Can happen, simply change to default view!
                     }
 
                 }
@@ -214,11 +221,7 @@ public class WatchFaceDrawer {
         scheduleSubjectPaint.setAntiAlias(antiAlias);
     }
 
-    public void setDrawAsText(boolean drawAsText) {
-        this.drawAsText = drawAsText;
-    }
-
-    public boolean isDrawAsText() {
-        return drawAsText;
+    public void setCurrentDrawer(ModeFaceDrawer.ModeFaceDrawers currentDrawer) {
+        this.currentDrawer = currentDrawer;
     }
 }

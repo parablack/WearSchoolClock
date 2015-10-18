@@ -16,7 +16,6 @@ public class SingeLineDrawer extends ModeFaceDrawer<SuperTimeWrapper> {
     private static final int SECOND_START = 160 + 115;
     private static final int SECOND_HEIGHT = 10;
 
-    private static final long SECOND_LINE_WIDTH = 320 / 60;
 
     static Paint greenPaint = new Paint(), redPaint = new Paint(), yellowPaint = new Paint();
 
@@ -24,7 +23,6 @@ public class SingeLineDrawer extends ModeFaceDrawer<SuperTimeWrapper> {
         greenPaint.setColor(Color.GREEN);
         redPaint.setColor(Color.RED);
         yellowPaint.setColor(Color.YELLOW);
-        yellowPaint.setTextSize(100);
     }
 
 

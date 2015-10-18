@@ -22,6 +22,13 @@ public class SuperTimeWrapper {
         return getBegin().getMinutes() + getEnd().getMinutes() + 1;           // CURRENT ONE!
     }
 
+    public double getPercentageDone(){
+        double totalSec = getTotalMinutes() * 60;
+        double done = totalSec - end.toSeconds();
+      //  System.out.println("total: " +totalSec + " done " + done);
+        return (done / totalSec);
+    }
+
 
     // Simple TW
 
@@ -48,6 +55,9 @@ public class SuperTimeWrapper {
             return seconds;
         }
 
+        public long toSeconds(){
+            return (hours * 60 * 60) + minutes * 60 + seconds;
+        }
 
         @Override
         public String toString() {

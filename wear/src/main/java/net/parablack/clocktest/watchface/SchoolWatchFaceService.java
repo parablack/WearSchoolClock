@@ -12,6 +12,7 @@ import net.parablack.clocktest.json.InvalidDataException;
 import net.parablack.clocktest.json.JSONReader;
 import net.parablack.clocktest.json.JSONSchedule;
 import net.parablack.clocktest.watchface.drawer.WatchFaceDrawer;
+import net.parablack.clocktest.watchface.drawer.mode.ModeFaceDrawer;
 
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -218,11 +219,10 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
             if(x < 100 && y < 100 && alreadyTapped < 3){
                 alreadyTapped++;
             } else
-            if(alreadyTapped == 3 && x > 200 && y > 200){
-                System.out.println("Activating other view!");
-                drawer.setDrawAsText(!drawer.isDrawAsText());
-
-                alreadyTapped = 0;
+            if(alreadyTapped == 3){
+                if( x > 200 && y > 200){ drawer.setCurrentDrawer(ModeFaceDrawer.ModeFaceDrawers.SINGLE_LINE); alreadyTapped = 0; }
+                if( x > 200 && y < 100){ drawer.setCurrentDrawer(ModeFaceDrawer.ModeFaceDrawers.FULL_LINE); alreadyTapped = 0;}
+                if( x < 100 && y > 200){ drawer.setCurrentDrawer(ModeFaceDrawer.ModeFaceDrawers.TEXT); alreadyTapped = 0;}
                 invalidate();
             }
 
