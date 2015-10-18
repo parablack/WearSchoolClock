@@ -2,11 +2,8 @@ package net.parablack.clocktest.watchface.drawer.mode;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.support.wearable.watchface.WatchFaceService;
 
 import net.parablack.clocktest.watchface.drawer.WatchFaceDrawer;
-
-import java.util.Objects;
 
 
 public abstract class ModeFaceDrawer<T> {

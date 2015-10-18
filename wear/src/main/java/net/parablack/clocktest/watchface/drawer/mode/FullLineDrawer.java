@@ -12,11 +12,13 @@ public class FullLineDrawer extends ModeFaceDrawer<SuperTimeWrapper>{
     private static final int LINE_HEIGHT = 55;
     private static final float LINE_START = 160 + 70; // Saving power, it is (center / 2) + 70
 
-    static Paint greenPaint = new Paint(), redPaint = new Paint();
+    static Paint greenPaint = new Paint(), redPaint = new Paint(), yellowPaint = new Paint();
 
     static {
         greenPaint.setColor(Color.GREEN);
         redPaint.setColor(Color.RED);
+        yellowPaint.setColor(Color.YELLOW);
+        yellowPaint.setTextSize(40);
     }
 
     public FullLineDrawer(WatchFaceDrawer drawer) {
@@ -44,6 +46,10 @@ public class FullLineDrawer extends ModeFaceDrawer<SuperTimeWrapper>{
 
         c.drawRect(0, y, sP, y + height, greenPaint);
         c.drawRect(sP, y, width, y + height, redPaint);
+
+        int a = (int) (currentPercentage * 100);
+        float f = a / 100F;
+        c.drawText(f + "", centerX - yellowPaint.measureText(f + "") / 2, y + 20, yellowPaint);
 
     }
 }

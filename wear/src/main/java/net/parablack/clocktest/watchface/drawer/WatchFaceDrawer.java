@@ -103,7 +103,6 @@ public class WatchFaceDrawer {
 
         if(hourOfDay == 0 && minute == 1){
             engine.getMainSchedule().reload();
-
         }
 
 

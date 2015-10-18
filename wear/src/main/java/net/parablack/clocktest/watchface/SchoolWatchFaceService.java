@@ -216,15 +216,21 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
         public void onTapCommand(int tapType, int x, int y, long eventTime) {
             super.onTapCommand(tapType, x, y, eventTime);
 
-            if(x < 100 && y < 100 && alreadyTapped < 3){
+            if(x < 100 && y < 100 ){
                 alreadyTapped++;
             } else
-            if(alreadyTapped == 3){
+            if(alreadyTapped >= 12){
+                if( x > 200 && y > 200){
+                    System.out.println("Forced reload --> Applying");
+                    getMainSchedule().reload(); alreadyTapped = 0; }
+            }
+            else if(alreadyTapped >= 3){
                 if( x > 200 && y > 200){ drawer.setCurrentDrawer(ModeFaceDrawer.ModeFaceDrawers.SINGLE_LINE); alreadyTapped = 0; }
                 if( x > 200 && y < 100){ drawer.setCurrentDrawer(ModeFaceDrawer.ModeFaceDrawers.FULL_LINE); alreadyTapped = 0;}
                 if( x < 100 && y > 200){ drawer.setCurrentDrawer(ModeFaceDrawer.ModeFaceDrawers.TEXT); alreadyTapped = 0;}
                 invalidate();
             }
+
 
         }
 

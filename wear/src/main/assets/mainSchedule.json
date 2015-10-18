@@ -290,16 +290,6 @@
   "encoding": "^^!\"&/()=",
   "d1": {
     "schedule": [
-      {
-        "shown": true,
-        "subject_preset": "6",
-        "meta": "defaultMeta",
-        "additional": {
-          "room": "EFR"
-        },
-        "id": 2,
-        "time_preset": "h10"
-      }
     ],
     "id": 1
   },
