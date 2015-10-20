@@ -8,9 +8,9 @@ import android.graphics.Rect;
 import android.os.Vibrator;
 import android.util.Log;
 
+import net.parablack.clocktest.json.JSONEvent;
 import net.parablack.clocktest.watchface.SchoolWatchFaceService;
 import net.parablack.clocktest.watchface.WearEvent;
-import net.parablack.clocktest.json.JSONEvent;
 import net.parablack.clocktest.watchface.drawer.mode.FullLineDrawer;
 import net.parablack.clocktest.watchface.drawer.mode.ModeFaceDrawer;
 import net.parablack.clocktest.watchface.drawer.mode.ScheduleDrawException;
@@ -26,7 +26,6 @@ import java.util.Locale;
 public class WatchFaceDrawer {
 
 
-
     private static final String DOUBLE_COLON = ":";
 
 
@@ -35,13 +34,13 @@ public class WatchFaceDrawer {
     private static final Paint datePaint = new Paint();
 
 
-    private static final Paint scheduleSubjectPaint = new Paint(),  scheduleNextPaint = new Paint();
+    private static final Paint scheduleSubjectPaint = new Paint(), scheduleNextPaint = new Paint();
 
 
     private static final float doubleColonWidthHours;
 
 
-    static{
+    static {
         hourPaint.setColor(Color.WHITE);
         hourPaint.setTextSize(100);
 
@@ -67,7 +66,6 @@ public class WatchFaceDrawer {
     }
 
 
-
     private ModeFaceDrawer.ModeFaceDrawers currentDrawer = ModeFaceDrawer.ModeFaceDrawers.TEXT;
 
     private SchoolWatchFaceService.Engine engine;
@@ -85,8 +83,6 @@ public class WatchFaceDrawer {
         vibrator = (Vibrator) service.getSystemService(Context.VIBRATOR_SERVICE);
 
 
-
-
     }
 
     public void onDraw(Canvas canvas, Rect bounds) {
@@ -101,16 +97,16 @@ public class WatchFaceDrawer {
         String minuteString = String.format("%02d", minute);
         String secondString = String.format("%02d", engine.getCalendar().get(Calendar.SECOND));
 
-        if(hourOfDay == 0 && minute == 1){
-            engine.getMainSchedule().reload();
-        }
-
+        // Doesn't work?!
+//        if(hourOfDay == 0 && minute == 1){
+//            engine.getMainSchedule().reload();
+//        }
 
 
         String dateString = new SimpleDateFormat("EEE, dd. MMM", Locale.GERMANY).format(engine.getCalendar().getTime());
         //      String dateString2 = new SimpleDateFormat("MMMM yyyy").format(calendar.getTime());
 
-        canvas.drawColor(Color.BLACK);
+        canvas.drawColor(engine.notifyReload() ? Color.BLUE : Color.BLACK);
 
         int width = bounds.width();
         int height = bounds.height();
@@ -128,11 +124,11 @@ public class WatchFaceDrawer {
         if (engine.isScheduleEnabled()) {
             WearEvent currentEvent = engine.getMainSchedule().getCurrent();
 
-          //  canvas.drawText("Aktuelle Stunde:", 10, centerY + 35, scheduleTextPaint);
+            //  canvas.drawText("Aktuelle Stunde:", 10, centerY + 35, scheduleTextPaint);
             float halfCurrentWidth = scheduleSubjectPaint.measureText(currentEvent.getName()) / 2;
             canvas.drawText(currentEvent.getName(), centerX - halfCurrentWidth, centerY + 60, scheduleSubjectPaint);
 
-            float halfW =  centerX - (scheduleNextPaint.measureText(engine.getMainSchedule().getNext().getName()) / 2);
+            float halfW = centerX - (scheduleNextPaint.measureText(engine.getMainSchedule().getNext().getName()) / 2);
             canvas.drawText(engine.getMainSchedule().getNext().getName(), halfW, centerY + 150, scheduleNextPaint);
 
             if (currentEvent instanceof JSONEvent) {
@@ -172,11 +168,10 @@ public class WatchFaceDrawer {
                         // This can never happen!
                     }
 
-                }
-                else {
+                } else {
                     // Draw as matches
 
-                    if(engine.getMainSchedule().getCurrent() instanceof  JSONEvent){
+                    if (engine.getMainSchedule().getCurrent() instanceof JSONEvent) {
                         JSONEvent jse = (JSONEvent) engine.getMainSchedule().getCurrent();
 
                         SuperTimeWrapper.TimeWrapper ttE = new SuperTimeWrapper.TimeWrapper(h, min, sec);
@@ -187,10 +182,10 @@ public class WatchFaceDrawer {
 
                         try {
 
-                            if(currentDrawer == ModeFaceDrawer.ModeFaceDrawers.SINGLE_LINE)
-                            singleLineDrawer.draw(canvas, bounds, new SuperTimeWrapper(fromBegin, ttE));
+                            if (currentDrawer == ModeFaceDrawer.ModeFaceDrawers.SINGLE_LINE)
+                                singleLineDrawer.draw(canvas, bounds, new SuperTimeWrapper(fromBegin, ttE));
 
-                            if(currentDrawer == ModeFaceDrawer.ModeFaceDrawers.FULL_LINE)
+                            if (currentDrawer == ModeFaceDrawer.ModeFaceDrawers.FULL_LINE)
                                 fullLineDrawer.draw(canvas, bounds, new SuperTimeWrapper(fromBegin, ttE));
                         } catch (ScheduleDrawException e) {
                             Log.i("Schedule", "ScheduleDrawException : " + e.getMessage());
@@ -198,8 +193,7 @@ public class WatchFaceDrawer {
                         }
 
 
-                    }
-                    else{
+                    } else {
                         Log.i("Schedule", "ScheduleDrawException : " + "No JSON Event");
                         currentDrawer = ModeFaceDrawer.ModeFaceDrawers.TEXT; // Can happen, simply change to default view!
                     }

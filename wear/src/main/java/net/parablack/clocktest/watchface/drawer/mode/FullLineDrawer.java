@@ -29,16 +29,7 @@ public class FullLineDrawer extends ModeFaceDrawer<SuperTimeWrapper>{
 
     @Override
     protected void onDraw(Canvas canvas, SuperTimeWrapper superTimeWrapper) throws ScheduleDrawException {
-        //      Log.i("SchoolWear", "onDraw In drawAsSymbol");
-
-    //    System.out.println("Current Percentage: " + superTimeWrapper.getPercentageDone());
-
-
         drawLine(canvas, superTimeWrapper.getPercentageDone(), LINE_START, LINE_HEIGHT);
-//        System.out.println("minTotal: " + minTotal + " , begin:" + begin + " , end: " + end);
-
-
-
     }
 
 

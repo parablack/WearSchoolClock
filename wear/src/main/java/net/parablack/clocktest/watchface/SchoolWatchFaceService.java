@@ -2,6 +2,7 @@ package net.parablack.clocktest.watchface;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -47,8 +48,7 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
         private JSONSchedule mainSchedule;
         private boolean scheduleEnabled = true;
 
-//        private WearEvent currentEvent;
-//        private WearEvent nextEvent;
+        private boolean reloading;
 
         private WatchFaceDrawer drawer;
 
@@ -85,13 +85,23 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
 
             drawer = new WatchFaceDrawer(SchoolWatchFaceService.this);
 
-            try {
-                mainReader = new JSONReader(getAssets());
-                mainSchedule = mainReader.getSchedule();
-            } catch (InvalidDataException e) {
-                scheduleEnabled = false;
-                e.printStackTrace();
-            }
+            scheduleEnabled = false;
+
+            AsyncTask<Void, Void, Void> as = new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
+                        mainReader = new JSONReader(getAssets());
+                        mainSchedule = mainReader.getSchedule();
+                        scheduleEnabled = true;
+                    } catch (InvalidDataException e) {
+                        e.printStackTrace();
+                        scheduleEnabled = false;
+                    }
+                    return null;
+                }
+            }.execute();
+
 
             calendar = Calendar.getInstance();
 
@@ -159,6 +169,7 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
         @Override
         public void onDraw(Canvas canvas, Rect bounds) {
             /* draw your watch face */
+
             drawer.onDraw(canvas, bounds);
 
 
@@ -212,22 +223,35 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
         }
 
         int alreadyTapped = 0;
+
         @Override
         public void onTapCommand(int tapType, int x, int y, long eventTime) {
             super.onTapCommand(tapType, x, y, eventTime);
 
-            if(x < 100 && y < 100 ){
+            if (x < 100 && y < 100) {
                 alreadyTapped++;
-            } else
-            if(alreadyTapped >= 12){
-                if( x > 200 && y > 200){
+            } else if (alreadyTapped >= 12) {
+                if (x > 200 && y > 200) {
                     System.out.println("Forced reload --> Applying");
-                    getMainSchedule().reload(); alreadyTapped = 0; }
-            }
-            else if(alreadyTapped >= 3){
-                if( x > 200 && y > 200){ drawer.setCurrentDrawer(ModeFaceDrawer.ModeFaceDrawers.SINGLE_LINE); alreadyTapped = 0; }
-                if( x > 200 && y < 100){ drawer.setCurrentDrawer(ModeFaceDrawer.ModeFaceDrawers.FULL_LINE); alreadyTapped = 0;}
-                if( x < 100 && y > 200){ drawer.setCurrentDrawer(ModeFaceDrawer.ModeFaceDrawers.TEXT); alreadyTapped = 0;}
+                    Reloader r = new Reloader();
+                    r.execute();
+                    reloading = true;
+                    alreadyTapped = 0;
+                    invalidate();
+                }
+            } else if (alreadyTapped >= 3) {
+                if (x > 200 && y > 200) {
+                    drawer.setCurrentDrawer(ModeFaceDrawer.ModeFaceDrawers.SINGLE_LINE);
+                    alreadyTapped = 0;
+                }
+                if (x > 200 && y < 100) {
+                    drawer.setCurrentDrawer(ModeFaceDrawer.ModeFaceDrawers.FULL_LINE);
+                    alreadyTapped = 0;
+                }
+                if (x < 100 && y > 200) {
+                    drawer.setCurrentDrawer(ModeFaceDrawer.ModeFaceDrawers.TEXT);
+                    alreadyTapped = 0;
+                }
                 invalidate();
             }
 
@@ -240,6 +264,23 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
 
         public boolean isScheduleEnabled() {
             return scheduleEnabled;
+        }
+
+        private class Reloader extends AsyncTask<Void, Void, Void> {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                getMainSchedule().reload();
+                return null;
+            }
+        }
+
+        public boolean notifyReload() {
+            if (reloading) {
+                reloading = false;
+                return true;
+            }
+            return false;
         }
 
         // handler to update the time once a second in interactive mode
