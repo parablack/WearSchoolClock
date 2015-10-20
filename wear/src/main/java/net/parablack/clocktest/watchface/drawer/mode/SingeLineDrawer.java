@@ -7,6 +7,9 @@ import android.graphics.Paint;
 import net.parablack.clocktest.watchface.drawer.WatchFaceDrawer;
 import net.parablack.clocktest.watchface.drawer.mode.wrapper.SuperTimeWrapper;
 
+/**
+ * Draws the time left in single lines (Minutes + Seconds)
+ */
 public class SingeLineDrawer extends ModeFaceDrawer<SuperTimeWrapper> {
 
 

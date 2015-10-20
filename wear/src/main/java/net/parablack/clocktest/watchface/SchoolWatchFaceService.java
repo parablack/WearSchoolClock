@@ -196,17 +196,10 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
 
         }
 
-//        private void refreshSchedule() {
-//            if (scheduleEnabled) {
-//                mainSchedule.reload();
-//
-//                currentEvent = mainSchedule.getCurrent();
-//                nextEvent = mainSchedule.getNext();
-//                alreadyVibrated = false;
-//            }
-//        }
-
-
+        /**
+         *
+         * @return The Main-Schedule of the clock
+         */
         public JSONSchedule getMainSchedule() {
             return mainSchedule;
         }
@@ -258,10 +251,18 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
 
         }
 
+        /**
+         *
+         * @return Calendar-Object of the current class
+         */
         public Calendar getCalendar() {
             return calendar;
         }
 
+        /**
+         *
+         * @return Wather schedule is enabled or not
+         */
         public boolean isScheduleEnabled() {
             return scheduleEnabled;
         }
@@ -275,6 +276,10 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
             }
         }
 
+        /**
+         * Notifys if a reload has (or is) taking place, if yes, it will be automatically set to false for the next check
+         * @return Reload has taken place since the last calls
+         */
         public boolean notifyReload() {
             if (reloading) {
                 reloading = false;
@@ -284,7 +289,6 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
         }
 
         // handler to update the time once a second in interactive mode
-
 
         // receiver to update the time zone
 //        final BroadcastReceiver mTimeZoneReceiver = new BroadcastReceiver() {

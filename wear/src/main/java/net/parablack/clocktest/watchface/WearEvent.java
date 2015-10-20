@@ -1,12 +1,18 @@
 package net.parablack.clocktest.watchface;
 
-/**
- * Created by Simon on 16.09.2015.
- */
+
 public interface WearEvent {
 
+    /**
+     *
+     * @return The time til the end of the event
+     */
     long getTimeTilEnd();
 
+    /**
+     *
+     * @return The name of the event
+     */
     String getName();
 
     class NothingUpEvent implements  WearEvent{

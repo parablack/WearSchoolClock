@@ -1,14 +1,22 @@
 package net.parablack.clocktest.watchface;
 
-/**
- * Created by Simon on 16.09.2015.
- */
 public interface WearSchedule {
-
+    /**
+     * Reload the event
+     */
     void reload();
 
+    /**
+     *
+     * @return The current event of the day
+     */
     WearEvent getCurrent();
 
+
+    /**
+     *
+     * @return The next event of the day, or an event on another day if theres no more today
+     */
     WearEvent getNext();
 
 }

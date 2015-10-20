@@ -8,7 +8,9 @@ import android.util.Log;
 
 import net.parablack.clocktest.watchface.drawer.WatchFaceDrawer;
 
-
+/**
+ * Draws the time left as a simple text
+ */
 public class TextDrawer extends ModeFaceDrawer<String> {
 
     private static Paint scheduleTimePaint = new Paint();

@@ -10,18 +10,35 @@ public class SuperTimeWrapper {
         this.end = end;
     }
 
+    /**
+     *
+     * @return The begin-timewrapper
+     */
     public TimeWrapper getBegin() {
         return begin;
     }
 
+
+    /**
+     *
+     * @return The end-timewrapper
+     */
     public TimeWrapper getEnd() {
         return end;
     }
 
+    /**
+     *
+     * @return The total duration of the event in minutes
+     */
     public int getTotalMinutes(){
         return getBegin().getMinutes() + getEnd().getMinutes() + 1;           // CURRENT ONE!
     }
 
+    /**
+     *
+     * @return The percentage done between the two times
+     */
     public double getPercentageDone(){
         double totalSec = getTotalMinutes() * 60;
         double done = totalSec - end.toSeconds();

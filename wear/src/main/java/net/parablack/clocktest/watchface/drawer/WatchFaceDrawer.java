@@ -206,6 +206,10 @@ public class WatchFaceDrawer {
 
     }
 
+    /**
+     *
+     * @param antiAlias Wether anti-aliasing should be applied or not
+     */
     public void setAntiAlias(boolean antiAlias) {
         hourPaint.setAntiAlias(antiAlias);
         minutePaint.setAntiAlias(antiAlias);

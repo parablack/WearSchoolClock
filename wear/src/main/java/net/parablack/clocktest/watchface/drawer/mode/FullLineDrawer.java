@@ -8,6 +8,9 @@ import android.graphics.Rect;
 import net.parablack.clocktest.watchface.drawer.WatchFaceDrawer;
 import net.parablack.clocktest.watchface.drawer.mode.wrapper.SuperTimeWrapper;
 
+/**
+ * Draws the time left in one line, also the percentage done
+ */
 public class FullLineDrawer extends ModeFaceDrawer<SuperTimeWrapper>{
 
     private static final int LINE_HEIGHT = 55;
