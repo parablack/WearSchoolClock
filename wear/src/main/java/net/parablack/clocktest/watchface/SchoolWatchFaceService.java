@@ -217,13 +217,14 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
 
         int alreadyTapped = 0;
 
+        // Always called twice?!
         @Override
         public void onTapCommand(int tapType, int x, int y, long eventTime) {
             super.onTapCommand(tapType, x, y, eventTime);
 
             if (x < 100 && y < 100) {
                 alreadyTapped++;
-            } else if (alreadyTapped >= 12) {
+            } else if (alreadyTapped >= 20) {
                 if (x > 200 && y > 200) {
                     System.out.println("Forced reload --> Applying");
                     Reloader r = new Reloader();
@@ -261,7 +262,7 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
 
         /**
          *
-         * @return Wather schedule is enabled or not
+         * @return Wether schedule is enabled or not
          */
         public boolean isScheduleEnabled() {
             return scheduleEnabled;

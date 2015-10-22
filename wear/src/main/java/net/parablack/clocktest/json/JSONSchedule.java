@@ -14,7 +14,7 @@ import java.util.Collections;
 import static net.parablack.clocktest.watchface.TimeUtils.currentCalendar;
 import static net.parablack.clocktest.watchface.TimeUtils.dayMillis;
 
-
+// TODO well this is pretty ugly
 public class JSONSchedule implements WearSchedule {
 
     private JSONObject rootObject;

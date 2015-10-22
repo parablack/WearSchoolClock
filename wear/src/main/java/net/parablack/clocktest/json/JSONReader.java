@@ -11,9 +11,7 @@ import java.util.HashMap;
 
 import static net.parablack.clocktest.json.JSONReaderUtil.*;
 
-/**
- * Created by Simon on 16.09.2015.
- */
+
 public class JSONReader {
 
     private HashMap<String, ScheduleMeta> metas = new HashMap<>();
@@ -54,11 +52,20 @@ public class JSONReader {
 
     }
 
-
+    /**
+     * Get the meta with the specified name
+     * @param name The name of the meta, specified in the metas.json file
+     * @return The meta according to the name
+     */
     public ScheduleMeta getMeta(String name) {
         return metas.get(name);
     }
 
+    /**
+     * Get the time preset with the specified name
+     * @param name The name of the preset, specified in the timePreset.json file
+     * @return The preset according to the name
+     */
     public ScheduleTime getTime(String name) {
         return times.get(name);
     }
@@ -67,6 +74,10 @@ public class JSONReader {
         return subjects.get(name);
     }
 
+    /**
+     * Get the current loaded schedule from the files
+     * @return THe loaded schedule
+     */
     public JSONSchedule getSchedule() {
         return schedule;
     }

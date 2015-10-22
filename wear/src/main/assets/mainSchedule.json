@@ -107,7 +107,7 @@
         "subject_preset": "11",
         "meta": "defaultMeta",
         "additional": {
-          "room": "NFR"
+          "room": "R8d"
         },
         "id": 5,
         "time_preset": "h8"
@@ -222,7 +222,7 @@
         "subject_preset": "1",
         "meta": "defaultMeta",
         "additional": {
-          "room": "R9d"
+          "room": "R8d"
         },
         "id": 6,
         "time_preset": "h4"
@@ -232,7 +232,7 @@
         "subject_preset": "3",
         "meta": "defaultMeta",
         "additional": {
-          "room": "RFR"
+          "room": "DFR"
         },
         "id": 6,
         "time_preset": "h5"
@@ -242,7 +242,7 @@
         "subject_preset": "3",
         "meta": "defaultMeta",
         "additional": {
-          "room": "RFR"
+          "room": "DFR"
         },
         "id": 6,
         "time_preset": "h6"

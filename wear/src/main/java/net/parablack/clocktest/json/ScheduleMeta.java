@@ -3,9 +3,9 @@ package net.parablack.clocktest.json;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by Simon on 16.09.2015.
- */
+
+
+// TODO multi-vibration
 public class ScheduleMeta {
 
     private String id;

@@ -11,28 +11,30 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-/**
- * Created by Simon on 16.09.2015.
- */
+
 class JSONReaderUtil {
+
 
     protected static void initByArray(AssetManager as, String fileName, String checksum, String arrayName, ScheduleInitCallback callback) throws InvalidDataException {
         try {
             // -------------- LOAD METAS
-        JSONObject rootMetaJson = byAsset(as, fileName);
-        if (!verifyMeta(rootMetaJson, checksum))
-            throw new InvalidDataException("Error loading "+fileName + "! - Invalid Checksum (" + checksum + ")" );
-
-        JSONArray innerArray = rootMetaJson.getJSONArray(arrayName);
-        for (int i = 0; i < innerArray.length(); i++){
-            JSONObject extractedObject = innerArray.getJSONObject(i);
-            if(extractedObject != null){
-                callback.callback(extractedObject);
+            JSONObject rootMetaJson = byAsset(as, fileName);
+            if (!verifyMeta(rootMetaJson, checksum))
+                throw new InvalidDataException("Error loading " + fileName + "! - Invalid Checksum (" + checksum + ")");
+            JSONArray innerArray = null;
+            if (rootMetaJson != null) {
+                innerArray = rootMetaJson.getJSONArray(arrayName);
             }
+            assert innerArray != null;
+            for (int i = 0; i < innerArray.length(); i++) {
+                JSONObject extractedObject = innerArray.getJSONObject(i);
+                if (extractedObject != null) {
+                    callback.callback(extractedObject);
+                }
 
-        }
+            }
             System.out.println("Loading of " + fileName + " completed, " + innerArray.length() + " entrys loaded!");
-        } catch (JSONException e) {
+        } catch (JSONException | NullPointerException e) {
             e.printStackTrace();
             throw new InvalidDataException("JSON");
         }
@@ -41,21 +43,20 @@ class JSONReaderUtil {
     }
 
     protected static void fetchArray(JSONArray array, ScheduleInitCallback cb) throws JSONException {
-      //  System.out.println("Array _ " + array + ", len " + array.length());
-        for (int i = 0; i < array.length(); i++){
+        //  System.out.println("Array _ " + array + ", len " + array.length());
+        for (int i = 0; i < array.length(); i++) {
             JSONObject extractedObject = array.getJSONObject(i);
-            if(extractedObject != null){
+            if (extractedObject != null) {
                 cb.callback(extractedObject);
             }
 
         }
     }
 
-    protected static JSONObject byAsset(AssetManager as, String fileName){
+    protected static JSONObject byAsset(AssetManager as, String fileName) {
         try {
             String metaString = JSONReaderUtil.readFile(as.open(fileName));
             return new JSONObject(metaString);
-
 
 
         } catch (IOException e) {
@@ -82,12 +83,12 @@ class JSONReaderUtil {
         return stringBuilder.toString();
     }
 
-    protected static boolean verifyMeta(JSONObject obj, String verify){
+    protected static boolean verifyMeta(JSONObject obj, String verify) {
         try {
-            if(obj.getString("checksum").equals(verify)){
+            if (obj.getString("checksum").equals(verify)) {
                 System.out.println("Meta-Checksum verified " + obj.getString("checksum"));
                 return true;
-            } else{
+            } else {
                 System.out.println("Meta-Checksum failed!!! " + obj.getString("checksum"));
                 return false;
             }

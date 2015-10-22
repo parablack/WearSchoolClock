@@ -13,10 +13,6 @@ public class MainActivityWear extends WearableActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test_layout);
-
-   //     ScheduleProvider.SchoolHour co ;
-
-   //     System.out.println(co + " " + co.getTimeTillEnd());
     }
 
 

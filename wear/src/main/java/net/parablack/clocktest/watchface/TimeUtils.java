@@ -14,8 +14,7 @@ public class TimeUtils {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeZone(TimeZone.getDefault());
         calendar.setTimeInMillis(System.currentTimeMillis());
-        return  calendar;
-
+        return calendar;
     }
 
     /**

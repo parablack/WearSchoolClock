@@ -15,7 +15,7 @@ public interface WearEvent {
      */
     String getName();
 
-    class NothingUpEvent implements  WearEvent{
+    class NothingUpEvent implements WearEvent{
 
         private long timeEnd = -1;
 
