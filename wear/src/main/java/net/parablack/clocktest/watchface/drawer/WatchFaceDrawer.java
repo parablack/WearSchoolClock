@@ -50,16 +50,16 @@ public class WatchFaceDrawer {
         minutePaint.setColor(Color.WHITE);
         minutePaint.setTextSize(100);
 
-        secondPaint.setColor(Color.parseColor("#0A63F2")); // 09ED0D
+        secondPaint.setColor(Color.parseColor("#FF9C9C")); // 0A63F2 is das von ir 09ED0D
         secondPaint.setTextSize(60);
 
         datePaint.setColor(Color.WHITE);
         datePaint.setTextSize(35);
 
-        scheduleSubjectPaint.setColor(Color.parseColor("#FF9100")); // #F2D70A
+        scheduleSubjectPaint.setColor(Color.parseColor("#A1A9FF")); // #F2D70A
         scheduleSubjectPaint.setTextSize(28);
 
-        scheduleNextPaint.setColor(Color.parseColor("#FF9100"));
+        scheduleNextPaint.setColor(Color.parseColor("#A1A9FF")); // FF9100 ist das orange von mir
         scheduleNextPaint.setTextSize(22);
 
         doubleColonWidthHours = doubleColonPaintHours.measureText(DOUBLE_COLON);

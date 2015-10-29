@@ -14,7 +14,7 @@ import net.parablack.clocktest.watchface.drawer.mode.wrapper.SuperTimeWrapper;
 public class FullLineDrawer extends ModeFaceDrawer<SuperTimeWrapper>{
 
     private static final int LINE_HEIGHT = 55;
-    private static final float LINE_START = 160 + 70; // Saving power, it is (center / 2) + 70
+    private static float LINE_START = -1; // Saving power, it is (center / 2) + 70 // FIXED
 
     static Paint greenPaint = new Paint(), redPaint = new Paint(), yellowPaint = new Paint();
 
@@ -32,11 +32,16 @@ public class FullLineDrawer extends ModeFaceDrawer<SuperTimeWrapper>{
 
     @Override
     protected void onDraw(Canvas canvas, SuperTimeWrapper superTimeWrapper) throws ScheduleDrawException {
+        if(LINE_START == -1){
+            LINE_START = height / 2 + 70;
+        }
         drawLine(canvas, superTimeWrapper.getPercentageDone(), LINE_START, LINE_HEIGHT);
+
     }
 
 
     private void drawLine(Canvas c, double currentPercentage, float y, float height){
+
         float sP = (float) (width * currentPercentage);
 
         c.drawRect(0, y, sP, y + height, greenPaint);

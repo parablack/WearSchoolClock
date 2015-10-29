@@ -222,6 +222,7 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
         public void onTapCommand(int tapType, int x, int y, long eventTime) {
             super.onTapCommand(tapType, x, y, eventTime);
 
+
             if (x < 100 && y < 100) {
                 alreadyTapped++;
             } else if (alreadyTapped >= 20) {

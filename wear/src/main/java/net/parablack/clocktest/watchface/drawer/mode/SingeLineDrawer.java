@@ -14,7 +14,7 @@ public class SingeLineDrawer extends ModeFaceDrawer<SuperTimeWrapper> {
 
 
     private static final int LINE_HEIGHT = 45;
-    private static final float LINE_START = 160 + 70; // Saving power, it is (center / 2) + 70
+    private static float LINE_START = -1; // Saving power, it is (center / 2) + 70
 
     private static final int SECOND_START = 160 + 115;
     private static final int SECOND_HEIGHT = 10;
@@ -37,6 +37,9 @@ public class SingeLineDrawer extends ModeFaceDrawer<SuperTimeWrapper> {
 
     @Override
     protected void onDraw(Canvas canvas, SuperTimeWrapper superTimeWrapper) throws ScheduleDrawException {
+        if(LINE_START == -1){
+            LINE_START = height / 2 + 70;
+        }
         //      Log.i("SchoolWear", "onDraw In drawAsSymbol");
         SuperTimeWrapper.TimeWrapper begin = superTimeWrapper.getBegin();
         SuperTimeWrapper.TimeWrapper end = superTimeWrapper.getEnd();
