@@ -22,16 +22,14 @@ public class SingeLineDrawer extends ModeFaceDrawer<SuperTimeWrapper> {
 
     static Paint greenPaint = new Paint(), redPaint = new Paint(), yellowPaint = new Paint();
 
-    static {
-        greenPaint.setColor(Color.GREEN);
-        redPaint.setColor(Color.RED);
-        yellowPaint.setColor(Color.YELLOW);
-    }
+
 
 
     public SingeLineDrawer(WatchFaceDrawer drawer) {
         super(drawer);
-
+        greenPaint.setColor(getColors("single_done"));
+        redPaint.setColor(getColors("single_todo"));
+        yellowPaint.setColor(getColors("single_inprogress"));
     }
 
 

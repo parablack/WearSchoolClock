@@ -16,12 +16,13 @@ public class TextDrawer extends ModeFaceDrawer<String> {
     private static Paint scheduleTimePaint = new Paint();
 
     static {
-        scheduleTimePaint.setColor(Color.RED);
         scheduleTimePaint.setTextSize(60);
     }
 
     public TextDrawer(WatchFaceDrawer d) {
         super(d);
+        scheduleTimePaint.setColor(getColors("text_text"));
+
     }
 
     @Override

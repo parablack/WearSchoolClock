@@ -18,6 +18,8 @@ public class JSONReader {
     private HashMap<String, ScheduleTime> times = new HashMap<>();
     private HashMap<String, ScheduleSubject> subjects = new HashMap<>();
     private JSONSchedule schedule;
+    private JSONColors colors;
+
 
 
     public JSONReader(AssetManager assets) throws InvalidDataException {
@@ -45,10 +47,18 @@ public class JSONReader {
             }
         });
 
+        JSONObject colors = byAsset(assets, "colors.json");
+        verifyMeta(colors, "$colorPreset_TkIhUZ28");
+        this.colors = new JSONColors(colors);
+
+
         JSONObject mainSchedule = byAsset(assets, "mainSchedule.json");
         verifyMeta(mainSchedule, "$mainSchedule_TkIhUZ28");
 
+
         schedule = new JSONSchedule(mainSchedule, this);
+
+
 
     }
 
@@ -81,4 +91,13 @@ public class JSONReader {
     public JSONSchedule getSchedule() {
         return schedule;
     }
+
+    /**
+     * Get the current loaded colors from the assets
+     * @return The colors object
+     */
+    public JSONColors getColors() {
+        return colors;
+    }
+
 }

@@ -83,7 +83,6 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
             super.onCreate(holder);
             /* initialize your watch face */
 
-            drawer = new WatchFaceDrawer(SchoolWatchFaceService.this);
 
             scheduleEnabled = false;
 
@@ -93,6 +92,7 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
                     try {
                         mainReader = new JSONReader(getAssets());
                         mainSchedule = mainReader.getSchedule();
+                        drawer = new WatchFaceDrawer(SchoolWatchFaceService.this);
                         scheduleEnabled = true;
                     } catch (InvalidDataException e) {
                         e.printStackTrace();
@@ -170,6 +170,7 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
         public void onDraw(Canvas canvas, Rect bounds) {
             /* draw your watch face */
 
+            if(drawer != null)
             drawer.onDraw(canvas, bounds);
 
 
@@ -288,6 +289,10 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
                 return true;
             }
             return false;
+        }
+
+        public JSONReader getMainReader() {
+            return mainReader;
         }
 
         // handler to update the time once a second in interactive mode

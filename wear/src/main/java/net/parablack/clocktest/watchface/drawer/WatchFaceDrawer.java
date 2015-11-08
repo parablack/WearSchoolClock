@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.os.Vibrator;
 import android.util.Log;
 
+import net.parablack.clocktest.json.JSONColors;
 import net.parablack.clocktest.json.JSONEvent;
 import net.parablack.clocktest.watchface.SchoolWatchFaceService;
 import net.parablack.clocktest.watchface.WearEvent;
@@ -41,25 +42,18 @@ public class WatchFaceDrawer {
 
 
     static {
-        hourPaint.setColor(Color.WHITE);
         hourPaint.setTextSize(100);
 
         doubleColonPaintHours.setTextSize(100);
-        doubleColonPaintHours.setColor(Color.WHITE);
 
-        minutePaint.setColor(Color.WHITE);
         minutePaint.setTextSize(100);
 
-        secondPaint.setColor(Color.parseColor("#FF9C9C")); // 0A63F2 is das von ir 09ED0D
         secondPaint.setTextSize(60);
 
-        datePaint.setColor(Color.WHITE);
         datePaint.setTextSize(35);
 
-        scheduleSubjectPaint.setColor(Color.parseColor("#A1A9FF")); // #F2D70A
         scheduleSubjectPaint.setTextSize(28);
 
-        scheduleNextPaint.setColor(Color.parseColor("#A1A9FF")); // FF9100 ist das orange von mir
         scheduleNextPaint.setTextSize(22);
 
         doubleColonWidthHours = doubleColonPaintHours.measureText(DOUBLE_COLON);
@@ -72,16 +66,39 @@ public class WatchFaceDrawer {
 
     private final Vibrator vibrator;
 
-    private final ModeFaceDrawer<String> textDrawer = new TextDrawer(this);
-    private final ModeFaceDrawer<SuperTimeWrapper> singleLineDrawer = new SingeLineDrawer(this);
-    private final ModeFaceDrawer<SuperTimeWrapper> fullLineDrawer = new FullLineDrawer(this);
+    private final JSONColors colors;
+
+    private final ModeFaceDrawer<String> textDrawer;
+    private final ModeFaceDrawer<SuperTimeWrapper> singleLineDrawer;
+    private final ModeFaceDrawer<SuperTimeWrapper> fullLineDrawer;
 
 
     public WatchFaceDrawer(SchoolWatchFaceService service) {
         engine = service.getWatchEngine();
 
+        colors = engine.getMainReader().getColors();
+        if(colors == null) System.out.println("Colors = null");
+
+        loadColors();
         vibrator = (Vibrator) service.getSystemService(Context.VIBRATOR_SERVICE);
 
+        textDrawer = new TextDrawer(this);
+        singleLineDrawer = new SingeLineDrawer(this);
+        fullLineDrawer = new FullLineDrawer(this);
+    }
+
+
+    public void loadColors(){
+        hourPaint.setColor(colors.getMainTime());
+        minutePaint.setColor(colors.getMainTime());
+        doubleColonPaintHours.setColor(colors.getMainTime());
+
+        secondPaint.setColor(colors.getSecondsTime()); // 0A63F2 is das von ir 09ED0D         TOBI #FF9C9C
+
+        scheduleSubjectPaint.setColor(getColors().getSubjectCurrent()); // #F2D70A        // #A1A9FF tobi
+        scheduleNextPaint.setColor(getColors().getSubjectNext()); // FF9100 ist das orange von mir       // #A1A9FF tobi
+
+        datePaint.setColor(colors.getMainTime());
 
     }
 
@@ -220,5 +237,9 @@ public class WatchFaceDrawer {
 
     public void setCurrentDrawer(ModeFaceDrawer.ModeFaceDrawers currentDrawer) {
         this.currentDrawer = currentDrawer;
+    }
+
+    public JSONColors getColors() {
+        return colors;
     }
 }

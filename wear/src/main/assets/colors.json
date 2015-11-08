@@ -1,10 +1,15 @@
 {
   "secondsTime": "#0A63F2",
-  "full_done": "#FF9100",
-  "full_percentage": "#FF9100",
+  "full_done": "#00CC00",
+  "full_percentage": "#FFCC00",
+  "text_text": "#0A63F2",
   "subjectNext": "#FF9100",
   "checksum": "$colorPreset_TkIhUZ28",
   "mainTime": "#FFFFFF",
   "subjectCurrent": "#FF9100",
-  "full_todo": "#FF9100"
+  "full_todo": "#CC0000",
+
+  "single_done": "#00CC00",
+  "single_todo": "#CC0000",
+  "single_inprogress": "#FFCC00"
 }

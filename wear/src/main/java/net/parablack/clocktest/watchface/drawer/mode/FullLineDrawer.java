@@ -16,17 +16,17 @@ public class FullLineDrawer extends ModeFaceDrawer<SuperTimeWrapper>{
     private static final int LINE_HEIGHT = 55;
     private static float LINE_START = -1; // Saving power, it is (center / 2) + 70 // FIXED
 
-    static Paint greenPaint = new Paint(), redPaint = new Paint(), yellowPaint = new Paint();
+    static Paint donePaint = new Paint(), todoPaint = new Paint(), percentagePaint = new Paint();
 
-    static {
-        greenPaint.setColor(Color.GREEN);
-        redPaint.setColor(Color.RED);
-        yellowPaint.setColor(Color.YELLOW);
-        yellowPaint.setTextSize(40);
-    }
 
     public FullLineDrawer(WatchFaceDrawer drawer) {
         super(drawer);
+
+        donePaint.setColor(getColors("full_done"));
+        todoPaint.setColor(getColors("full_todo"));
+        percentagePaint.setColor(getColors("full_percentage"));
+        percentagePaint.setTextSize(40);
+
     }
 
 
@@ -44,19 +44,19 @@ public class FullLineDrawer extends ModeFaceDrawer<SuperTimeWrapper>{
 
         float sP = (float) (width * currentPercentage);
 
-        c.drawRect(0, y, sP, y + height, greenPaint);
-        c.drawRect(sP, y, width, y + height, redPaint);
+        c.drawRect(0, y, sP, y + height, donePaint);
+        c.drawRect(sP, y, width, y + height, todoPaint);
 
         int a = (int) (currentPercentage * 1000);
         float f = a / 10F;
 
         Rect bounds = new Rect();
-        yellowPaint.getTextBounds(f + "", 0, 2, bounds);
-        yellowPaint.setTextAlign(Paint.Align.CENTER);
+        percentagePaint.getTextBounds(f + "", 0, 2, bounds);
+        percentagePaint.setTextAlign(Paint.Align.CENTER);
         int hei = bounds.height();
         float offset = y + height - ((height - hei) / 2);
 
-        c.drawText(f + "", centerX, offset, yellowPaint);
+        c.drawText(f + "", centerX, offset, percentagePaint);
 
     }
 }
