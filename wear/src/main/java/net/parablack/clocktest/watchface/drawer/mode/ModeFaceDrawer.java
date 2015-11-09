@@ -25,6 +25,8 @@ public abstract class ModeFaceDrawer<T> {
 
     protected abstract void onDraw(Canvas c, T args) throws ScheduleDrawException;
 
+    public abstract void reloadColors();
+
     public void draw(Canvas c, Rect bounds, T args) throws ScheduleDrawException {
         width = bounds.width();
         height = bounds.height();

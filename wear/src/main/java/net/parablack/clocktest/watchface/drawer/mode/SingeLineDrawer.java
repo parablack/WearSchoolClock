@@ -27,9 +27,7 @@ public class SingeLineDrawer extends ModeFaceDrawer<SuperTimeWrapper> {
 
     public SingeLineDrawer(WatchFaceDrawer drawer) {
         super(drawer);
-        greenPaint.setColor(getColors("single_done"));
-        redPaint.setColor(getColors("single_todo"));
-        yellowPaint.setColor(getColors("single_inprogress"));
+        reloadColors();
     }
 
 
@@ -78,6 +76,13 @@ public class SingeLineDrawer extends ModeFaceDrawer<SuperTimeWrapper> {
             }
 
         } else throw new ScheduleDrawException("Time too big! Drawing failed!");
+    }
+
+    @Override
+    public void reloadColors() {
+        greenPaint.setColor(getColors("single_done"));
+        redPaint.setColor(getColors("single_todo"));
+        yellowPaint.setColor(getColors("single_inprogress"));
     }
 
     private int minTotal;

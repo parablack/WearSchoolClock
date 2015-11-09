@@ -2,11 +2,14 @@ package net.parablack.clocktest.json;
 
 import android.content.res.AssetManager;
 
+import com.google.android.gms.wearable.Asset;
+
 import net.parablack.clocktest.json.subjects.ScheduleSubject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.util.HashMap;
 
 import static net.parablack.clocktest.json.JSONReaderUtil.*;
@@ -18,11 +21,15 @@ public class JSONReader {
     private HashMap<String, ScheduleTime> times = new HashMap<>();
     private HashMap<String, ScheduleSubject> subjects = new HashMap<>();
     private JSONSchedule schedule;
-    private JSONColors colors;
+ //   private JSONColors colors;
 
 
 
-    public JSONReader(AssetManager assets) throws InvalidDataException {
+    public JSONReader()  {
+
+    }
+
+    public void parseData(AssetManager assets) throws InvalidDataException{
         initByArray(assets, "meta.json", "$metas_TkIhUZ28", "metas", new ScheduleInitCallback() {
             @Override
             public void callback(JSONObject object) throws JSONException {
@@ -47,9 +54,7 @@ public class JSONReader {
             }
         });
 
-        JSONObject colors = byAsset(assets, "colors.json");
-        verifyMeta(colors, "$colorPreset_TkIhUZ28");
-        this.colors = new JSONColors(colors);
+
 
 
         JSONObject mainSchedule = byAsset(assets, "mainSchedule.json");
@@ -57,7 +62,6 @@ public class JSONReader {
 
 
         schedule = new JSONSchedule(mainSchedule, this);
-
 
 
     }
@@ -96,8 +100,10 @@ public class JSONReader {
      * Get the current loaded colors from the assets
      * @return The colors object
      */
-    public JSONColors getColors() {
-        return colors;
+    public JSONColors getColors(InputStream a) {
+        JSONObject colors = byAsset(a);
+        verifyMeta(colors, "$colorPreset_TkIhUZ28");
+        return new JSONColors(colors);
     }
 
 }

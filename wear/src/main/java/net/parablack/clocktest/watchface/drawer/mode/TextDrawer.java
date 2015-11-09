@@ -21,6 +21,11 @@ public class TextDrawer extends ModeFaceDrawer<String> {
 
     public TextDrawer(WatchFaceDrawer d) {
         super(d);
+        reloadColors();
+    }
+
+    @Override
+    public void reloadColors() {
         scheduleTimePaint.setColor(getColors("text_text"));
 
     }

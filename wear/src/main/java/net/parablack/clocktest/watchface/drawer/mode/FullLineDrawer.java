@@ -22,10 +22,7 @@ public class FullLineDrawer extends ModeFaceDrawer<SuperTimeWrapper>{
     public FullLineDrawer(WatchFaceDrawer drawer) {
         super(drawer);
 
-        donePaint.setColor(getColors("full_done"));
-        todoPaint.setColor(getColors("full_todo"));
-        percentagePaint.setColor(getColors("full_percentage"));
-        percentagePaint.setTextSize(40);
+       reloadColors();
 
     }
 
@@ -37,6 +34,14 @@ public class FullLineDrawer extends ModeFaceDrawer<SuperTimeWrapper>{
         }
         drawLine(canvas, superTimeWrapper.getPercentageDone(), LINE_START, LINE_HEIGHT);
 
+    }
+
+    @Override
+    public void reloadColors() {
+        donePaint.setColor(getColors("full_done"));
+        todoPaint.setColor(getColors("full_todo"));
+        percentagePaint.setColor(getColors("full_percentage"));
+        percentagePaint.setTextSize(40);
     }
 
 

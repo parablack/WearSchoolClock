@@ -2,11 +2,14 @@ package net.parablack.clocktest.json;
 
 import android.content.res.AssetManager;
 
+import com.google.android.gms.wearable.Asset;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -56,6 +59,22 @@ class JSONReaderUtil {
     protected static JSONObject byAsset(AssetManager as, String fileName) {
         try {
             String metaString = JSONReaderUtil.readFile(as.open(fileName));
+            return new JSONObject(metaString);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    protected static JSONObject byAsset(InputStream stream) {
+        try {
+            String metaString = JSONReaderUtil.readFile(stream);
             return new JSONObject(metaString);
 
 

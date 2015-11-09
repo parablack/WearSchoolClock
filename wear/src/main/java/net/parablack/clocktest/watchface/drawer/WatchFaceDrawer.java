@@ -8,6 +8,8 @@ import android.graphics.Rect;
 import android.os.Vibrator;
 import android.util.Log;
 
+import com.google.android.gms.wearable.Asset;
+
 import net.parablack.clocktest.json.JSONColors;
 import net.parablack.clocktest.json.JSONEvent;
 import net.parablack.clocktest.watchface.SchoolWatchFaceService;
@@ -19,6 +21,8 @@ import net.parablack.clocktest.watchface.drawer.mode.SingeLineDrawer;
 import net.parablack.clocktest.watchface.drawer.mode.TextDrawer;
 import net.parablack.clocktest.watchface.drawer.mode.wrapper.SuperTimeWrapper;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -66,7 +70,7 @@ public class WatchFaceDrawer {
 
     private final Vibrator vibrator;
 
-    private final JSONColors colors;
+    private JSONColors colors;
 
     private final ModeFaceDrawer<String> textDrawer;
     private final ModeFaceDrawer<SuperTimeWrapper> singleLineDrawer;
@@ -75,11 +79,7 @@ public class WatchFaceDrawer {
 
     public WatchFaceDrawer(SchoolWatchFaceService service) {
         engine = service.getWatchEngine();
-
-        colors = engine.getMainReader().getColors();
-        if(colors == null) System.out.println("Colors = null");
-
-        loadColors();
+        colors = new JSONColors();
         vibrator = (Vibrator) service.getSystemService(Context.VIBRATOR_SERVICE);
 
         textDrawer = new TextDrawer(this);
@@ -88,7 +88,7 @@ public class WatchFaceDrawer {
     }
 
 
-    public void loadColors(){
+    private void loadColors() {
         hourPaint.setColor(colors.getMainTime());
         minutePaint.setColor(colors.getMainTime());
         doubleColonPaintHours.setColor(colors.getMainTime());
@@ -100,6 +100,17 @@ public class WatchFaceDrawer {
 
         datePaint.setColor(colors.getMainTime());
 
+    }
+
+    public void updateColors(InputStream stream) {
+
+        colors = engine.getMainReader().getColors(stream);
+
+        textDrawer.reloadColors();
+        singleLineDrawer.reloadColors();
+        fullLineDrawer.reloadColors();
+
+        loadColors();
     }
 
     public void onDraw(Canvas canvas, Rect bounds) {
@@ -224,7 +235,6 @@ public class WatchFaceDrawer {
     }
 
     /**
-     *
      * @param antiAlias Wether anti-aliasing should be applied or not
      */
     public void setAntiAlias(boolean antiAlias) {

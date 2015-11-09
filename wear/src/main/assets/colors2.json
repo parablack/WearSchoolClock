@@ -1,0 +1,20 @@
+{
+  "checksum": "$colorPreset_TkIhUZ28",
+
+
+  "secondsTime": "#66FA70",
+  "mainTime": "#FFFFFF",
+  "subjectCurrent": "#F78502",
+  "subjectNext": "#F78502",
+
+
+  "text_text": "#66FA70",
+
+  "full_todo": "#910008",
+  "full_done": "#007D00",
+  "full_percentage": "#000000",
+
+  "single_done": "#00CC00",
+  "single_todo": "#CC0000",
+  "single_inprogress": "#FFCC00"
+}

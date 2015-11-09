@@ -7,7 +7,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.wearable.watchface.CanvasWatchFaceService;
+import android.util.Log;
 import android.view.SurfaceHolder;
+
+import com.google.android.gms.wearable.Asset;
+import com.google.android.gms.wearable.DataEvent;
+import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.DataMapItem;
 
 import net.parablack.clocktest.json.InvalidDataException;
 import net.parablack.clocktest.json.JSONReader;
@@ -15,6 +21,7 @@ import net.parablack.clocktest.json.JSONSchedule;
 import net.parablack.clocktest.watchface.drawer.WatchFaceDrawer;
 import net.parablack.clocktest.watchface.drawer.mode.ModeFaceDrawer;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -83,6 +90,10 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
             super.onCreate(holder);
             /* initialize your watch face */
 
+            mainReader = new JSONReader();
+
+            // Has to be instantiated later than main reader, because it references to mainReader
+            drawer = new WatchFaceDrawer(SchoolWatchFaceService.this);
 
             scheduleEnabled = false;
 
@@ -90,14 +101,18 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
                 @Override
                 protected Void doInBackground(Void... params) {
                     try {
-                        mainReader = new JSONReader(getAssets());
+                        mainReader.parseData(getAssets());
                         mainSchedule = mainReader.getSchedule();
-                        drawer = new WatchFaceDrawer(SchoolWatchFaceService.this);
                         scheduleEnabled = true;
+                        drawer.updateColors(getAssets().open("colors.json"));
                     } catch (InvalidDataException e) {
                         e.printStackTrace();
                         scheduleEnabled = false;
+                    } catch (IOException e){
+                        e.printStackTrace();
+                        Log.w("Schedule", "Falling back into default colors!");
                     }
+
                     return null;
                 }
             }.execute();
@@ -217,7 +232,8 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
         }
 
         int alreadyTapped = 0;
-
+        int alreadyDownRightTapped = 0;
+        int colors_currLoaded = 1;
         // Always called twice?!
         @Override
         public void onTapCommand(int tapType, int x, int y, long eventTime) {
@@ -249,6 +265,38 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
                     alreadyTapped = 0;
                 }
                 invalidate();
+            }
+
+            if(x > 250 && y > 250){
+                alreadyDownRightTapped++;
+            }else if(alreadyDownRightTapped >= 20){
+                if(x < 100 && y < 100){
+                    reloading = true;
+                    new AsyncTask<Void, Void, Void>(){
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                            try {
+                                if(colors_currLoaded == 1){
+                                    drawer.updateColors(SchoolWatchFaceService.this.getAssets().open("colors2.json"));
+                                    Log.i("Schedule", "Loading colors2");
+                                    colors_currLoaded = 2;
+                                }
+                                else {
+                                    drawer.updateColors(SchoolWatchFaceService.this.getAssets().open("colors.json"));
+                                    colors_currLoaded = 1;
+                                    Log.i("Schedule", "Loading colors");
+
+                                }
+                                invalidate();
+                                alreadyDownRightTapped = 0;
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            return null;
+                        }
+                    }.execute();
+                }
+
             }
 
 
@@ -294,6 +342,8 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
         public JSONReader getMainReader() {
             return mainReader;
         }
+
+
 
         // handler to update the time once a second in interactive mode
 
