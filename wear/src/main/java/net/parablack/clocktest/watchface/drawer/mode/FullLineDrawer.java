@@ -1,7 +1,6 @@
 package net.parablack.clocktest.watchface.drawer.mode;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 

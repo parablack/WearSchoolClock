@@ -12,10 +12,15 @@ import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
+    private ClockCommunicator communicator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        communicator = new ClockCommunicator(this);
+
     }
 
 
@@ -23,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("Test Buttoni Rigatoni");
 
 
-        int notificationId = 001;
+        int notificationId = 1;
         Intent viewIntent = new Intent(this, MainActivity.class);
 
         PendingIntent viewPendingIntent =
@@ -35,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
                         .setContentTitle("Hallo")
                         .setContentText("Testo")
                         .setContentIntent(viewPendingIntent)
-                        .addAction(R.drawable.ic_setting_dark, "Jo geil", viewPendingIntent);
+                        .addAction(R.drawable.ic_setting_dark, "Aha", viewPendingIntent);
 
 
         NotificationManagerCompat notificationManager =
@@ -43,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
 
         notificationManager.notify(notificationId, notificationBuilder.build());
 
+
+        // Send to clock
+        communicator.sendNewColorPreset("abc");
 
     }
 

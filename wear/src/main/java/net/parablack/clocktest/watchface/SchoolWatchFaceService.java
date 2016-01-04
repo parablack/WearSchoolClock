@@ -18,6 +18,7 @@ import com.google.android.gms.wearable.DataMapItem;
 import net.parablack.clocktest.json.InvalidDataException;
 import net.parablack.clocktest.json.JSONReader;
 import net.parablack.clocktest.json.JSONSchedule;
+import net.parablack.clocktest.transfer.ScheduleAssetListener;
 import net.parablack.clocktest.watchface.drawer.WatchFaceDrawer;
 import net.parablack.clocktest.watchface.drawer.mode.ModeFaceDrawer;
 
@@ -50,6 +51,8 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
 
         static final int MSG_UPDATE_TIME = 0;
         private static final int INTERACTIVE_UPDATE_RATE_MS = 1000;
+
+        private ScheduleAssetListener assetListener;
 
         private JSONReader mainReader;
         private JSONSchedule mainSchedule;
@@ -117,6 +120,7 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
                 }
             }.execute();
 
+            assetListener = new ScheduleAssetListener();
 
             calendar = Calendar.getInstance();
 
