@@ -249,8 +249,7 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
             } else if (alreadyTapped >= 20) {
                 if (x > 200 && y > 200) {
                     System.out.println("Forced reload --> Applying");
-                    Reloader r = new Reloader();
-                    r.execute();
+                    mainSchedule.reload();
                     reloading = true;
                     alreadyTapped = 0;
                     invalidate();
@@ -322,14 +321,6 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
             return scheduleEnabled;
         }
 
-        private class Reloader extends AsyncTask<Void, Void, Void> {
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                getMainSchedule().reload();
-                return null;
-            }
-        }
 
         /**
          * Notifys if a reload has (or is) taking place, if yes, it will be automatically set to false for the next check
@@ -346,6 +337,7 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
         public JSONReader getMainReader() {
             return mainReader;
         }
+
 
 
 

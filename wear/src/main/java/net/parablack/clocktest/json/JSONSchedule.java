@@ -1,5 +1,7 @@
 package net.parablack.clocktest.json;
 
+import android.os.AsyncTask;
+
 import net.parablack.clocktest.watchface.WearEvent;
 import net.parablack.clocktest.watchface.WearSchedule;
 
@@ -32,8 +34,22 @@ public class JSONSchedule implements WearSchedule {
     }
 
 
+    /**
+     * Reloads the schedule by reparsing it from JSON
+     * This method is executed async. If you want to reload
+     */
     @Override
     public void reload() {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                syncReload();
+                return null;
+            }
+        }.doInBackground();
+    }
+
+    public void syncReload() {
         Calendar c = currentCalendar();
         tomorrowEvents.clear();
         events.clear();
@@ -99,12 +115,12 @@ public class JSONSchedule implements WearSchedule {
 
     private WearEvent _current, _next;
 
-    protected void reloadEvents (){
+    protected void reloadEvents() {
         _next = _loadNext();
         _current = _loadCurrent();
     }
 
-    private WearEvent _loadCurrent(){
+    private WearEvent _loadCurrent() {
         long dayMillis = dayMillis();
 
 
@@ -122,8 +138,8 @@ public class JSONSchedule implements WearSchedule {
         }
         if (tomorrowEvents.size() >= 1)
             return new WearEvent.NothingUpEvent(tomorrowEvents.get(0).getTime().getBegin());
-        else{
-            if(_next instanceof  JSONEvent){
+        else {
+            if (_next instanceof JSONEvent) {
                 JSONEvent ne = (JSONEvent) _next;
 
                 return new WearEvent.NothingUpEvent(ne.getTime().getBegin());
@@ -133,7 +149,7 @@ public class JSONSchedule implements WearSchedule {
         return new WearEvent.NothingUpEvent();
     }
 
-    private WearEvent _loadNext(){
+    private WearEvent _loadNext() {
         long dayMillis = dayMillis();
 
 
@@ -151,11 +167,11 @@ public class JSONSchedule implements WearSchedule {
             weekDay = incrWeekNumber(weekDay);
 
             try {
-                for(ArrayList ar = getForDayNumber(weekDay); ar.size() <= 0; ar = getForDayNumber(weekDay = incrWeekNumber(weekDay))){
+                for (ArrayList ar = getForDayNumber(weekDay); ar.size() <= 0; ar = getForDayNumber(weekDay = incrWeekNumber(weekDay))) {
                     System.out.println("ar + ar.size() = " + ar + ar.size() + " " + weekDay);
                 }
                 ArrayList<JSONEvent> ar2 = getForDayNumber(weekDay);
-                System.out.println("ar2 ("+weekDay+")= " + ar2);
+                System.out.println("ar2 (" + weekDay + ")= " + ar2);
                 int finalWeekDay = weekDay;
                 return ar2.get(0);
             } catch (JSONException e) {
@@ -170,14 +186,14 @@ public class JSONSchedule implements WearSchedule {
 
     @Override
     public WearEvent getCurrent() {
-        if(_current == null || _current.getTimeTilEnd() < 0) reloadEvents();
+        if (_current == null || _current.getTimeTilEnd() < 0) reloadEvents();
         return _current;
 
     }
 
     @Override
     public WearEvent getNext() {
-        if(_next == null) reloadEvents();
+        if (_next == null) reloadEvents();
         return _next;
 
     }

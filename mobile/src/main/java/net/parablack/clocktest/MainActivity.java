@@ -52,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
         // Send to clock
         communicator.sendNewColorPreset("abc");
 
+        // Send message
+        communicator.requestTranscription("abc123".getBytes());
+
     }
 
 

@@ -1,26 +1,13 @@
 package net.parablack.clocktest.transfer;
 
-import android.content.Context;
-import android.net.Uri;
-import android.os.Bundle;
 import android.util.Log;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.wearable.Asset;
-import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Node;
-import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
-
-import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
-
-import javax.security.auth.login.LoginException;
 
 public class ScheduleAssetListener extends WearableListenerService {
 

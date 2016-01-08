@@ -1,11 +1,11 @@
-package net.parablack.clocktest;
+package net.parablack.clocktest.app;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.view.View;
 
-import net.parablack.clocktest.app.MenuActivity;
+import net.parablack.clocktest.R;
 
 public class MainActivityWear extends WearableActivity {
 

@@ -17,7 +17,7 @@
         <uses-library android:name="com.google.android.wearable" android:required="false" />
 
         <activity
-            android:name=".MainActivityWear"
+            android:name=".app.MainActivityWear"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.DeviceDefault.Light" >
             <intent-filter>

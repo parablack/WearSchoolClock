@@ -8,7 +8,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.wearable.Asset;
+import com.google.android.gms.wearable.CapabilityApi;
+import com.google.android.gms.wearable.CapabilityInfo;
 import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.MessageApi;
@@ -18,12 +19,17 @@ import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 
+import java.util.Set;
+
 public class ClockCommunicator implements
         DataApi.DataListener,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener{
+        GoogleApiClient.OnConnectionFailedListener {
 
     private static final String COLOR_PRESET = "net.parablack.clock.color";
+
+    private static final String
+            WATCHFACE_RELOAD_CAPABILITY = "watchface_reload";
 
     private GoogleApiClient mGoogleApiClient;
 
@@ -35,6 +41,9 @@ public class ClockCommunicator implements
                 .build();
 
         mGoogleApiClient.connect();
+
+        setupMessageTranscription();
+
     }
 
     @Override
@@ -44,7 +53,7 @@ public class ClockCommunicator implements
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.i("[Clock]", "Connection supsendend {"+i+"}.");
+        Log.i("[Clock]", "Connection supsendend {" + i + "}.");
     }
 
     @Override
@@ -57,7 +66,7 @@ public class ClockCommunicator implements
         Log.e("[Clock]", "Connection failed.");
     }
 
-    public void sendNewColorPreset(String json){
+    public void sendNewColorPreset(String json) {
         System.out.println("Sending " + json);
         PutDataMapRequest request = PutDataMapRequest.create("/color/json");
 
@@ -91,6 +100,78 @@ public class ClockCommunicator implements
             }
         });
 
+    }
+
+    String reloadNodeId;
+
+    private void setupMessageTranscription() {
+
+        Wearable.CapabilityApi.getCapability(
+                mGoogleApiClient, WATCHFACE_RELOAD_CAPABILITY,
+                CapabilityApi.FILTER_REACHABLE).setResultCallback(new ResultCallback<CapabilityApi.GetCapabilityResult>() {
+            @Override
+            public void onResult(CapabilityApi.GetCapabilityResult getCapabilityResult) {
+                System.out.println("[1] Capability result received, passing to updateTranscriptionCapability()");
+                updateTranscriptionCapability(getCapabilityResult.getCapability());
+            }
+        });
+
+        CapabilityApi.CapabilityListener capabilityListener =
+                new CapabilityApi.CapabilityListener() {
+                    @Override
+                    public void onCapabilityChanged(CapabilityInfo capabilityInfo) {
+                        updateTranscriptionCapability(capabilityInfo);
+                        System.out.println("[2] Capability result received (CHANGED!), passing to updateTranscriptionCapability()");
+
+                    }
+                };
+
+        Wearable.CapabilityApi.addCapabilityListener(
+                mGoogleApiClient,
+                capabilityListener,
+                WATCHFACE_RELOAD_CAPABILITY);
+    }
+
+
+    private void updateTranscriptionCapability(CapabilityInfo capabilityInfo) {
+        Set<Node> connectedNodes = capabilityInfo.getNodes();
+        System.out.println("Node length  = " + connectedNodes.size());
+        reloadNodeId = pickBestNodeId(connectedNodes);
+        System.out.println("reloadNodeId = " + reloadNodeId);
+    }
+
+    public void requestTranscription(byte[] data) {
+        if (reloadNodeId != null) {
+            Wearable.MessageApi.sendMessage(mGoogleApiClient, reloadNodeId,
+                    "/message/reload", data).setResultCallback(
+                    new ResultCallback<MessageApi.SendMessageResult>() {
+
+                        @Override
+                        public void onResult(MessageApi.SendMessageResult sendMessageResult) {
+                            if (!sendMessageResult.getStatus().isSuccess()) {
+                                // Failed to send message
+                                System.out.println("Message fail: " + sendMessageResult.getStatus());
+                            }else{
+                                System.out.println("Message succes: " + sendMessageResult.getStatus());
+                            }
+                        }
+                    }
+            );
+        } else {
+            System.out.println("Message fail: No node found!");
+        }
+    }
+
+    private String pickBestNodeId(Set<Node> nodes) {
+        String bestNodeId = null;
+        // Find a nearby node or pick one arbitrarily
+        for (Node node : nodes) {
+            if (node.isNearby()) {
+                return node.getId();
+            }
+            bestNodeId = node.getId();
+        }
+        return bestNodeId;
     }
 
 
