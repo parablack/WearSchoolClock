@@ -67,7 +67,8 @@ public abstract class ModeFaceDrawer<T> {
     public enum ModeFaceDrawers {
         TEXT,
         SINGLE_LINE,
-        FULL_LINE
+        FULL_LINE,
+        PIXELS
 
     }
 

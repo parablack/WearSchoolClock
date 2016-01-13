@@ -6,6 +6,8 @@ import android.support.wearable.activity.WearableActivity;
 import android.view.View;
 
 import net.parablack.clocktest.R;
+import net.parablack.clocktest.watchface.SchoolWatchFaceService;
+import net.parablack.clocktest.watchface.drawer.mode.ModeFaceDrawer;
 
 public class MainActivityWear extends WearableActivity {
 
@@ -17,9 +19,20 @@ public class MainActivityWear extends WearableActivity {
 
 
     public void onMasterButtonClick(View v){
-        System.out.println("Clicked! Du Penne Tagliatelle");
-        Intent i = new Intent(this, MenuActivity.class);
-        startActivity(i);
+        if(v.getId() == R.id.main_button){
+            System.out.println("Clicked! Test {1}");
+            Intent i = new Intent(this, MenuActivity.class);
+            startActivity(i);
+
+        }
+
+    }
+
+    public void onDesignChangeButtonClicked(View v){
+
+        System.out.println("Design Button Change clicked --> Applying");
+        SchoolWatchFaceService.getInstance().getWatchEngine().getDrawer().setCurrentDrawer(ModeFaceDrawer.ModeFaceDrawers.PIXELS);
+
     }
 
 }

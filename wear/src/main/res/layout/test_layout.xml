@@ -12,8 +12,16 @@
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="86dp"
         android:text="@string/button_play"
-        android:id="@+id/button"
+        android:id="@+id/main_button"
         android:onClick="onMasterButtonClick" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/clock_change_design"
+        android:id="@+id/change_design"
+        android:nestedScrollingEnabled="true"
+        android:onClick="onDesignChangeButtonClicked" />
 </LinearLayout>

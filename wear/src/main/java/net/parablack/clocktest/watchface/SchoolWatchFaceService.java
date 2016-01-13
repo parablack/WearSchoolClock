@@ -33,7 +33,17 @@ import static android.support.wearable.watchface.WatchFaceStyle.PEEK_MODE_SHORT;
 
 public class SchoolWatchFaceService extends CanvasWatchFaceService {
 
+    private static SchoolWatchFaceService instance;
+
     private Engine watchEngine;
+
+    public static SchoolWatchFaceService getInstance() {
+        return instance;
+    }
+
+    public SchoolWatchFaceService() {
+        instance = this;
+    }
 
     @Override
     public Engine onCreateEngine() {
@@ -338,9 +348,13 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
             return mainReader;
         }
 
+        public WatchFaceDrawer getDrawer() {
+            return drawer;
+        }
 
-
-
+        public void setDrawer(WatchFaceDrawer drawer) {
+            this.drawer = drawer;
+        }
         // handler to update the time once a second in interactive mode
 
         // receiver to update the time zone

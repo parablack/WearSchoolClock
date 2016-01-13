@@ -16,6 +16,7 @@ import net.parablack.clocktest.watchface.SchoolWatchFaceService;
 import net.parablack.clocktest.watchface.WearEvent;
 import net.parablack.clocktest.watchface.drawer.mode.FullLineDrawer;
 import net.parablack.clocktest.watchface.drawer.mode.ModeFaceDrawer;
+import net.parablack.clocktest.watchface.drawer.mode.PixelDrawer;
 import net.parablack.clocktest.watchface.drawer.mode.ScheduleDrawException;
 import net.parablack.clocktest.watchface.drawer.mode.SingeLineDrawer;
 import net.parablack.clocktest.watchface.drawer.mode.TextDrawer;
@@ -75,6 +76,7 @@ public class WatchFaceDrawer {
     private final ModeFaceDrawer<String> textDrawer;
     private final ModeFaceDrawer<SuperTimeWrapper> singleLineDrawer;
     private final ModeFaceDrawer<SuperTimeWrapper> fullLineDrawer;
+    private final ModeFaceDrawer<SuperTimeWrapper> pixelDrawer;
 
 
     public WatchFaceDrawer(SchoolWatchFaceService service) {
@@ -85,6 +87,7 @@ public class WatchFaceDrawer {
         textDrawer = new TextDrawer(this);
         singleLineDrawer = new SingeLineDrawer(this);
         fullLineDrawer = new FullLineDrawer(this);
+        pixelDrawer = new PixelDrawer(this);
     }
 
 
@@ -215,6 +218,9 @@ public class WatchFaceDrawer {
 
                             if (currentDrawer == ModeFaceDrawer.ModeFaceDrawers.FULL_LINE)
                                 fullLineDrawer.draw(canvas, bounds, new SuperTimeWrapper(fromBegin, ttE));
+                            if (currentDrawer == ModeFaceDrawer.ModeFaceDrawers.PIXELS)
+                                pixelDrawer.draw(canvas, bounds, new SuperTimeWrapper(fromBegin, ttE));
+
                         } catch (ScheduleDrawException e) {
                             Log.i("Schedule", "ScheduleDrawException : " + e.getMessage());
                             currentDrawer = ModeFaceDrawer.ModeFaceDrawers.TEXT; // Can happen, simply change to default view!
