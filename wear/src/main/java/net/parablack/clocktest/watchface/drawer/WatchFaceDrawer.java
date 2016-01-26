@@ -116,6 +116,16 @@ public class WatchFaceDrawer {
         loadColors();
     }
 
+    public void updateColors(JSONColors colors){
+        this.colors = colors;
+
+        textDrawer.reloadColors();
+        singleLineDrawer.reloadColors();
+        fullLineDrawer.reloadColors();
+
+        loadColors();
+    }
+
     public void onDraw(Canvas canvas, Rect bounds) {
             /* draw your watch face */
 
