@@ -7,7 +7,7 @@ import android.view.View;
 
 import net.parablack.clocktest.R;
 import net.parablack.clocktest.watchface.SchoolWatchFaceService;
-import net.parablack.clocktest.watchface.drawer.mode.ModeFaceDrawer;
+import net.parablack.clocktest.watchface.drawer.mode.PixelDrawer;
 
 public class MainActivityWear extends WearableActivity {
 
@@ -31,7 +31,7 @@ public class MainActivityWear extends WearableActivity {
     public void onDesignChangeButtonClicked(View v){
 
         System.out.println("Design Button Change clicked --> Applying");
-        SchoolWatchFaceService.getInstance().getWatchEngine().getDrawer().setCurrentDrawer(ModeFaceDrawer.ModeFaceDrawers.PIXELS);
+        SchoolWatchFaceService.getInstance().getWatchEngine().getDrawer().setCurrentDrawer(new PixelDrawer(SchoolWatchFaceService.getInstance().getWatchEngine().getDrawer()));
 
     }
 

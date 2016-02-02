@@ -8,11 +8,13 @@ import android.util.Log;
 import net.parablack.clocktest.json.InvalidDataException;
 import net.parablack.clocktest.json.JSONColors;
 import net.parablack.clocktest.watchface.drawer.WatchFaceDrawer;
+import net.parablack.clocktest.watchface.drawer.mode.wrapper.TimeException;
 
 
 public abstract class ModeFaceDrawer<T> {
 
     private WatchFaceDrawer drawer;
+    private boolean ambi;
 
     protected int width, height;
     protected float centerX, centerY;
@@ -23,16 +25,18 @@ public abstract class ModeFaceDrawer<T> {
         this.drawer = drawer;
     }
 
-    protected abstract void onDraw(Canvas c, T args) throws ScheduleDrawException;
+    protected abstract void onDraw(Canvas c, T args) throws ScheduleDrawException, TimeException;
 
     public abstract void reloadColors();
 
-    public void draw(Canvas c, Rect bounds, T args) throws ScheduleDrawException {
+
+    public void draw(Canvas c, Rect bounds, boolean ambi, T args) throws ScheduleDrawException, TimeException {
         width = bounds.width();
         height = bounds.height();
 
         centerX = width / 2f;
         centerY = height / 2f;
+    this.ambi = ambi;
 
         onDraw(c, args);
 
@@ -53,6 +57,8 @@ public abstract class ModeFaceDrawer<T> {
     public WatchFaceDrawer getDrawer() {
         return drawer;
     }
+
+    protected boolean displaySeconds() { return ambi; }
 
     protected void flagUnsuccessful() {
         _flagUnsuccessful = true;

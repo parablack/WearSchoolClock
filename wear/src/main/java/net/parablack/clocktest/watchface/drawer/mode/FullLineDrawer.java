@@ -6,6 +6,7 @@ import android.graphics.Rect;
 
 import net.parablack.clocktest.watchface.drawer.WatchFaceDrawer;
 import net.parablack.clocktest.watchface.drawer.mode.wrapper.SuperTimeWrapper;
+import net.parablack.clocktest.watchface.drawer.mode.wrapper.TimeException;
 
 /**
  * Draws the time left in one line, also the percentage done
@@ -27,7 +28,7 @@ public class FullLineDrawer extends ModeFaceDrawer<SuperTimeWrapper>{
 
 
     @Override
-    protected void onDraw(Canvas canvas, SuperTimeWrapper superTimeWrapper) throws ScheduleDrawException {
+    protected void onDraw(Canvas canvas, SuperTimeWrapper superTimeWrapper) throws ScheduleDrawException, TimeException {
         if(LINE_START == -1){
             LINE_START = height / 2 + 70;
         }
@@ -50,9 +51,12 @@ public class FullLineDrawer extends ModeFaceDrawer<SuperTimeWrapper>{
 
         c.drawRect(0, y, sP, y + height, donePaint);
         c.drawRect(sP, y, width, y + height, todoPaint);
-
-        int a = (int) (currentPercentage * 1000);
-        float f = a / 10F;
+        float f;
+        if(displaySeconds()) {
+            int a = (int) (currentPercentage * 1000);
+            f = a / 10F;
+        }
+        else f = Math.round(currentPercentage * 100);
 
         Rect bounds = new Rect();
         percentagePaint.getTextBounds(f + "", 0, 2, bounds);

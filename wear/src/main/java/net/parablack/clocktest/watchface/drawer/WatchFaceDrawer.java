@@ -21,12 +21,15 @@ import net.parablack.clocktest.watchface.drawer.mode.ScheduleDrawException;
 import net.parablack.clocktest.watchface.drawer.mode.SingeLineDrawer;
 import net.parablack.clocktest.watchface.drawer.mode.TextDrawer;
 import net.parablack.clocktest.watchface.drawer.mode.wrapper.SuperTimeWrapper;
+import net.parablack.clocktest.watchface.drawer.mode.wrapper.TimeException;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+
+import static net.parablack.clocktest.watchface.drawer.mode.wrapper.SuperTimeWrapper.*;
 
 
 public class WatchFaceDrawer {
@@ -64,30 +67,20 @@ public class WatchFaceDrawer {
         doubleColonWidthHours = doubleColonPaintHours.measureText(DOUBLE_COLON);
     }
 
-
-    private ModeFaceDrawer.ModeFaceDrawers currentDrawer = ModeFaceDrawer.ModeFaceDrawers.TEXT;
-
     private SchoolWatchFaceService.Engine engine;
 
     private final Vibrator vibrator;
 
     private JSONColors colors;
 
-    private final ModeFaceDrawer<String> textDrawer;
-    private final ModeFaceDrawer<SuperTimeWrapper> singleLineDrawer;
-    private final ModeFaceDrawer<SuperTimeWrapper> fullLineDrawer;
-    private final ModeFaceDrawer<SuperTimeWrapper> pixelDrawer;
+    private ModeFaceDrawer<SuperTimeWrapper> modeDrawer;
 
 
     public WatchFaceDrawer(SchoolWatchFaceService service) {
         engine = service.getWatchEngine();
         colors = new JSONColors();
         vibrator = (Vibrator) service.getSystemService(Context.VIBRATOR_SERVICE);
-
-        textDrawer = new TextDrawer(this);
-        singleLineDrawer = new SingeLineDrawer(this);
-        fullLineDrawer = new FullLineDrawer(this);
-        pixelDrawer = new PixelDrawer(this);
+        modeDrawer = new TextDrawer(this);
     }
 
 
@@ -109,9 +102,7 @@ public class WatchFaceDrawer {
 
         colors = engine.getMainReader().getColors(stream);
 
-        textDrawer.reloadColors();
-        singleLineDrawer.reloadColors();
-        fullLineDrawer.reloadColors();
+        modeDrawer.reloadColors();
 
         loadColors();
     }
@@ -119,10 +110,7 @@ public class WatchFaceDrawer {
     public void updateColors(JSONColors colors){
         this.colors = colors;
 
-        textDrawer.reloadColors();
-        singleLineDrawer.reloadColors();
-        fullLineDrawer.reloadColors();
-
+        modeDrawer.reloadColors();
         loadColors();
     }
 
@@ -186,6 +174,7 @@ public class WatchFaceDrawer {
         if (engine.shouldTimerBeRunning()) {
 
             canvas.drawText(secondString, centerX + 80, centerY + 5, secondPaint);
+        }
 
             if (engine.isScheduleEnabled()) {
 
@@ -200,59 +189,42 @@ public class WatchFaceDrawer {
                 toEnd -= min;
                 int h = (int) (toEnd / 60);
 
-                if (currentDrawer == ModeFaceDrawer.ModeFaceDrawers.TEXT) {
-                    String text = String.format("%01d:%02d:%02d", h, min, sec);
-                    try {
-                        textDrawer.draw(canvas, bounds, text);
-                    } catch (ScheduleDrawException e) {
-                        e.printStackTrace();
-                        // This can never happen!
-                    }
 
-                } else {
-                    // Draw as matches
+                try{
+
+                    TimeWrapper timeWrapperToEnd = new TimeWrapper(h, min, sec);
+                    TimeWrapper fromBegin = new SuperTimeWrapper.ErrorTimeWrapper();
 
                     if (engine.getMainSchedule().getCurrent() instanceof JSONEvent) {
                         JSONEvent jse = (JSONEvent) engine.getMainSchedule().getCurrent();
 
-                        SuperTimeWrapper.TimeWrapper ttE = new SuperTimeWrapper.TimeWrapper(h, min, sec);
                         long begin = jse.getTimeFromBeginning();
                         int minutesFromBegin = (int) ((begin / 1000) / 60);
 
-                        SuperTimeWrapper.TimeWrapper fromBegin = new SuperTimeWrapper.TimeWrapper(-1, minutesFromBegin, -1);  // Hours and seconds are never needed
+                        fromBegin = new TimeWrapper(-1, minutesFromBegin, -1);  // Hours and seconds are never needed
 
-                        try {
-
-                            if (currentDrawer == ModeFaceDrawer.ModeFaceDrawers.SINGLE_LINE)
-                                singleLineDrawer.draw(canvas, bounds, new SuperTimeWrapper(fromBegin, ttE));
-
-                            if (currentDrawer == ModeFaceDrawer.ModeFaceDrawers.FULL_LINE)
-                                fullLineDrawer.draw(canvas, bounds, new SuperTimeWrapper(fromBegin, ttE));
-                            if (currentDrawer == ModeFaceDrawer.ModeFaceDrawers.PIXELS)
-                                pixelDrawer.draw(canvas, bounds, new SuperTimeWrapper(fromBegin, ttE));
-
-                        } catch (ScheduleDrawException e) {
-                            Log.i("Schedule", "ScheduleDrawException : " + e.getMessage());
-                            currentDrawer = ModeFaceDrawer.ModeFaceDrawers.TEXT; // Can happen, simply change to default view!
-                        }
-
-
-                    } else {
-                        Log.i("Schedule", "ScheduleDrawException : " + "No JSON Event");
-                        currentDrawer = ModeFaceDrawer.ModeFaceDrawers.TEXT; // Can happen, simply change to default view!
                     }
+
+                        modeDrawer.draw(canvas, bounds, engine.shouldTimerBeRunning(), new SuperTimeWrapper(fromBegin, timeWrapperToEnd));
+
+                }catch(TimeException e){
+                    modeDrawer = new TextDrawer(this);
+                } catch (ScheduleDrawException e) {
+                    e.printStackTrace();
 
                 }
 
-            }
         }
         // ---------------------------------------------------------
     }
 
+    public void onAmbientModeChanged(boolean inAmbient){
+        setAntiAlias(!inAmbient);
+    }
     /**
      * @param antiAlias Wether anti-aliasing should be applied or not
      */
-    public void setAntiAlias(boolean antiAlias) {
+    private void setAntiAlias(boolean antiAlias) {
         hourPaint.setAntiAlias(antiAlias);
         minutePaint.setAntiAlias(antiAlias);
         secondPaint.setAntiAlias(antiAlias);
@@ -260,8 +232,8 @@ public class WatchFaceDrawer {
         scheduleSubjectPaint.setAntiAlias(antiAlias);
     }
 
-    public void setCurrentDrawer(ModeFaceDrawer.ModeFaceDrawers currentDrawer) {
-        this.currentDrawer = currentDrawer;
+    public void setCurrentDrawer(ModeFaceDrawer<SuperTimeWrapper> drawer) {
+        this.modeDrawer = drawer;
     }
 
     public JSONColors getColors() {

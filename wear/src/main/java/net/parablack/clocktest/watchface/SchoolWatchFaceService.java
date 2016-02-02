@@ -20,7 +20,10 @@ import net.parablack.clocktest.json.JSONReader;
 import net.parablack.clocktest.json.JSONSchedule;
 import net.parablack.clocktest.transfer.ScheduleAssetListener;
 import net.parablack.clocktest.watchface.drawer.WatchFaceDrawer;
+import net.parablack.clocktest.watchface.drawer.mode.FullLineDrawer;
 import net.parablack.clocktest.watchface.drawer.mode.ModeFaceDrawer;
+import net.parablack.clocktest.watchface.drawer.mode.SingeLineDrawer;
+import net.parablack.clocktest.watchface.drawer.mode.TextDrawer;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -178,15 +181,9 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
         @Override
         public void onAmbientModeChanged(boolean inAmbientMode) {
             super.onAmbientModeChanged(inAmbientMode);
-            /* the wearable switched between modes */
 
-            if (lowBitAmbient) {
-                boolean antiAlias = !inAmbientMode;
-                drawer.setAntiAlias(antiAlias);
-            }
-//            if (inAmbientMode) {
-//
-//            }
+            drawer.onAmbientModeChanged(inAmbientMode);
+
             alreadyTapped = 0;
             invalidate();
             updateTimer();
@@ -266,15 +263,15 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
                 }
             } else if (alreadyTapped >= 3) {
                 if (x > 200 && y > 200) {
-                    drawer.setCurrentDrawer(ModeFaceDrawer.ModeFaceDrawers.SINGLE_LINE);
+                    drawer.setCurrentDrawer(new SingeLineDrawer(drawer));
                     alreadyTapped = 0;
                 }
                 if (x > 200 && y < 100) {
-                    drawer.setCurrentDrawer(ModeFaceDrawer.ModeFaceDrawers.FULL_LINE);
+                    drawer.setCurrentDrawer(new FullLineDrawer(drawer));
                     alreadyTapped = 0;
                 }
                 if (x < 100 && y > 200) {
-                    drawer.setCurrentDrawer(ModeFaceDrawer.ModeFaceDrawers.TEXT);
+                    drawer.setCurrentDrawer(new TextDrawer(drawer));
                     alreadyTapped = 0;
                 }
                 invalidate();

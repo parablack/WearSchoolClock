@@ -6,6 +6,7 @@ import android.graphics.Paint;
 
 import net.parablack.clocktest.watchface.drawer.WatchFaceDrawer;
 import net.parablack.clocktest.watchface.drawer.mode.wrapper.SuperTimeWrapper;
+import net.parablack.clocktest.watchface.drawer.mode.wrapper.TimeException;
 
 /**
  * Draws the time left in single lines (Minutes + Seconds)
@@ -32,7 +33,7 @@ public class SingeLineDrawer extends ModeFaceDrawer<SuperTimeWrapper> {
 
 
     @Override
-    protected void onDraw(Canvas canvas, SuperTimeWrapper superTimeWrapper) throws ScheduleDrawException {
+    protected void onDraw(Canvas canvas, SuperTimeWrapper superTimeWrapper) throws ScheduleDrawException, TimeException {
         if(LINE_START == -1){
             LINE_START = height / 2 + 70;
         }
@@ -61,20 +62,21 @@ public class SingeLineDrawer extends ModeFaceDrawer<SuperTimeWrapper> {
                 drawLine(canvas, (j - 1), LINE_START, LINE_HEIGHT, redPaint);
             }
 
-            // Draw Seconds
-            initDrawCalc(60);
-            {
-                for (int j = 1; j < (60 - end.getSeconds()); j++) {
-                    drawLine(canvas, (j - 1), SECOND_START, SECOND_HEIGHT, greenPaint);
-                }
+            if(displaySeconds()) {
+                // Draw Seconds
+                initDrawCalc(60);
+                {
+                    for (int j = 1; j < (60 - end.getSeconds()); j++) {
+                        drawLine(canvas, (j - 1), SECOND_START, SECOND_HEIGHT, greenPaint);
+                    }
 
-                for (int j = (60 - end.getSeconds()); j <= 60; j++) {
-                    drawLine(canvas, (j - 1), SECOND_START,SECOND_HEIGHT, redPaint);
-                }
-                drawLine(canvas, (60 - end.getSeconds() - 1), SECOND_START, SECOND_HEIGHT, yellowPaint);
+                    for (int j = (60 - end.getSeconds()); j <= 60; j++) {
+                        drawLine(canvas, (j - 1), SECOND_START, SECOND_HEIGHT, redPaint);
+                    }
+                    drawLine(canvas, (60 - end.getSeconds() - 1), SECOND_START, SECOND_HEIGHT, yellowPaint);
 
+                }
             }
-
         } else throw new ScheduleDrawException("Time too big! Drawing failed!");
     }
 
