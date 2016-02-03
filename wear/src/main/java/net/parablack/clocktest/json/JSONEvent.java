@@ -1,6 +1,7 @@
 package net.parablack.clocktest.json;
 
 import android.os.Vibrator;
+import android.support.annotation.NonNull;
 
 import net.parablack.clocktest.watchface.TimeUtils;
 import net.parablack.clocktest.watchface.WearEvent;
@@ -10,11 +11,10 @@ import net.parablack.clocktest.json.subjects.WearEventSubject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by Simon on 16.09.2015.
- */
+
 public class JSONEvent implements WearEvent, Comparable<JSONEvent>{
 
+    private int dayId;
 
     private WearEventSubject subject;
     private ScheduleTime time;
@@ -29,8 +29,7 @@ public class JSONEvent implements WearEvent, Comparable<JSONEvent>{
     private EventAdditionalInformation addInfos;
 
     public JSONEvent(JSONObject object, JSONReader reader) throws JSONException {
-        JSONObject object1 = object;
-        String id = object.getString("id");
+        int dayId = object.getInt("id");
 
         String subjectString = object.getString("subject_preset");
         if(subjectString.equals("NONE")){
@@ -62,8 +61,7 @@ public class JSONEvent implements WearEvent, Comparable<JSONEvent>{
 
     public long getTimeFromBeginning(){
         long dayMillis = TimeUtils.dayMillis();
-        long tti = dayMillis - time.getBegin();
-        return tti;
+        return dayMillis - time.getBegin();
     }
 
     @Override
@@ -77,7 +75,7 @@ public class JSONEvent implements WearEvent, Comparable<JSONEvent>{
     }
 
     @Override
-    public int compareTo(JSONEvent another) {
+    public int compareTo(@NonNull JSONEvent another) {
         if(time.getBegin() < another.time.getBegin()) return -1;
         else return 1;
 
@@ -99,7 +97,7 @@ public class JSONEvent implements WearEvent, Comparable<JSONEvent>{
         if(!alreadyVibrated) {
 
             int minTilEnd = (int) ((getTimeTilEnd() / 1000) / 60);
-            if (getMeta().getVibration().getTimeBefore() == minTilEnd && !alreadyVibrated) {
+            if (getMeta().getVibration().getTimeBefore() == minTilEnd) {
                 long[] vibrationPattern = {0, getMeta().getVibration().getDuration(), 50, getMeta().getVibration().getDuration(), 50,
                         getMeta().getVibration().getDuration(), 50, getMeta().getVibration().getDuration()};
                 //-1 - don't repeat

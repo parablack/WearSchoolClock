@@ -23,7 +23,7 @@ public class JSONSchedule implements WearSchedule {
     private JSONReader reader;
 
     private ArrayList<JSONEvent> events = new ArrayList<>();
-    private ArrayList<JSONEvent> tomorrowEvents = new ArrayList<>();
+    private ArrayList<JSONEvent> nextDayEvents = new ArrayList<>();
 
 
     public JSONSchedule(JSONObject rootObject, JSONReader reader) {
@@ -51,7 +51,7 @@ public class JSONSchedule implements WearSchedule {
 
     public void syncReload() {
         Calendar c = currentCalendar();
-        tomorrowEvents.clear();
+        nextDayEvents.clear();
         events.clear();
 
         try {
@@ -80,8 +80,9 @@ public class JSONSchedule implements WearSchedule {
             }
 
             // --------------------- TOMORROW ----------------
-            {
-                int weekDay = c.get(Calendar.DAY_OF_WEEK);
+            int weekDay = c.get(Calendar.DAY_OF_WEEK);
+            nextDayEvents.clear();
+            while(nextDayEvents.size() == 0){
 
                 weekDay++;
                 if (weekDay == 8) weekDay = 1;
@@ -95,14 +96,14 @@ public class JSONSchedule implements WearSchedule {
                     @Override
                     public void callback(JSONObject object) throws JSONException {
                         JSONEvent eve = new JSONEvent(object, reader);
-                        tomorrowEvents.add(eve);
+                        nextDayEvents.add(eve);
                         System.out.println("JSONEvent added: " + eve);
                     }
                 });
 
-                Collections.sort(tomorrowEvents);
+                Collections.sort(nextDayEvents);
 
-                for (JSONEvent jsE : tomorrowEvents)
+                for (JSONEvent jsE : nextDayEvents)
                     System.out.println("Tommorows JSEs: " + jsE.toString());
             }
 
@@ -136,8 +137,8 @@ public class JSONSchedule implements WearSchedule {
                 return new WearEvent.NothingUpEvent(each.getTime().getBegin());
             }
         }
-        if (tomorrowEvents.size() >= 1)
-            return new WearEvent.NothingUpEvent(tomorrowEvents.get(0).getTime().getBegin());
+        if (nextDayEvents.size() >= 1)
+            return new WearEvent.NothingUpEvent(nextDayEvents.get(0).getTime().getBegin());
         else {
             if (_next instanceof JSONEvent) {
                 JSONEvent ne = (JSONEvent) _next;
@@ -160,8 +161,8 @@ public class JSONSchedule implements WearSchedule {
             }
         }
 
-        if (tomorrowEvents != null && tomorrowEvents.size() >= 1)
-            return tomorrowEvents.get(0);
+        if (nextDayEvents != null && nextDayEvents.size() >= 1)
+            return nextDayEvents.get(0);
         else {
             int weekDay = currentCalendar().get(Calendar.DAY_OF_WEEK);
             weekDay = incrWeekNumber(weekDay);

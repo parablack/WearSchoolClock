@@ -1,6 +1,9 @@
 package net.parablack.clocktest.watchface;
 
 
+import net.parablack.clocktest.R;
+import net.parablack.clocktest.app.MainActivityWear;
+
 public interface WearEvent {
 
     /**
@@ -46,7 +49,7 @@ public interface WearEvent {
 
         @Override
         public String getName() {
-            return "Heute noch frei!";
+            return SchoolWatchFaceService.getInstance().getString(R.string.schedule_no_event);
         }
     }
 

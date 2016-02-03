@@ -21,7 +21,7 @@ public class PixelDrawer extends ModeFaceDrawer<SuperTimeWrapper> {
     @Override
     protected void onDraw(Canvas c, SuperTimeWrapper args) throws ScheduleDrawException, TimeException {
         if(!displaySeconds()) return;
-        c.drawColor(Color.argb(100, 255 - ((int) args.getPercentageDone() * 255), (int) args.getPercentageDone() * 25
+        c.drawColor(Color.argb(100, 255 - (int) (args.getPercentageDone() * 255), (int) (args.getPercentageDone() * 255)
                 , 0));
 
     }

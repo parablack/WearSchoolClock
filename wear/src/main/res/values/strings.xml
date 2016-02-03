@@ -5,4 +5,5 @@
     <string name="button_play">Play</string>
     <string name="play_button_desc">Dies ist ein toller Button der dir viel offenbaren wird wenn du auf ihn klickst!</string>
     <string name="clock_change_design">Design ändern</string>
+    <string name="schedule_no_event">Aktuell frei!</string>
 </resources>

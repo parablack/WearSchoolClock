@@ -68,15 +68,4 @@ public abstract class ModeFaceDrawer<T> {
         return _flagUnsuccessful;
     }
 
-    // Internal draw part
-
-    public enum ModeFaceDrawers {
-        TEXT,
-        SINGLE_LINE,
-        FULL_LINE,
-        PIXELS
-
-    }
-
-
 }
