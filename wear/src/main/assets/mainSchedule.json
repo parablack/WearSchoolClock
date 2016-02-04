@@ -107,7 +107,7 @@
         "subject_preset": "11",
         "meta": "defaultMeta",
         "additional": {
-          "room": "R8d"
+          "room": "Ph1"
         },
         "id": 5,
         "time_preset": "h8"
@@ -117,30 +117,10 @@
         "subject_preset": "11",
         "meta": "defaultMeta",
         "additional": {
-          "room": "NFR"
+          "room": "R8d"
         },
         "id": 5,
         "time_preset": "h9"
-      },
-      {
-        "shown": true,
-        "subject_preset": "12",
-        "meta": "defaultMeta",
-        "additional": {
-          "room": "EFR"
-        },
-        "id": 5,
-        "time_preset": "h10"
-      },
-      {
-        "shown": true,
-        "subject_preset": "12",
-        "meta": "defaultMeta",
-        "additional": {
-          "room": "EFR"
-        },
-        "id": 5,
-        "time_preset": "h11"
       },
       {
         "shown": true,
@@ -173,14 +153,6 @@
         "id": "sb3",
         "display_name": "Kleine Pause 3",
         "time_preset": "sb3"
-      },
-      {
-        "shown": true,
-        "subject_preset": "NONE",
-        "meta": "noVibration",
-        "id": "sb4",
-        "display_name": "Kleine Pause 4",
-        "time_preset": "sb4"
       }
     ],
     "id": 5

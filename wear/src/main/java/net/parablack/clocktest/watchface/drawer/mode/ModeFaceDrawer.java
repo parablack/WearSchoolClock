@@ -13,6 +13,10 @@ import net.parablack.clocktest.watchface.drawer.mode.wrapper.TimeException;
 
 public abstract class ModeFaceDrawer<T> {
 
+    protected static final int LINE_HEIGHT = 55;
+    protected static float LINE_START = -1; // Saving power, it is (center / 2) + 70 // FIXED
+
+
     private WatchFaceDrawer drawer;
     private boolean ambi;
 
@@ -36,7 +40,11 @@ public abstract class ModeFaceDrawer<T> {
 
         centerX = width / 2f;
         centerY = height / 2f;
-    this.ambi = ambi;
+        this.ambi = ambi;
+
+        if(LINE_START == -1){
+            LINE_START = height / 2 + 70;
+        }
 
         onDraw(c, args);
 

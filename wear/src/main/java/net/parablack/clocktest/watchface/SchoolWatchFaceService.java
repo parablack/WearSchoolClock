@@ -182,6 +182,12 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
         public void onAmbientModeChanged(boolean inAmbientMode) {
             super.onAmbientModeChanged(inAmbientMode);
 
+            if(inAmbientMode) {
+                alreadyDownRightTapped = 0;
+                alreadyTapped = 0;
+
+            }
+
             drawer.onAmbientModeChanged(inAmbientMode);
 
             alreadyTapped = 0;
@@ -235,6 +241,39 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
             return isVisible() && !isInAmbientMode();
         }
 
+        public void reload(){
+            reloading = true;
+            mainSchedule.reload();
+        }
+
+        public void reloadColors(){
+
+            new AsyncTask<Void, Void, Void>(){
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
+                        if(colors_currLoaded == 1){
+                            drawer.updateColors(SchoolWatchFaceService.this.getAssets().open("colors2.json"));
+                            Log.i("Schedule", "Loading colors2");
+                            colors_currLoaded = 2;
+                        }
+                        else {
+                            drawer.updateColors(SchoolWatchFaceService.this.getAssets().open("colors.json"));
+                            colors_currLoaded = 1;
+                            Log.i("Schedule", "Loading colors");
+
+                        }
+                        invalidate();
+                        alreadyDownRightTapped = 0;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+            }.execute();
+
+        }
+
         private void updateTimer() {
             mUpdateTimeHandler.removeMessages(MSG_UPDATE_TIME);
             if (shouldTimerBeRunning()) {
@@ -256,10 +295,8 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
             } else if (alreadyTapped >= 20) {
                 if (x > 200 && y > 200) {
                     System.out.println("Forced reload --> Applying");
-                    mainSchedule.reload();
-                    reloading = true;
                     alreadyTapped = 0;
-                    invalidate();
+
                 }
             } else if (alreadyTapped >= 3) {
                 if (x > 200 && y > 200) {
@@ -282,29 +319,7 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
             }else if(alreadyDownRightTapped >= 20){
                 if(x < 100 && y < 100){
                     reloading = true;
-                    new AsyncTask<Void, Void, Void>(){
-                        @Override
-                        protected Void doInBackground(Void... params) {
-                            try {
-                                if(colors_currLoaded == 1){
-                                    drawer.updateColors(SchoolWatchFaceService.this.getAssets().open("colors2.json"));
-                                    Log.i("Schedule", "Loading colors2");
-                                    colors_currLoaded = 2;
-                                }
-                                else {
-                                    drawer.updateColors(SchoolWatchFaceService.this.getAssets().open("colors.json"));
-                                    colors_currLoaded = 1;
-                                    Log.i("Schedule", "Loading colors");
-
-                                }
-                                invalidate();
-                                alreadyDownRightTapped = 0;
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            return null;
-                        }
-                    }.execute();
+                    reloadColors();
                 }
 
             }

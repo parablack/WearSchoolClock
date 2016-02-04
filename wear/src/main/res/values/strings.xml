@@ -6,4 +6,7 @@
     <string name="play_button_desc">Dies ist ein toller Button der dir viel offenbaren wird wenn du auf ihn klickst!</string>
     <string name="clock_change_design">Design ändern</string>
     <string name="schedule_no_event">Aktuell frei!</string>
+    <string name="schedule_change_design_desc">Design ändern</string>
+    <string name="schedule_force_reload_button">Reload</string>
+    <string name="schedule_button_color_change">Farben</string>
 </resources>

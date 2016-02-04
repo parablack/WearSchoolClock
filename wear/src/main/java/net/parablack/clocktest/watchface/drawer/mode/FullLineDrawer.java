@@ -13,8 +13,6 @@ import net.parablack.clocktest.watchface.drawer.mode.wrapper.TimeException;
  */
 public class FullLineDrawer extends ModeFaceDrawer<SuperTimeWrapper>{
 
-    private static final int LINE_HEIGHT = 55;
-    private static float LINE_START = -1; // Saving power, it is (center / 2) + 70 // FIXED
 
     static Paint donePaint = new Paint(), todoPaint = new Paint(), percentagePaint = new Paint();
 
@@ -29,9 +27,7 @@ public class FullLineDrawer extends ModeFaceDrawer<SuperTimeWrapper>{
 
     @Override
     protected void onDraw(Canvas canvas, SuperTimeWrapper superTimeWrapper) throws ScheduleDrawException, TimeException {
-        if(LINE_START == -1){
-            LINE_START = height / 2 + 70;
-        }
+
         drawLine(canvas, superTimeWrapper.getPercentageDone(), LINE_START, LINE_HEIGHT);
 
     }

@@ -4,24 +4,40 @@
     android:layout_height="match_parent"
     android:weightSum="1">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/play_button_desc"
-        android:id="@+id/textView" />
-
     <Button
         android:layout_width="match_parent"
-        android:layout_height="86dp"
+        android:layout_height="62dp"
         android:text="@string/button_play"
         android:id="@+id/main_button"
         android:onClick="onMasterButtonClick" />
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:text="@string/clock_change_design"
         android:id="@+id/change_design"
         android:nestedScrollingEnabled="true"
-        android:onClick="onDesignChangeButtonClicked" />
+        android:onClick="onDesignChangeButtonClicked"
+        android:layout_weight="0.58" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/schedule_force_reload_button"
+            android:id="@+id/reload_button"
+            android:onClick="onReloadButtonClicked" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/schedule_button_color_change"
+            android:id="@+id/color_change_button"
+            android:onClick="onColorChangeButtonClicked" />
+    </LinearLayout>
+
 </LinearLayout>

@@ -35,4 +35,16 @@ public class MainActivityWear extends WearableActivity {
 
     }
 
+    public void onReloadButtonClicked(View v){
+
+        System.out.println("Reload Button clicked --> Force reload");
+        SchoolWatchFaceService.getInstance().getWatchEngine().reload();
+    }
+
+    public void onColorChangeButtonClicked(View v){
+
+        System.out.println("Color Button clicked --> Color changing");
+        SchoolWatchFaceService.getInstance().getWatchEngine().reloadColors();
+    }
+
 }
