@@ -26,4 +26,15 @@ public class TimeUtils {
 
     }
 
+
+    /**
+     *
+     * @return The milliseconds since the start of the day
+     */
+    public static int weekDay(){
+        return currentCalendar().get(Calendar.DAY_OF_WEEK);
+
+    }
+
+
 }

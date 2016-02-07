@@ -56,6 +56,14 @@
         "id": "sb1",
         "display_name": "Kleine Pause 1",
         "time_preset": "sb1"
+      },
+      {
+        "shown": true,
+        "subject_preset": "1",
+        "meta": "noVibration",
+        "id": 4,
+        "display_name": "Test",
+        "time_preset": "h11"
       }
     ],
     "id": 4

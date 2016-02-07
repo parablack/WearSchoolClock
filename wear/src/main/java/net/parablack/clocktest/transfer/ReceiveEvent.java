@@ -6,6 +6,12 @@ public abstract class ReceiveEvent {
 
     private static final String ROOT_PATH = "/net/parablack/color/";
 
+    public void register(){
+
+
+
+
+    }
 
     public abstract String getPathEndpoint();
 

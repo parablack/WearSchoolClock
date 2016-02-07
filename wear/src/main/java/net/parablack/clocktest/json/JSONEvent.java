@@ -12,7 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class JSONEvent implements WearEvent, Comparable<JSONEvent>{
+public class JSONEvent implements WearEvent{
 
     private int dayId;
 
@@ -29,7 +29,7 @@ public class JSONEvent implements WearEvent, Comparable<JSONEvent>{
     private EventAdditionalInformation addInfos;
 
     public JSONEvent(JSONObject object, JSONReader reader) throws JSONException {
-        int dayId = object.getInt("id");
+    //    dayId = object.getInt("id");
 
         String subjectString = object.getString("subject_preset");
         if(subjectString.equals("NONE")){
@@ -75,8 +75,9 @@ public class JSONEvent implements WearEvent, Comparable<JSONEvent>{
     }
 
     @Override
-    public int compareTo(@NonNull JSONEvent another) {
-        if(time.getBegin() < another.time.getBegin()) return -1;
+    public int compareTo(@NonNull WearEvent another) {
+        if(!(another instanceof JSONEvent)) return 1;
+        if(time.getBegin() < ((JSONEvent) another).time.getBegin()) return -1;
         else return 1;
 
     }

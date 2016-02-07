@@ -10,20 +10,11 @@ import android.support.wearable.watchface.CanvasWatchFaceService;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
-import com.google.android.gms.wearable.Asset;
-import com.google.android.gms.wearable.DataEvent;
-import com.google.android.gms.wearable.DataEventBuffer;
-import com.google.android.gms.wearable.DataMapItem;
-
 import net.parablack.clocktest.json.InvalidDataException;
 import net.parablack.clocktest.json.JSONReader;
 import net.parablack.clocktest.json.JSONSchedule;
 import net.parablack.clocktest.transfer.ScheduleAssetListener;
 import net.parablack.clocktest.watchface.drawer.WatchFaceDrawer;
-import net.parablack.clocktest.watchface.drawer.mode.FullLineDrawer;
-import net.parablack.clocktest.watchface.drawer.mode.ModeFaceDrawer;
-import net.parablack.clocktest.watchface.drawer.mode.SingeLineDrawer;
-import net.parablack.clocktest.watchface.drawer.mode.TextDrawer;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -39,6 +30,7 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
     private static SchoolWatchFaceService instance;
 
     private Engine watchEngine;
+
 
     public static SchoolWatchFaceService getInstance() {
         return instance;
@@ -69,11 +61,15 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
 
         private JSONReader mainReader;
         private JSONSchedule mainSchedule;
+
         private boolean scheduleEnabled = true;
 
         private boolean reloading;
 
         private WatchFaceDrawer drawer;
+
+        private WatchFaceTapper tapper;
+
 
         Calendar calendar;
 
@@ -108,6 +104,8 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
 
             mainReader = new JSONReader();
 
+            tapper = new WatchFaceTapper(this);
+
             // Has to be instantiated later than main reader, because it references to mainReader
             drawer = new WatchFaceDrawer(SchoolWatchFaceService.this);
 
@@ -124,7 +122,7 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
                     } catch (InvalidDataException e) {
                         e.printStackTrace();
                         scheduleEnabled = false;
-                    } catch (IOException e){
+                    } catch (IOException e) {
                         e.printStackTrace();
                         Log.w("Schedule", "Falling back into default colors!");
                     }
@@ -182,15 +180,11 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
         public void onAmbientModeChanged(boolean inAmbientMode) {
             super.onAmbientModeChanged(inAmbientMode);
 
-            if(inAmbientMode) {
-                alreadyDownRightTapped = 0;
-                alreadyTapped = 0;
+            tapper.reset();
 
-            }
 
             drawer.onAmbientModeChanged(inAmbientMode);
 
-            alreadyTapped = 0;
             invalidate();
             updateTimer();
 
@@ -202,8 +196,8 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
         public void onDraw(Canvas canvas, Rect bounds) {
             /* draw your watch face */
 
-            if(drawer != null)
-            drawer.onDraw(canvas, bounds);
+            if (drawer != null)
+                drawer.onDraw(canvas, bounds);
 
 
         }
@@ -230,7 +224,6 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
         }
 
         /**
-         *
          * @return The Main-Schedule of the clock
          */
         public JSONSchedule getMainSchedule() {
@@ -241,30 +234,30 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
             return isVisible() && !isInAmbientMode();
         }
 
-        public void reload(){
+        public void reload() {
             reloading = true;
             mainSchedule.reload();
         }
 
-        public void reloadColors(){
+        int colors_currLoaded = 1;
 
-            new AsyncTask<Void, Void, Void>(){
+        public void reloadColors() {
+            reloading = true;
+            new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
                     try {
-                        if(colors_currLoaded == 1){
+                        if (colors_currLoaded == 1) {
                             drawer.updateColors(SchoolWatchFaceService.this.getAssets().open("colors2.json"));
                             Log.i("Schedule", "Loading colors2");
                             colors_currLoaded = 2;
-                        }
-                        else {
+                        } else {
                             drawer.updateColors(SchoolWatchFaceService.this.getAssets().open("colors.json"));
                             colors_currLoaded = 1;
                             Log.i("Schedule", "Loading colors");
 
                         }
                         invalidate();
-                        alreadyDownRightTapped = 0;
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -281,54 +274,16 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
             }
         }
 
-        int alreadyTapped = 0;
-        int alreadyDownRightTapped = 0;
-        int colors_currLoaded = 1;
+
         // Always called twice?!
         @Override
         public void onTapCommand(int tapType, int x, int y, long eventTime) {
             super.onTapCommand(tapType, x, y, eventTime);
-
-
-            if (x < 100 && y < 100) {
-                alreadyTapped++;
-            } else if (alreadyTapped >= 20) {
-                if (x > 200 && y > 200) {
-                    System.out.println("Forced reload --> Applying");
-                    alreadyTapped = 0;
-
-                }
-            } else if (alreadyTapped >= 3) {
-                if (x > 200 && y > 200) {
-                    drawer.setCurrentDrawer(new SingeLineDrawer(drawer));
-                    alreadyTapped = 0;
-                }
-                if (x > 200 && y < 100) {
-                    drawer.setCurrentDrawer(new FullLineDrawer(drawer));
-                    alreadyTapped = 0;
-                }
-                if (x < 100 && y > 200) {
-                    drawer.setCurrentDrawer(new TextDrawer(drawer));
-                    alreadyTapped = 0;
-                }
-                invalidate();
-            }
-
-            if(x > 250 && y > 250){
-                alreadyDownRightTapped++;
-            }else if(alreadyDownRightTapped >= 20){
-                if(x < 100 && y < 100){
-                    reloading = true;
-                    reloadColors();
-                }
-
-            }
-
+            tapper.onClick(tapType, x, y, eventTime);
 
         }
 
         /**
-         *
          * @return Calendar-Object of the current class
          */
         public Calendar getCalendar() {
@@ -336,7 +291,6 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
         }
 
         /**
-         *
          * @return Wether schedule is enabled or not
          */
         public boolean isScheduleEnabled() {
@@ -346,6 +300,7 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
 
         /**
          * Notifys if a reload has (or is) taking place, if yes, it will be automatically set to false for the next check
+         *
          * @return Reload has taken place since the last calls
          */
         public boolean notifyReload() {

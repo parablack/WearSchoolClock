@@ -1,6 +1,7 @@
 package net.parablack.clocktest.json;
 
 import android.content.res.AssetManager;
+import android.util.Log;
 
 import com.google.android.gms.wearable.Asset;
 
@@ -46,7 +47,7 @@ class JSONReaderUtil {
     }
 
     protected static void fetchArray(JSONArray array, ScheduleInitCallback cb) throws JSONException {
-        //  System.out.println("Array _ " + array + ", len " + array.length());
+        Log.v("Clock", "fetchArray: array = " + array + ", array.length = " + array.length());
         for (int i = 0; i < array.length(); i++) {
             JSONObject extractedObject = array.getJSONObject(i);
             if (extractedObject != null) {
