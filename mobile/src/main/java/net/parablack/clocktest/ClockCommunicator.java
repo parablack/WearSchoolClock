@@ -53,7 +53,7 @@ public class ClockCommunicator implements
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.i("[Clock]", "Connection supsendend {" + i + "}.");
+        Log.i("Clock", "Connection supsendend {" + i + "}.");
     }
 
     @Override
@@ -63,42 +63,41 @@ public class ClockCommunicator implements
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.e("[Clock]", "Connection failed.");
+        Log.e("Clock", "Connection failed.");
     }
 
     public void sendNewColorPreset(String json) {
         System.out.println("Sending " + json);
-        PutDataMapRequest request = PutDataMapRequest.create("/color/json");
+        PutDataMapRequest request = PutDataMapRequest.create("/clock/color");
 
         request.getDataMap().putString("color", json);
 
         PutDataRequest rawRequest = request.asPutDataRequest();
-
+   //     rawRequest.setUrgent();
         PendingResult<DataApi.DataItemResult> pendingResult = Wearable.DataApi.putDataItem(mGoogleApiClient, rawRequest);
-
         pendingResult.setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
             @Override
             public void onResult(DataApi.DataItemResult dataItemResult) {
-                System.out.println("Result: " + dataItemResult);
+                System.out.println("Result: " + dataItemResult.getStatus());
             }
         });
 
-        Wearable.NodeApi.getLocalNode(mGoogleApiClient).setResultCallback(new ResultCallback<NodeApi.GetLocalNodeResult>() {
-            @Override
-            public void onResult(NodeApi.GetLocalNodeResult nodes) {
-                System.out.println("GetLocalNodeResult : " + nodes);
-                Node node = nodes.getNode();
-                Log.v("[Clock", "Activity Node is : " + node.getId() + " - " + node.getDisplayName());
-                Wearable.MessageApi.sendMessage(mGoogleApiClient, node.getId(), "/clock/colors", "123abc".getBytes()).setResultCallback(new ResultCallback<MessageApi.SendMessageResult>() {
-                    @Override
-                    public void onResult(MessageApi.SendMessageResult sendMessageResult) {
-                        System.out.println("SendMessageResult : " + sendMessageResult);
-
-                    }
-                });
-
-            }
-        });
+//        Wearable.NodeApi.getLocalNode(mGoogleApiClient).setResultCallback(new ResultCallback<NodeApi.GetLocalNodeResult>() {
+//            @Override
+//            public void onResult(NodeApi.GetLocalNodeResult nodes) {
+//                System.out.println("GetLocalNodeResult : " + nodes);
+//                Node node = nodes.getNode();
+//                Log.v("Clock", "Activity Node is : " + node.getId() + " - " + node.getDisplayName());
+//                Wearable.MessageApi.sendMessage(mGoogleApiClient, node.getId(), "/clock/color", "123abc".getBytes()).setResultCallback(new ResultCallback<MessageApi.SendMessageResult>() {
+//                    @Override
+//                    public void onResult(MessageApi.SendMessageResult sendMessageResult) {
+//                        System.out.println("SendMessageResult : " + sendMessageResult.getStatus());
+//
+//                    }
+//                });
+//
+//            }
+//        });
 
     }
 
@@ -125,11 +124,11 @@ public class ClockCommunicator implements
 
                     }
                 };
-
         Wearable.CapabilityApi.addCapabilityListener(
                 mGoogleApiClient,
                 capabilityListener,
                 WATCHFACE_RELOAD_CAPABILITY);
+
     }
 
 
@@ -140,7 +139,7 @@ public class ClockCommunicator implements
         System.out.println("reloadNodeId = " + reloadNodeId);
     }
 
-    public void requestTranscription(byte[] data) {
+    public void requestTranscription(String path, byte[] data) {
         if (reloadNodeId != null) {
             Wearable.MessageApi.sendMessage(mGoogleApiClient, reloadNodeId,
                     "/message/reload", data).setResultCallback(
@@ -158,7 +157,8 @@ public class ClockCommunicator implements
                     }
             );
         } else {
-            System.out.println("Message fail: No node found!");
+            System.out.println("Message fail: No node found, researching!");
+            setupMessageTranscription();
         }
     }
 

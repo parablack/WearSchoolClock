@@ -1,0 +1,56 @@
+{
+  "background": {
+    "displayName": "Hintergrund",
+    "defaultValue": "#000000"
+  },
+
+  "mainTime":{
+    "defaultValue": "#FFFFFF",
+    "displayName": "Zeit"
+  },
+  "secondsTime":{
+    "defaultValue": "#0A0A0A",
+    "displayName": "Sekunden"
+  },
+
+  "subjectCurrent":{
+    "defaultValue": "#FF9100",
+    "displayName": "Aktuelles Fach"
+  },
+  "subjectNext":{
+    "defaultValue": "#FF9100",
+    "displayName": "Nächstes Fach"
+  },
+
+  "full_done":{
+    "defaultValue": "#00CC00",
+    "displayName": "Prozent: Geschafft"
+  },
+  "full_percentage":{
+    "defaultValue": "#0A0A0A",
+    "displayName": "Prozent: Prozentzahl"
+  },
+  "full_todo":{
+    "defaultValue": "#CC0000",
+    "displayName": "Prozent: Nicht geschafft"
+  },
+  "single_done":{
+    "defaultValue": "#0A0A0A",
+    "displayName": "Striche: Geschafft"
+  },
+  "single_todo":{
+    "defaultValue": "#0A0A0A",
+    "displayName": "Striche: Noch zu tun"
+  },
+
+  "single_inprogress":{
+    "defaultValue": "#0A0A0A",
+    "displayName": "Striche: Aktuell"
+  },
+
+  "text_text":{
+    "defaultValue": "#0A0A0A",
+    "displayName": "Zahlen: Farbe"
+  }
+
+}

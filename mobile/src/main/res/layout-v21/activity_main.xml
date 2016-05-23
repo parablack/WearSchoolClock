@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/test_button"
         android:text="@string/button_test"
+        android:nestedScrollingEnabled="false"
         android:onClick="testButtonClicked"
         android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"

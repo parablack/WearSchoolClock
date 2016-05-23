@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ClockTest</string>
+    <string name="app_name">SchoolClock</string>
     <string name="hello_world">Hello World!</string>
     <string name="school_face_name">Schule</string>
     <string name="button_play">Play</string>

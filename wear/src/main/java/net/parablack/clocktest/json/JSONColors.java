@@ -3,7 +3,6 @@ package net.parablack.clocktest.json;
 import android.graphics.Color;
 import android.util.Log;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class JSONColors {
@@ -22,25 +21,19 @@ public class JSONColors {
 
     public void reload(JSONObject lastObject) {
         this.lastObject = lastObject;
-        try {
 
-            secondsTime = Color.parseColor(lastObject.getString("secondsTime"));
-            subjectNext = Color.parseColor(lastObject.getString("subjectNext"));
-            subjectCurrent = Color.parseColor(lastObject.getString("subjectCurrent"));
-            mainTime = Color.parseColor(lastObject.getString("mainTime"));
+        secondsTime = getColorByName("secondsTime");
+        subjectNext = getColorByName("subjectNext");
+        subjectCurrent = getColorByName("subjectCurrent");
+        mainTime = getColorByName("mainTime");
 
 //            full_done = Color.parseColor(rootlast.getString("full_done"));
 //            full_percentage = Color.parseColor(rootlast.getString("full_percentage"));
 //            full_todo = Color.parseColor(rootlast.getString("full_todo"));
-        } catch (JSONException e) {
-            e.printStackTrace();
 
-            // It is already set to white...
-
-        }
     }
 
-    public void reparse(){
+    public void reparse() {
         reload(lastObject);
     }
 
@@ -65,11 +58,16 @@ public class JSONColors {
         return mainTime;
     }
 
-    public int getColorByName(String name) throws InvalidDataException {
+    public int getColorByName(String name) {
         try {
-            return Color.parseColor(lastObject.getString(name));
+            try {
+                // TODO : DEPRECATED, now ints are used for color representation, no hex anymore
+                return Color.parseColor(lastObject.getString(name));
+            } catch (IllegalArgumentException e) {
+                return lastObject.getInt(name);
+            }
         } catch (Exception e) {
-            Log.w("Schedule", "getColorByName: Color not found, returning white (Color: "+name+"), ("+e.getClass().getSimpleName()+")");
+            Log.w("Schedule", "getColorByName: Color not found, returning white (Color: " + name + "), (" + e.getClass().getSimpleName() + ")");
             return Color.WHITE;
         }
     }
