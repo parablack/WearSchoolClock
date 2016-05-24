@@ -118,7 +118,7 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
                         mainReader.parseData(getAssets());
                         mainSchedule = mainReader.getSchedule();
                         scheduleEnabled = true;
-                        drawer.updateColors(getAssets().open("colors.json"));
+                        drawer.updateColors(getAssets().open("colors.json"), getSharedPreferences("SchoolClock_pref", MODE_PRIVATE));
                     } catch (InvalidDataException e) {
                         e.printStackTrace();
                         scheduleEnabled = false;
@@ -237,34 +237,6 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
         public void reload() {
             reloading = true;
             mainSchedule.reload();
-        }
-
-        int colors_currLoaded = 1;
-
-        public void reloadColors() {
-            reloading = true;
-            new AsyncTask<Void, Void, Void>() {
-                @Override
-                protected Void doInBackground(Void... params) {
-                    try {
-                        if (colors_currLoaded == 1) {
-                            drawer.updateColors(SchoolWatchFaceService.this.getAssets().open("colors2.json"));
-                            Log.i("Schedule", "Loading colors2");
-                            colors_currLoaded = 2;
-                        } else {
-                            drawer.updateColors(SchoolWatchFaceService.this.getAssets().open("colors.json"));
-                            colors_currLoaded = 1;
-                            Log.i("Schedule", "Loading colors");
-
-                        }
-                        invalidate();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                }
-            }.execute();
-
         }
 
         private void updateTimer() {

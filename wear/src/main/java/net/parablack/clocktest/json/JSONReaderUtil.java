@@ -1,5 +1,6 @@
 package net.parablack.clocktest.json;
 
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.util.Log;
 
@@ -85,6 +86,18 @@ class JSONReaderUtil {
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
+        }
+
+    }
+
+    protected static JSONObject byPreference(SharedPreferences preferences, String name) throws InvalidDataException {
+        try {
+            String json = preferences.getString(name, "Error");
+            return new JSONObject(json);
+
+        } catch (JSONException e) {
+            Log.e("Clock", "No preferences found! Falling back to default values!");
+            throw new InvalidDataException("PrefError");
         }
 
     }

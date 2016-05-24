@@ -9,7 +9,7 @@
     "displayName": "Zeit"
   },
   "secondsTime":{
-    "defaultValue": "#0A0A0A",
+    "defaultValue": "#FFFFFF",
     "displayName": "Sekunden"
   },
 
@@ -27,7 +27,7 @@
     "displayName": "Prozent: Geschafft"
   },
   "full_percentage":{
-    "defaultValue": "#0A0A0A",
+    "defaultValue": "#FFCC00",
     "displayName": "Prozent: Prozentzahl"
   },
   "full_todo":{
@@ -35,21 +35,21 @@
     "displayName": "Prozent: Nicht geschafft"
   },
   "single_done":{
-    "defaultValue": "#0A0A0A",
+    "defaultValue": "#00CC00",
     "displayName": "Striche: Geschafft"
   },
   "single_todo":{
-    "defaultValue": "#0A0A0A",
+    "defaultValue": "#CC0000",
     "displayName": "Striche: Noch zu tun"
   },
 
   "single_inprogress":{
-    "defaultValue": "#0A0A0A",
+    "defaultValue": "#FFCC00",
     "displayName": "Striche: Aktuell"
   },
 
   "text_text":{
-    "defaultValue": "#0A0A0A",
+    "defaultValue": "#FFFFFF",
     "displayName": "Zahlen: Farbe"
   }
 

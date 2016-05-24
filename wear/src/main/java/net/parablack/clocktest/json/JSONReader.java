@@ -1,5 +1,6 @@
 package net.parablack.clocktest.json;
 
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 
 import com.google.android.gms.wearable.Asset;
@@ -100,10 +101,15 @@ public class JSONReader {
      * Get the current loaded colors from the assets
      * @return The colors object
      */
-    public JSONColors getColors(InputStream a) {
-        JSONObject colors = byAsset(a);
-        verifyMeta(colors, "$colorPreset_TkIhUZ28");
-        return new JSONColors(colors);
+    public JSONColors getColors(SharedPreferences a, InputStream is) {
+        JSONColors colors;
+        try {
+            colors = new JSONColors(byPreference(a, "json_colors"));
+        } catch (InvalidDataException e) {
+            colors = new JSONColors(byAsset(is));
+            colors.save(a);
+        }
+        return colors;
     }
 
 }

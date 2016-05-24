@@ -1,5 +1,6 @@
 package net.parablack.clocktest.json;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.util.Log;
 
@@ -8,8 +9,7 @@ import org.json.JSONObject;
 public class JSONColors {
     private JSONObject lastObject;
 
-    private int secondsTime = Color.WHITE, subjectNext = Color.WHITE, subjectCurrent = Color.WHITE, mainTime = Color.WHITE,
-            full_done = Color.WHITE, full_percentage = Color.WHITE, full_todo = Color.WHITE;
+    private int secondsTime = Color.WHITE, subjectNext = Color.WHITE, subjectCurrent = Color.WHITE, mainTime = Color.WHITE, background = Color.BLACK;
 
     public JSONColors() {
     }
@@ -26,11 +26,7 @@ public class JSONColors {
         subjectNext = getColorByName("subjectNext");
         subjectCurrent = getColorByName("subjectCurrent");
         mainTime = getColorByName("mainTime");
-
-//            full_done = Color.parseColor(rootlast.getString("full_done"));
-//            full_percentage = Color.parseColor(rootlast.getString("full_percentage"));
-//            full_todo = Color.parseColor(rootlast.getString("full_todo"));
-
+        background = getColorByName("background");
     }
 
     public void reparse() {
@@ -58,6 +54,10 @@ public class JSONColors {
         return mainTime;
     }
 
+    public int getBackground() {
+        return background;
+    }
+
     public int getColorByName(String name) {
         try {
             try {
@@ -67,20 +67,14 @@ public class JSONColors {
                 return lastObject.getInt(name);
             }
         } catch (Exception e) {
-            Log.w("Schedule", "getColorByName: Color not found, returning white (Color: " + name + "), (" + e.getClass().getSimpleName() + ")");
-            return Color.WHITE;
+            Log.w("Schedule", "getColorByName: Color not found, returning black (Color: " + name + "), (" + e.getClass().getSimpleName() + ")");
+            return Color.BLACK;
         }
     }
 
-//    public int getFull_done() {
-//        return full_done;
-//    }
-//
-//    public int getFull_percentage() {
-//        return full_percentage;
-//    }
-//
-//    public int getFull_todo() {
-//        return full_todo;
-//    }
+    public void save(SharedPreferences pref){
+        pref.edit().putString("json_colors", lastObject.toString()).apply();
+    }
+
+
 }

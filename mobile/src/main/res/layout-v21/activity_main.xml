@@ -30,4 +30,14 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/test_button" />
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_color_reset"
+        android:id="@+id/reset_button"
+        android:layout_above="@+id/colorList"
+        android:layout_toRightOf="@+id/test_button"
+        android:onClick="resetButtonClicked" />
+
 </RelativeLayout>

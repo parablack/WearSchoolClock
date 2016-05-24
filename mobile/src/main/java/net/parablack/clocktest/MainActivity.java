@@ -14,18 +14,17 @@ import android.widget.ListView;
 import net.parablack.clocktest.color.ColorChanger;
 import net.parablack.clocktest.color.ColorCreator;
 import net.parablack.clocktest.color.ColorListAdapter;
+import net.parablack.clocktest.color.ColorManager;
 
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
     private ClockCommunicator communicator;
-    private ColorCreator creator;
-    private ColorListAdapter<String> adapter;
+    private ColorManager colorManager;
 
     public static MainActivity instance;
 
-    public static HashMap<Integer, String> posToName = new HashMap<>();
 
 
     @Override
@@ -35,29 +34,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         communicator = new ClockCommunicator(this);
-        creator = new ColorCreator(this);
+        colorManager = new ColorManager(this);
 
-        View v1 = findViewById(R.id.colorList);
-        ListView v = (ListView) v1;
 
-        adapter = new ColorListAdapter<>(this, android.R.layout.simple_list_item_1);
-        for(String s : creator.getColorNames()){
-            adapter.add(ColorCreator.getDisplayName(s));
-            posToName.put(adapter.getPosition(ColorCreator.getDisplayName(s)), s);
-        }
-        assert v != null;
-        v.setAdapter(adapter);
-        v.setLongClickable(true);
-        v.setOnItemLongClickListener(new ColorChanger());
     }
 
-
-    public ColorCreator getColorCreator() {
-        return creator;
-    }
-
-    public ColorListAdapter<String> getColorListAdapter() {
-        return adapter;
+    public ColorManager getColorManager() {
+        return colorManager;
     }
 
     public void testButtonClicked(View v){
@@ -86,10 +69,16 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Send to clock
-        communicator.sendNewColorPreset(creator.toJSON() + System.currentTimeMillis());
+        communicator.sendNewColorPreset(colorManager.getCreator().toJSON() + System.currentTimeMillis());
 
         // Send message
         communicator.requestTranscription("/message/reload", "RELOAD_COLORS".getBytes());
+
+    }
+
+    public void resetButtonClicked(View v){
+
+        colorManager.reset();
 
     }
 

@@ -62,6 +62,7 @@ public class ScheduleAssetListener extends WearableListenerService {
                 try {
                     DataMapItem item = DataMapItem.fromDataItem(event.getDataItem());
                     colors.reload(new JSONObject(item.getDataMap().getString("color")));
+                    colors.save(SchoolWatchFaceService.getInstance().getSharedPreferences("SchoolClock_pref", MODE_PRIVATE));
                     SchoolWatchFaceService.getInstance().getWatchEngine().getDrawer().updateColors(colors);
                     Log.d("Clock", "Changed colors!");
                 } catch (JSONException e) {

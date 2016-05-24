@@ -10,6 +10,8 @@ import net.parablack.clocktest.watchface.drawer.WatchFaceDrawer;
 import net.parablack.clocktest.watchface.drawer.mode.wrapper.SuperTimeWrapper;
 import net.parablack.clocktest.watchface.drawer.mode.wrapper.TimeException;
 
+import java.util.Locale;
+
 /**
  * Draws the time left as a simple text
  */
@@ -35,9 +37,10 @@ public class TextDrawer extends ModeFaceDrawer<SuperTimeWrapper> {
     @Override
     protected void onDraw(Canvas c, SuperTimeWrapper time) throws TimeException {
         String text;
+        scheduleTimePaint.setAntiAlias(displaySeconds());
         if(displaySeconds())
-        text = String.format("%01d:%02d:%02d", time.getEnd().getHours(), time.getEnd().getMinutes(), time.getEnd().getSeconds());
-        else text = String.format("%01d:%02d", time.getEnd().getHours(), time.getEnd().getMinutes());
+        text = String.format(Locale.GERMANY, "%01d:%02d:%02d", time.getEnd().getHours(), time.getEnd().getMinutes(), time.getEnd().getSeconds());
+        else text = String.format(Locale.GERMANY,"%01d:%02d", time.getEnd().getHours(), time.getEnd().getMinutes());
         c.drawText(text, centerX - (scheduleTimePaint.measureText(text) / 2), centerX + 115, scheduleTimePaint);
 
     }

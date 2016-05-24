@@ -32,12 +32,6 @@
             android:id="@+id/reload_button"
             android:onClick="onReloadButtonClicked" />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/schedule_button_color_change"
-            android:id="@+id/color_change_button"
-            android:onClick="onColorChangeButtonClicked" />
     </LinearLayout>
 
 </LinearLayout>

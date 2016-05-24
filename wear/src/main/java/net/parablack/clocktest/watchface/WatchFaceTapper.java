@@ -20,7 +20,6 @@ public class WatchFaceTapper {
 
     public void reset() {
         alreadyTapped = 0;
-        alreadyDownRightTapped = 0;
     }
 
     public void onClick(int tapType, int x, int y, long eventTime) {
@@ -55,15 +54,7 @@ public class WatchFaceTapper {
 
         if (x > 250 && y > 250) {
             alreadyDownRightTapped++;
-        } else if (alreadyDownRightTapped >= 20) {
-            if (x < 100 && y < 100) {
-                service.reloadColors();
-                reset();
-            }
-
         }
-
-
     }
 
 }

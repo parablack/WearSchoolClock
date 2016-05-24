@@ -3,6 +3,7 @@ package net.parablack.clocktest.color;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.util.Log;
 
 import net.parablack.clocktest.json.JSONReaderUtil;
@@ -33,10 +34,10 @@ public class ColorCreator {
 
 
             try {
-                colors.put(key, rootObject.getJSONObject(key).getInt("defaultValue"));
+                colors.put(key, Color.parseColor(rootObject.getJSONObject(key).getString("defaultValue")));
             } catch (Exception e) {
-                Log.e("Clock", "Default JSON is corrupted. Aborting whole process.");
-
+                Log.e("Clock", "Default JSON is corrupted. Aborting whole process. (key=" + key + ")");
+                e.printStackTrace();
             }
         }
         saveToPreferences(con);
@@ -64,11 +65,17 @@ public class ColorCreator {
     }
 
     public ColorCreator(Context con) {
+        this(con, false);
+    }
+
+    public ColorCreator(Context con, boolean defaultValue) {
         loadDisplayNames(con);
         SharedPreferences pref = con.getSharedPreferences("SchoolClock_Colors", Context.MODE_PRIVATE);
         String json = pref.getString("colors_json", "Error");
+        Log.d("Clock", "Preferences loaded: [" + json + "]");
         try {
-            loadFromJSON(json);
+            if(defaultValue) loadDefaultValues(con);
+                else loadFromJSON(json);
         } catch (JSONException e) {
             loadDefaultValues(con);
 
@@ -76,6 +83,7 @@ public class ColorCreator {
         }
 
     }
+
 
     private void loadFromJSON(String json) throws JSONException {
         rootObject = new JSONObject(json);
@@ -123,9 +131,10 @@ public class ColorCreator {
         return displayNames.get(id);
     }
 
-    private void saveToPreferences(Context con) {
+    public void saveToPreferences(Context con) {
         SharedPreferences pref = con.getSharedPreferences("SchoolClock_Colors", Context.MODE_PRIVATE);
         pref.edit().putString("colors_json", toJSON()).apply();
+        Log.i("Clock", "saveToPreferences: Preferences saved!");
     }
 
 }

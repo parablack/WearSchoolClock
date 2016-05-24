@@ -1,6 +1,7 @@
 package net.parablack.clocktest.watchface.drawer;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -98,9 +99,9 @@ public class WatchFaceDrawer {
 
     }
 
-    public void updateColors(InputStream stream) {
+    public void updateColors(InputStream stream, SharedPreferences pref) {
 
-        colors = engine.getMainReader().getColors(stream);
+        colors = engine.getMainReader().getColors(pref, stream);
 
         modeDrawer.reloadColors();
 
@@ -117,14 +118,13 @@ public class WatchFaceDrawer {
     public void onDraw(Canvas canvas, Rect bounds) {
             /* draw your watch face */
 
-
         engine.getCalendar().setTimeInMillis(System.currentTimeMillis());
 
         int hourOfDay = engine.getCalendar().get(Calendar.HOUR_OF_DAY), minute = engine.getCalendar().get(Calendar.MINUTE);
 
-        String hourString = String.format("%02d", hourOfDay);
-        String minuteString = String.format("%02d", minute);
-        String secondString = String.format("%02d", engine.getCalendar().get(Calendar.SECOND));
+        String hourString = String.format(Locale.GERMANY,"%02d", hourOfDay);
+        String minuteString = String.format(Locale.GERMANY, "%02d", minute);
+        String secondString = String.format(Locale.GERMANY, "%02d", engine.getCalendar().get(Calendar.SECOND));
 
         // Doesn't work?!
 //        if(hourOfDay == 0 && minute == 1){
@@ -135,7 +135,7 @@ public class WatchFaceDrawer {
         String dateString = new SimpleDateFormat("EEE, dd. MMM", Locale.GERMANY).format(engine.getCalendar().getTime());
         //      String dateString2 = new SimpleDateFormat("MMMM yyyy").format(calendar.getTime());
 
-        canvas.drawColor(engine.notifyReload() ? Color.BLUE : Color.BLACK);
+        canvas.drawColor(colors.getBackground());
 
         int width = bounds.width();
         int height = bounds.height();
@@ -228,6 +228,7 @@ public class WatchFaceDrawer {
         hourPaint.setAntiAlias(antiAlias);
         minutePaint.setAntiAlias(antiAlias);
         secondPaint.setAntiAlias(antiAlias);
+        datePaint.setAntiAlias(antiAlias);
         scheduleNextPaint.setAntiAlias(antiAlias);
         scheduleSubjectPaint.setAntiAlias(antiAlias);
     }
