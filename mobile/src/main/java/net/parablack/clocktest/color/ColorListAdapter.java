@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import net.parablack.clocktest.MainActivity;
-
 public class ColorListAdapter<T> extends ArrayAdapter<T> {
 
     private ColorManager manager;

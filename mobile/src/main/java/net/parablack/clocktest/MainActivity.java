@@ -44,29 +44,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void testButtonClicked(View v){
-        System.out.println("Test Buttoni Rigatoni #2");
-
-
-        int notificationId = 1;
-        Intent viewIntent = new Intent(this, MainActivity.class);
-
-        PendingIntent viewPendingIntent =
-                PendingIntent.getActivity(this, 0, viewIntent, 0);
-
-        NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_notification_test)
-                        .setContentTitle("Hallo")
-                        .setContentText("Testo")
-                        .setContentIntent(viewPendingIntent)
-                        .addAction(R.drawable.ic_setting_dark, "Aha", viewPendingIntent);
-
-
-        NotificationManagerCompat notificationManager =
-                NotificationManagerCompat.from(this);
-
-        notificationManager.notify(notificationId, notificationBuilder.build());
-
 
         // Send to clock
         communicator.sendNewColorPreset(colorManager.getCreator().toJSON() + System.currentTimeMillis());
@@ -76,14 +53,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void resetButtonClicked(View v){
-
-        colorManager.reset();
-
-    }
-
-
-    // ?! What the heck!
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -102,6 +71,12 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        if(id == R.id.color_reset){
+
+            colorManager.reset();
+            return true;
+        }
+
 
         return super.onOptionsItemSelected(item);
     }

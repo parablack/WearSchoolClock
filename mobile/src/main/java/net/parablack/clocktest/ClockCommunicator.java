@@ -2,6 +2,7 @@ package net.parablack.clocktest;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -25,8 +26,6 @@ public class ClockCommunicator implements
         DataApi.DataListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
-
-    private static final String COLOR_PRESET = "net.parablack.clock.color";
 
     private static final String
             WATCHFACE_RELOAD_CAPABILITY = "watchface_reload";
@@ -62,12 +61,12 @@ public class ClockCommunicator implements
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull  ConnectionResult connectionResult) {
         Log.e("Clock", "Connection failed.");
     }
 
     public void sendNewColorPreset(String json) {
-        System.out.println("Sending " + json);
+        Log.d("Clock", "Sending " + json);
         PutDataMapRequest request = PutDataMapRequest.create("/clock/color");
 
         request.getDataMap().putString("color", json);
@@ -77,8 +76,8 @@ public class ClockCommunicator implements
         PendingResult<DataApi.DataItemResult> pendingResult = Wearable.DataApi.putDataItem(mGoogleApiClient, rawRequest);
         pendingResult.setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
             @Override
-            public void onResult(DataApi.DataItemResult dataItemResult) {
-                System.out.println("Result: " + dataItemResult.getStatus());
+            public void onResult(@NonNull  DataApi.DataItemResult dataItemResult) {
+               Log.d("Clock", "Result: " + dataItemResult.getStatus());
             }
         });
 
@@ -109,8 +108,8 @@ public class ClockCommunicator implements
                 mGoogleApiClient, WATCHFACE_RELOAD_CAPABILITY,
                 CapabilityApi.FILTER_REACHABLE).setResultCallback(new ResultCallback<CapabilityApi.GetCapabilityResult>() {
             @Override
-            public void onResult(CapabilityApi.GetCapabilityResult getCapabilityResult) {
-                System.out.println("[1] Capability result received, passing to updateTranscriptionCapability()");
+            public void onResult( @NonNull  CapabilityApi.GetCapabilityResult getCapabilityResult) {
+                Log.d("Clock","[1] Capability result received, passing to updateTranscriptionCapability()");
                 updateTranscriptionCapability(getCapabilityResult.getCapability());
             }
         });
@@ -120,7 +119,7 @@ public class ClockCommunicator implements
                     @Override
                     public void onCapabilityChanged(CapabilityInfo capabilityInfo) {
                         updateTranscriptionCapability(capabilityInfo);
-                        System.out.println("[2] Capability result received (CHANGED!), passing to updateTranscriptionCapability()");
+                        Log.d("Clock","[2] Capability result received (CHANGED!), passing to updateTranscriptionCapability()");
 
                     }
                 };
@@ -134,9 +133,9 @@ public class ClockCommunicator implements
 
     private void updateTranscriptionCapability(CapabilityInfo capabilityInfo) {
         Set<Node> connectedNodes = capabilityInfo.getNodes();
-        System.out.println("Node length  = " + connectedNodes.size());
+        Log.v("Clock", "Node length  = " + connectedNodes.size());
         reloadNodeId = pickBestNodeId(connectedNodes);
-        System.out.println("reloadNodeId = " + reloadNodeId);
+        Log.v("Clock", "reloadNodeId = " + reloadNodeId);
     }
 
     public void requestTranscription(String path, byte[] data) {
@@ -146,18 +145,18 @@ public class ClockCommunicator implements
                     new ResultCallback<MessageApi.SendMessageResult>() {
 
                         @Override
-                        public void onResult(MessageApi.SendMessageResult sendMessageResult) {
+                        public void onResult(@NonNull MessageApi.SendMessageResult sendMessageResult) {
                             if (!sendMessageResult.getStatus().isSuccess()) {
                                 // Failed to send message
-                                System.out.println("Message fail: " + sendMessageResult.getStatus());
+                                Log.e("Clock","Message fail: " + sendMessageResult.getStatus());
                             }else{
-                                System.out.println("Message succes: " + sendMessageResult.getStatus());
+                                Log.d("Clock","Message succes: " + sendMessageResult.getStatus());
                             }
                         }
                     }
             );
         } else {
-            System.out.println("Message fail: No node found, researching!");
+            Log.e("Clock","Message fail: No node found, researching!");
             setupMessageTranscription();
         }
     }
