@@ -43,7 +43,7 @@ public class JSONReaderUtil {
 
     }
 
-    protected static void fetchArray(JSONArray array, ScheduleInitCallback cb) throws JSONException {
+    public static void fetchArray(JSONArray array, ScheduleInitCallback cb) throws JSONException {
         Log.v("Clock", "fetchArray: array = " + array + ", array.length = " + array.length());
         for (int i = 0; i < array.length(); i++) {
             JSONObject extractedObject = array.getJSONObject(i);
@@ -116,7 +116,7 @@ public class JSONReaderUtil {
     }
 
 
-    interface ScheduleInitCallback {
+    public interface ScheduleInitCallback {
         void callback(JSONObject object) throws JSONException;
     }
 

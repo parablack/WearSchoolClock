@@ -1,6 +1,7 @@
 package net.parablack.clocktest.watchface;
 
 
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 
 import net.parablack.clocktest.R;
@@ -19,6 +20,13 @@ public interface WearEvent extends Comparable<WearEvent>{
      * @return The name of the event
      */
     String getName();
+
+    /**
+     * Should get called every minute to check if the event should vibrate
+     * @param vibrator The system vibrator
+     * @return true when vibrated
+     */
+    boolean checkVibrate(Vibrator vibrator);
 
     class NothingUpEvent implements WearEvent{
 
@@ -66,6 +74,11 @@ public interface WearEvent extends Comparable<WearEvent>{
         public String getName() {
             if(label != null) return label;
             return SchoolWatchFaceService.getInstance().getString(R.string.schedule_no_event);
+        }
+
+        @Override
+        public boolean checkVibrate(Vibrator vibrator) {
+            return false;
         }
 
 

@@ -1,0 +1,526 @@
+{
+  "d4": {
+    "schedule": [
+      {
+        "shown": true,
+        "subject_preset": "10",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "GFR"
+        },
+        "id": 4,
+        "time_preset": "h1"
+      },
+      {
+        "shown": true,
+        "subject_preset": "10",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "GFR"
+        },
+        "id": 4,
+        "time_preset": "h2"
+      },
+      {
+        "shown": true,
+        "subject_preset": "1",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "R8d"
+        },
+        "id": 4,
+        "time_preset": "h3"
+      },
+      {
+        "shown": true,
+        "subject_preset": "1",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "R8d"
+        },
+        "id": 4,
+        "time_preset": "h4"
+      },
+      {
+        "shown": true,
+        "subject_preset": "NONE",
+        "meta": "noVibration",
+        "id": "b1",
+        "display_name": "Pause 1",
+        "time_preset": "b1"
+      },
+      {
+        "shown": true,
+        "subject_preset": "NONE",
+        "meta": "noVibration",
+        "id": "sb1",
+        "display_name": "Kleine Pause 1",
+        "time_preset": "sb1"
+      },
+      {
+        "shown": true,
+        "subject_preset": "1",
+        "meta": "noVibration",
+        "id": 4,
+        "display_name": "Test",
+        "time_preset": "h11"
+      }
+    ],
+    "id": 4
+  },
+  "d5": {
+    "schedule": [
+      {
+        "shown": true,
+        "subject_preset": "5",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "MFR"
+        },
+        "id": 5,
+        "time_preset": "h1"
+      },
+      {
+        "shown": true,
+        "subject_preset": "5",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "MFR"
+        },
+        "id": 5,
+        "time_preset": "h2"
+      },
+      {
+        "shown": true,
+        "subject_preset": "2",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "EFR"
+        },
+        "id": 5,
+        "time_preset": "h3"
+      },
+      {
+        "shown": true,
+        "subject_preset": "2",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "EFR"
+        },
+        "id": 5,
+        "time_preset": "h4"
+      },
+      {
+        "shown": true,
+        "subject_preset": "11",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "Ph1"
+        },
+        "id": 5,
+        "time_preset": "h8"
+      },
+      {
+        "shown": true,
+        "subject_preset": "11",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "R8d"
+        },
+        "id": 5,
+        "time_preset": "h9"
+      },
+      {
+        "shown": true,
+        "subject_preset": "NONE",
+        "meta": "noVibration",
+        "id": "b1",
+        "display_name": "Pause 1",
+        "time_preset": "b1"
+      },
+      {
+        "shown": true,
+        "subject_preset": "NONE",
+        "meta": "noVibration",
+        "id": "b3",
+        "display_name": "Pause 3",
+        "time_preset": "b3"
+      },
+      {
+        "shown": true,
+        "subject_preset": "NONE",
+        "meta": "noVibration",
+        "id": "sb1",
+        "display_name": "Kleine Pause 1",
+        "time_preset": "sb1"
+      },
+      {
+        "shown": true,
+        "subject_preset": "NONE",
+        "meta": "noVibration",
+        "id": "sb3",
+        "display_name": "Kleine Pause 3",
+        "time_preset": "sb3"
+      }
+    ],
+    "id": 5
+  },
+  "d6": {
+    "schedule": [
+      {
+        "shown": true,
+        "subject_preset": "4",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "Ph2"
+        },
+        "id": 6,
+        "time_preset": "h1"
+      },
+      {
+        "shown": true,
+        "subject_preset": "4",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "Ph2"
+        },
+        "id": 6,
+        "time_preset": "h2"
+      },
+      {
+        "shown": true,
+        "subject_preset": "1",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "R8d"
+        },
+        "id": 6,
+        "time_preset": "h3"
+      },
+      {
+        "shown": true,
+        "subject_preset": "1",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "R8d"
+        },
+        "id": 6,
+        "time_preset": "h4"
+      },
+      {
+        "shown": true,
+        "subject_preset": "3",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "DFR"
+        },
+        "id": 6,
+        "time_preset": "h5"
+      },
+      {
+        "shown": true,
+        "subject_preset": "3",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "DFR"
+        },
+        "id": 6,
+        "time_preset": "h6"
+      },
+      {
+        "shown": true,
+        "subject_preset": "NONE",
+        "meta": "noVibration",
+        "id": "b1",
+        "display_name": "Pause 1",
+        "time_preset": "b1"
+      },
+      {
+        "shown": true,
+        "subject_preset": "NONE",
+        "meta": "noVibration",
+        "id": "b2",
+        "display_name": "Pause 2",
+        "time_preset": "b2"
+      },
+      {
+        "shown": true,
+        "subject_preset": "NONE",
+        "meta": "noVibration",
+        "id": "sb1",
+        "display_name": "Kleine Pause 1",
+        "time_preset": "sb1"
+      },
+      {
+        "shown": true,
+        "subject_preset": "NONE",
+        "meta": "noVibration",
+        "id": "sb2",
+        "display_name": "Kleine Pause 2",
+        "time_preset": "sb2"
+      }
+    ],
+    "id": 6
+  },
+  "d7": {
+    "schedule": [],
+    "id": 7
+  },
+  "checksum": "$mainSchedule_TkIhUZ28",
+  "encoding": "^^!\"&/()=",
+  "d1": {
+    "schedule": [
+    ],
+    "id": 1
+  },
+  "d2": {
+    "schedule": [
+      {
+        "shown": true,
+        "subject_preset": "6",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "EFR"
+        },
+        "id": 2,
+        "time_preset": "h1"
+      },
+      {
+        "shown": true,
+        "subject_preset": "6",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "EFR"
+        },
+        "id": 2,
+        "time_preset": "h2"
+      },
+      {
+        "shown": true,
+        "subject_preset": "2",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "R6a"
+        },
+        "id": 2,
+        "time_preset": "h3"
+      },
+      {
+        "shown": true,
+        "subject_preset": "2",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "R6a"
+        },
+        "id": 2,
+        "time_preset": "h4"
+      },
+      {
+        "shown": true,
+        "subject_preset": "4",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "Ph1"
+        },
+        "id": 2,
+        "time_preset": "h5"
+      },
+      {
+        "shown": true,
+        "subject_preset": "4",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "Ph1"
+        },
+        "id": 2,
+        "time_preset": "h6"
+      },
+      {
+        "shown": true,
+        "subject_preset": "7",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "SP"
+        },
+        "id": 2,
+        "time_preset": "h10"
+      },
+      {
+        "shown": true,
+        "subject_preset": "7",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "SP"
+        },
+        "id": 2,
+        "time_preset": "h11"
+      },
+      {
+        "shown": true,
+        "subject_preset": "NONE",
+        "meta": "noVibration",
+        "id": "b1",
+        "display_name": "Pause 1",
+        "time_preset": "b1"
+      },
+      {
+        "shown": true,
+        "subject_preset": "NONE",
+        "meta": "noVibration",
+        "id": "b2",
+        "display_name": "Pause 2",
+        "time_preset": "b2"
+      },
+      {
+        "shown": true,
+        "subject_preset": "NONE",
+        "meta": "noVibration",
+        "id": "sb1",
+        "display_name": "Kleine Pause 1",
+        "time_preset": "sb1"
+      },
+      {
+        "shown": true,
+        "subject_preset": "NONE",
+        "meta": "noVibration",
+        "id": "sb2",
+        "display_name": "Kleine Pause 2",
+        "time_preset": "sb2"
+      },
+      {
+        "shown": true,
+        "subject_preset": "NONE",
+        "meta": "noVibration",
+        "id": "sb4",
+        "display_name": "Kleine Pause 4",
+        "time_preset": "sb4"
+      }
+    ],
+    "id": 2
+  },
+  "d3": {
+    "schedule": [
+      {
+        "shown": true,
+        "subject_preset": "8",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "InfR"
+        },
+        "id": 3,
+        "time_preset": "h1"
+      },
+      {
+        "shown": true,
+        "subject_preset": "8",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "InfR"
+        },
+        "id": 3,
+        "time_preset": "h2"
+      },
+      {
+        "shown": true,
+        "subject_preset": "3",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "DFR"
+        },
+        "id": 3,
+        "time_preset": "h3"
+      },
+      {
+        "shown": true,
+        "subject_preset": "3",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "DFR"
+        },
+        "id": 3,
+        "time_preset": "h4"
+      },
+      {
+        "shown": true,
+        "subject_preset": "9",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "BkR1"
+        },
+        "id": 3,
+        "time_preset": "h5"
+      },
+      {
+        "shown": true,
+        "subject_preset": "9",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "BkR1"
+        },
+        "id": 3,
+        "time_preset": "h6"
+      },
+      {
+        "shown": true,
+        "subject_preset": "5",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "EFR"
+        },
+        "id": 3,
+        "time_preset": "h8"
+      },
+      {
+        "shown": true,
+        "subject_preset": "5",
+        "meta": "defaultMeta",
+        "additional": {
+          "room": "EFR"
+        },
+        "id": 3,
+        "time_preset": "h9"
+      },
+      {
+        "shown": true,
+        "subject_preset": "NONE",
+        "meta": "noVibration",
+        "id": "b1",
+        "display_name": "Pause 1",
+        "time_preset": "b1"
+      },
+      {
+        "shown": true,
+        "subject_preset": "NONE",
+        "meta": "noVibration",
+        "id": "b2",
+        "display_name": "Pause 2",
+        "time_preset": "b2"
+      },
+      {
+        "shown": true,
+        "subject_preset": "NONE",
+        "meta": "noVibration",
+        "id": "sb1",
+        "display_name": "Kleine Pause 1",
+        "time_preset": "sb1"
+      },
+      {
+        "shown": true,
+        "subject_preset": "NONE",
+        "meta": "noVibration",
+        "id": "sb2",
+        "display_name": "Kleine Pause 2",
+        "time_preset": "sb2"
+      },
+      {
+        "shown": true,
+        "subject_preset": "NONE",
+        "meta": "noVibration",
+        "id": "sb3",
+        "display_name": "Kleine Pause 3",
+        "time_preset": "sb3"
+      }
+    ],
+    "id": 3
+  }
+}

@@ -1,8 +1,6 @@
 package net.parablack.clocktest.color;
 
-import android.graphics.Color;
 import android.support.annotation.ColorInt;
-import android.support.annotation.MainThread;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,7 +39,7 @@ public class ColorChanger implements AdapterView.OnItemLongClickListener {
                         Log.d("Clock", "Color select: " + i);
                         manager.getCreator().setColor(colorid, i);
                         manager.getAdapter().notifyDataSetChanged();
-                        manager.getCreator().saveToPreferences(manager.getContext());
+                        manager.getCreator().saveToPreferences(manager.getFragment().getActivity());
                     }
                 })
                 .showColorIndicator(true) // Default false, choose to show text indicator showing the current color in HEX or DEC (see images) or not

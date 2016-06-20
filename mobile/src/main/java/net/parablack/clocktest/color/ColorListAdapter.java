@@ -25,7 +25,7 @@ public class ColorListAdapter<T> extends ArrayAdapter<T> {
 
         int color = manager.getCreator().getColor(id);
         if(Color.red(color) + Color.blue(color) + Color.green(color) < 200){
-            Log.d("Clock", "getView: Background too moody, setting color to white ("+id+"): " + Color.red(color) +" + " + Color.blue(color) + " + " +Color.green(color));
+       //     Log.d("Clock", "getView: Background too moody, setting color to white ("+id+"): " + Color.red(color) +" + " + Color.blue(color) + " + " +Color.green(color));
             ((TextView) v).setTextColor(Color.WHITE);
         }else ((TextView) v).setTextColor(Color.BLACK);
         v.setBackgroundColor(color);

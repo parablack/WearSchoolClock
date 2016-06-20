@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/color_choose"
+            android:icon="@mipmap/ic_launcher"
+            android:title="@string/color_choose" />
+        <item
+            android:id="@+id/schedule_choose"
+            android:icon="@drawable/common_google_signin_btn_text_light_normal"
+            android:title="@string/schedule_choose" />
+    </group>
+
+
+</menu>
