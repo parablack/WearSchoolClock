@@ -48,6 +48,8 @@ public class KvFGParser {
 
     public static Schedule getFromKvFGJSON(String json) throws JSONException {
 
+        initArray();
+
         JSONObject obj = new JSONObject(json);
         Schedule schedule = new Schedule();
 
@@ -67,7 +69,7 @@ public class KvFGParser {
 
                 String displayName = fach.getString("s") + " bei " + fach.getString("t") + " (" + fach.getString("r") + ")";
 
-                int begin = _hours[i];
+                int begin = _hours[j];
                 int end = begin + HOUR_DURATION;
 
                 ScheduleEvent event = new ScheduleEvent(displayName, begin, end, i + 2, 3);

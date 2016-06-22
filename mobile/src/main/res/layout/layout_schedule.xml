@@ -24,27 +24,17 @@
             android:text="@string/upload"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/scheduleList"
+            android:layout_alignEnd="@+id/scheduleList" />
 
-        <EditText
+        <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/kvfgText"
-            android:layout_below="@+id/upload_schedule"
+            android:id="@+id/scheduleList"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/parse"
-            android:id="@+id/parse_button"
-            android:layout_above="@+id/kvfgText"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_below="@+id/upload_schedule" />
     </RelativeLayout>
 
 

@@ -73,6 +73,21 @@ public class ScheduleEvent implements Comparable<WearEvent>, WearEvent{
         return getEnd() - dayMillis;
     }
 
+    public String niceStartTime(){
+        int mins = (getBegin() / 1000) / 60;
+        int hour = (mins - (mins % 60)) / 60;
+        int min = mins % 60;
+
+        return hour + ":" + min;
+    }
+
+    public String niceEndTime(){
+        int mins = getEnd() / (1000 * 60);
+        int hour = (mins - (mins % 60)) / 60;
+        int min = mins % 60;
+
+        return hour + ":" + min;
+    }
 
     @Override
     public int compareTo(@NonNull WearEvent another) {
@@ -82,4 +97,8 @@ public class ScheduleEvent implements Comparable<WearEvent>, WearEvent{
     }
 
 
+    @Override
+    public String toString() {
+        return "ScheduleEvent[" + niceStartTime() + " - " + niceEndTime() + " (" + getBegin() + ", " + getEnd() + "): " + getName() ;
+    }
 }

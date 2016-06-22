@@ -20,6 +20,8 @@
     <string name="schedule_choose">Schedule choose</string>
     <string name="upload">Upload</string>
     <string name="parse">Parse</string>
+    <string name="kvfg_import">Von KvFG</string>
+    <string name="kvfg_exportierten_stundenplan_einf_gen">KvFG: exportierten Stundenplan einfügen:</string>
 
 
 </resources>

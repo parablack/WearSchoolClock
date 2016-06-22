@@ -162,7 +162,6 @@ public class WatchFaceDrawer {
 
             if (currentEvent instanceof JSONEvent) {
                 JSONEvent e = (JSONEvent) currentEvent;
-
                 e.checkVibrate(vibrator);
 
 

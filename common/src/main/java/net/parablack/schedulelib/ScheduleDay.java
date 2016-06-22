@@ -40,7 +40,7 @@ public class ScheduleDay {
             public void callback(JSONObject object) throws JSONException {
                 ScheduleEvent eve = new ScheduleEvent(object);
                 events.add(eve);
-                Log.v("Clock", "JSONEvent added ["+id+"]: " + eve);
+                Log.v("Clock", "ScheduleEvent added ["+id+"]: " + eve);
             }
         });
 
@@ -139,4 +139,7 @@ public class ScheduleDay {
         return _next;
     }
 
+    public ArrayList<ScheduleEvent> getEvents() {
+        return events;
+    }
 }

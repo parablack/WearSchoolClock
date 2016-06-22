@@ -78,6 +78,10 @@ public class Schedule implements WearSchedule {
         return days[weekDay()].getNext();
     }
 
+    public ScheduleDay[] getDays() {
+        return days;
+    }
+
     private static int weekDay() {
         return currentCalendar().get(Calendar.DAY_OF_WEEK);
     }
