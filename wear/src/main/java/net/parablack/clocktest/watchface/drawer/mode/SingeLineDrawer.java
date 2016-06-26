@@ -45,10 +45,8 @@ public class SingeLineDrawer extends ModeFaceDrawer<SuperTimeWrapper> {
         int minTotal = superTimeWrapper.getTotalMinutes(); // The current one!
         initDrawCalc(minTotal);
 
-        System.out.println("minTotal: " + minTotal + " , begin:" + begin + " , end: " + end);
-
-        if (minTotal < 130) {  // Too big
-            System.out.println("tB = " + begin.getMinutes() + " tE = " + end.getMinutes() + " tM = " + minTotal);
+        if (minTotal < 200) {  // Too big
+           // System.out.println("tB = " + begin.getMinutes() + " tE = " + end.getMinutes() + " tM = " + minTotal);
 
             for (int j = 1; j <= begin.getMinutes(); j++) {
 

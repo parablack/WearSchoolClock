@@ -4,11 +4,11 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/color_choose"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@mipmap/ic_color_choose"
             android:title="@string/color_choose" />
         <item
             android:id="@+id/schedule_choose"
-            android:icon="@drawable/common_google_signin_btn_text_light_normal"
+            android:icon="@mipmap/ic_schedule_choose"
             android:title="@string/schedule_choose" />
     </group>
 

@@ -3,6 +3,7 @@ package net.parablack.clocktest.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
+import android.util.Log;
 import android.view.View;
 
 import net.parablack.clocktest.R;
@@ -30,14 +31,14 @@ public class MainActivityWear extends WearableActivity {
 
     public void onDesignChangeButtonClicked(View v){
 
-        System.out.println("Design Button Change clicked --> Applying");
+        Log.d("Clock", "Design Button Change clicked --> Applying");
         SchoolWatchFaceService.getInstance().getWatchEngine().getDrawer().setCurrentDrawer(new PixelDrawer(SchoolWatchFaceService.getInstance().getWatchEngine().getDrawer()));
 
     }
 
     public void onReloadButtonClicked(View v){
 
-        System.out.println("Reload Button clicked --> Force reload");
+        Log.d("Clock", "Reload Button clicked --> Force reload");
         SchoolWatchFaceService.getInstance().getWatchEngine().reload();
     }
 

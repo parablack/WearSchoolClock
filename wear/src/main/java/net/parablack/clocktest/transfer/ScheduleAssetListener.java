@@ -1,7 +1,5 @@
 package net.parablack.clocktest.transfer;
 
-import android.net.Uri;
-import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -15,9 +13,9 @@ import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 
-import net.parablack.clocktest.json.JSONColors;
 import net.parablack.clocktest.watchface.SchoolWatchFaceService;
-import net.parablack.clocktest.watchface.drawer.WatchFaceDrawer;
+import net.parablack.schedulelib.Schedule;
+import net.parablack.schedulelib.color.ScheduleColors;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,15 +53,30 @@ public class ScheduleAssetListener extends WearableListenerService {
         // Loop through the events and send a message
         // to the node that created the data item.
         for (DataEvent event : events) {
-            System.out.println("event.getDataItem.getUri.getPath = " + event.getDataItem().getUri().getPath());
+            Log.d("Clock", "event.getDataItem.getUri.getPath = " + event.getDataItem().getUri().getPath());
             if(event.getDataItem().getUri().getPath().equals("/clock/color")){
                  // We can expect to get an JSON String  here
-                JSONColors colors = new JSONColors();
                 try {
                     DataMapItem item = DataMapItem.fromDataItem(event.getDataItem());
-                    colors.reload(new JSONObject(item.getDataMap().getString("color")));
-                    colors.save(SchoolWatchFaceService.getInstance().getSharedPreferences("SchoolClock_pref", MODE_PRIVATE));
+                    ScheduleColors colors = new ScheduleColors(new JSONObject(item.getDataMap().getString("color")));
+                    Log.d("Clock", "Color string: " + item.getDataMap().getString("color"));
+                    colors.saveToPreferences(SchoolWatchFaceService.getInstance());
                     SchoolWatchFaceService.getInstance().getWatchEngine().getDrawer().updateColors(colors);
+                    Log.d("Clock", "Changed colors!");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(event.getDataItem().getUri().getPath().equals("/clock/schedule")){
+                // We can expect to get an JSON String  here
+                try {
+                    DataMapItem item = DataMapItem.fromDataItem(event.getDataItem());
+                    JSONObject object = new JSONObject(item.getDataMap().getString("schedule"));
+                    Schedule schedule = new Schedule(object);
+                    Log.d("Clock", "Schedule string: " + object.toString());
+                    schedule.toPrefs(SchoolWatchFaceService.getInstance());
+                    schedule.reload();
+                    SchoolWatchFaceService.getInstance().getWatchEngine().setMainSchedule(schedule);
                     Log.d("Clock", "Changed colors!");
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -73,14 +86,13 @@ public class ScheduleAssetListener extends WearableListenerService {
             }
 
 
-
         }
     }
 
     @Override
       public void onMessageReceived(MessageEvent messageEvent) {
         super.onMessageReceived(messageEvent);
-        System.out.println("Message received: " + messageEvent);
+        Log.i("Clock","Message received: " + messageEvent);
 
         if(messageEvent.getPath().equals("/message/reload")){
             Log.i("Clock", "onMessageReceived GOT /message/reload ");
@@ -101,6 +113,6 @@ public class ScheduleAssetListener extends WearableListenerService {
     public void onPeerConnected(Node peer) {
         super.onPeerConnected(peer);
 
-        System.out.println("Peer connected [Wear] : " + peer);
+        Log.d("Clock","Peer connected [Wear] : " + peer);
     }
 }

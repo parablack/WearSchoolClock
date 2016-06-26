@@ -3,6 +3,8 @@
 
 
     <item android:id="@+id/parse_kvfg" android:title="@string/kvfg_import" />
-
+    <item android:id="@+id/schedule_clear" android:title="@string/delete" />
+    <item android:id="@+id/schedule_export" android:title="@string/export" />
+    <item android:id="@+id/schedule_import" android:title="@string/schedule_import" />
 
 </menu>

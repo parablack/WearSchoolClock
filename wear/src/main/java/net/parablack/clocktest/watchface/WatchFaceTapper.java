@@ -1,6 +1,7 @@
 package net.parablack.clocktest.watchface;
 
 import android.content.Intent;
+import android.util.Log;
 
 import net.parablack.clocktest.app.MainActivityWear;
 import net.parablack.clocktest.watchface.drawer.mode.FullLineDrawer;
@@ -27,9 +28,9 @@ public class WatchFaceTapper {
 
         if (x < 100 && y < 100) {
             alreadyTapped++;
-        } else if (alreadyTapped >= 20) {
+        } else if (alreadyTapped >= 10) {
             if (x > 200 && y > 200) {
-                System.out.println("Forced starting app --> Starting intent");
+                Log.d("Clock","Forced starting app --> Starting intent");
                 Intent i = new Intent(SchoolWatchFaceService.getInstance(), MainActivityWear.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 SchoolWatchFaceService.getInstance().startActivity(i);
@@ -51,10 +52,5 @@ public class WatchFaceTapper {
             }
             service.invalidate();
         }
-
-        if (x > 250 && y > 250) {
-            alreadyDownRightTapped++;
-        }
     }
-
 }

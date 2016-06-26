@@ -1,5 +1,6 @@
 package net.parablack.schedulelib;
 
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 
 
@@ -8,12 +9,26 @@ import net.parablack.schedulelib.utils.TimeUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Locale;
+
 public class ScheduleEvent implements Comparable<WearEvent>, WearEvent{
+
+    private static final String[] dayNames = {
+            "",
+            "Sonntag",
+            "Montag",
+            "Dienstag",
+            "Mittwoch",
+            "Donnerstag",
+            "Freitag",
+            "Samstag",
+    };
 
     private String displayName;
     private int begin, end;   // Millis of day
     private int day;
     private int vibrateTime = -1;
+    private boolean alreadyVibrated;
 
     public ScheduleEvent(String displayName, int begin, int end, int day, int vibrateTime) {
         this.displayName = displayName;
@@ -54,6 +69,18 @@ public class ScheduleEvent implements Comparable<WearEvent>, WearEvent{
         return end;
     }
 
+    public void setBegin(int begin) {
+        this.begin = begin;
+    }
+
+    public void setEnd(int end) {
+        this.end = end;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
     public int getDay() {
         return day;
     }
@@ -73,20 +100,38 @@ public class ScheduleEvent implements Comparable<WearEvent>, WearEvent{
         return getEnd() - dayMillis;
     }
 
-    public String niceStartTime(){
-        int mins = (getBegin() / 1000) / 60;
-        int hour = (mins - (mins % 60)) / 60;
-        int min = mins % 60;
+    public long getTimeFromBeginning(){
+        long dayMillis = TimeUtils.dayMillis();
+        return dayMillis - getBegin();
+    }
 
-        return hour + ":" + min;
+    public String niceStartTime(){
+        return String.format(Locale.GERMANY, "%02d:%02d", getBeginHour(), getBeginMinute());
     }
 
     public String niceEndTime(){
-        int mins = getEnd() / (1000 * 60);
-        int hour = (mins - (mins % 60)) / 60;
-        int min = mins % 60;
+        return String.format(Locale.GERMANY, "%02d:%02d", getEndHour(), getEndMinute());
+    }
 
-        return hour + ":" + min;
+    public String niceDay(){
+        return dayNames[getDay()];
+    }
+
+    public int getBeginMinute(){
+        int mins = getBegin() / (1000 * 60);
+        return mins % 60;
+    }
+    public int getBeginHour(){
+        int mins = getBegin() / (1000 * 60);
+        return (mins - (mins % 60)) / 60;
+    }
+    public int getEndMinute(){
+        int mins = getEnd() / (1000 * 60);
+        return mins % 60;
+    }
+    public int getEndHour(){
+        int mins = getEnd() / (1000 * 60);
+        return (mins - (mins % 60)) / 60;
     }
 
     @Override
@@ -96,6 +141,31 @@ public class ScheduleEvent implements Comparable<WearEvent>, WearEvent{
         else return 1;
     }
 
+
+    public boolean checkVibrate(Vibrator vibrator){
+        if(!alreadyVibrated) {
+
+            int minTilEnd = (int) ((getTimeTilEnd() / 1000) / 60);
+            if (getVibrateTime() == minTilEnd) {
+                long[] vibrationPattern = {0, 50, 50, 50, 50,
+                        50, 50, 50};
+                //-1 - don't repeat
+                final int indexInPatternToRepeat = -1;
+                vibrator.vibrate(vibrationPattern, indexInPatternToRepeat);
+                alreadyVibrated = true;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
+    }
+
+    public void setVibrateTime(int vibrateTime) {
+        this.vibrateTime = vibrateTime;
+    }
 
     @Override
     public String toString() {

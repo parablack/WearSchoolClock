@@ -2,6 +2,15 @@ package net.parablack.clocktest.schedule.kvfgparser;
 
 
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
+
+import net.parablack.clocktest.R;
+import net.parablack.clocktest.schedule.ScheduleFragment;
 import net.parablack.schedulelib.Schedule;
 import net.parablack.schedulelib.ScheduleDay;
 import net.parablack.schedulelib.ScheduleEvent;
@@ -46,6 +55,49 @@ public class KvFGParser {
 
     }
 
+    public static void displayDialog(final ScheduleFragment con){
+        LayoutInflater li = LayoutInflater.from(con.getActivity());
+        View promptsView = li.inflate(R.layout.kvfg_text_input, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                con.getActivity());
+
+        alertDialogBuilder.setView(promptsView);
+
+        final EditText userInput = (EditText) promptsView
+                .findViewById(R.id.editTextDialogUserInput);
+
+        alertDialogBuilder
+                .setCancelable(true)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                String json = userInput.getText().toString();
+
+                                try {
+                                    Schedule schedule = KvFGParser.getFromKvFGJSON(json);
+                                    con.updateSchedule(schedule);
+
+                                } catch (JSONException e) {
+                                    new AlertDialog.Builder(con.getActivity())
+                                            .setTitle("Ungültiges Format")
+                                            .setMessage("Kein gültiges JSON gefunden!")
+                                            .setIcon(android.R.drawable.ic_dialog_alert)
+                                            .show();
+                                }
+                            }
+                        })
+                .setNegativeButton("Abbruch",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
     public static Schedule getFromKvFGJSON(String json) throws JSONException {
 
         initArray();
@@ -53,14 +105,14 @@ public class KvFGParser {
         JSONObject obj = new JSONObject(json);
         Schedule schedule = new Schedule();
 
-        schedule.addDay(new ScheduleDay(1)); //SUNDAY
-        schedule.addDay(new ScheduleDay(7)); //SATURDAY
+        schedule.addDay(new ScheduleDay(1, schedule)); //SUNDAY
+        schedule.addDay(new ScheduleDay(7, schedule)); //SATURDAY
 
 
         for(int i = 0; i < 5; i++){
 
             JSONObject day = obj.getJSONObject(i + "");
-            ScheduleDay sDay = new ScheduleDay(i + 2);
+            ScheduleDay sDay = new ScheduleDay(i + 2, schedule);
 
             for(int j = 0; j < 11; j++){
 
@@ -72,7 +124,7 @@ public class KvFGParser {
                 int begin = _hours[j];
                 int end = begin + HOUR_DURATION;
 
-                ScheduleEvent event = new ScheduleEvent(displayName, begin, end, i + 2, 3);
+                ScheduleEvent event = new ScheduleEvent(displayName, begin, end, i + 2, 2);
                 sDay.addEvent(event);
             }
             schedule.addDay(sDay);

@@ -32,7 +32,7 @@ public class SuperTimeWrapper {
      * @return The total duration of the event in minutes
      */
     public int getTotalMinutes() throws TimeException{
-        return getBegin().getMinutes() + getEnd().getMinutes() + 1;           // CURRENT ONE!
+        return (getBegin().getHours() * 60 ) + getBegin().getMinutes() + getEnd().getMinutes() + 1;           // CURRENT ONE!
     }
 
     /**
@@ -40,9 +40,8 @@ public class SuperTimeWrapper {
      * @return The percentage done between the two times
      */
     public double getPercentageDone() throws TimeException{
-        double totalSec = getTotalMinutes() * 60;
+        long totalSec = begin.toSeconds() + end.toSeconds();
         double done = totalSec - end.toSeconds();
-      //  System.out.println("total: " +totalSec + " done " + done);
         return (done / totalSec);
     }
 
@@ -84,6 +83,16 @@ public class SuperTimeWrapper {
                 return "TimeWrapper[Error]";
             }
         }
+        public static TimeWrapper fromMillis(long toEnd){
+            toEnd /= 1000;
+            int sec = (int) (toEnd % 60);
+            toEnd -= sec;
+            toEnd /= 60;
+            int min = (int) (toEnd % 60);
+            toEnd -= min;
+            int h = (int) (toEnd / 60);
+            return new TimeWrapper(h, min, sec);
+        }
     }
 
     public static class ErrorTimeWrapper extends TimeWrapper{
@@ -115,6 +124,9 @@ public class SuperTimeWrapper {
         public String toString() {
             return super.toString();
         }
+
+
+
     }
 
 }

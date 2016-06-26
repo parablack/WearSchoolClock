@@ -43,7 +43,7 @@ public class ColorFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_main, menu);
+        inflater.inflate(R.menu.menu_colors, menu);
     }
 
     @Override
@@ -54,12 +54,13 @@ public class ColorFragment extends Fragment implements View.OnClickListener {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.delete_clock) {
+            MainActivity.instance.getCommunicator().sendNewColorPreset("{}");
             return true;
         }
         if(id == R.id.color_reset){
-
             getColorManager().reset();
+            colorManager.getAdapter().notifyDataSetChanged();
             return true;
         }
 

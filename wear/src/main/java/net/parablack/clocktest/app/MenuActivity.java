@@ -10,7 +10,7 @@ import android.widget.ListView;
 
 import net.parablack.clocktest.R;
 import net.parablack.clocktest.app.games.MainGameActivity;
-import net.parablack.clocktest.app.games.repeat.RepeatGame;
+import net.parablack.clocktest.app.games.tictactoe.TicTacToeGame;
 
 
 public class MenuActivity extends WearableActivity {
@@ -25,9 +25,9 @@ public class MenuActivity extends WearableActivity {
 
         listView = (ListView) findViewById(R.id.gameList);
 
-        ArrayAdapter<RepeatGame> ad = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        ArrayAdapter<TicTacToeGame> ad = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
 
-        ad.add(new RepeatGame());
+        ad.add(new TicTacToeGame());
       //  ad.add("Das");
       //  ad.add("Programmo");
 

@@ -2,6 +2,7 @@ package net.parablack.clocktest.watchface.drawer.mode;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.Log;
 
 import net.parablack.clocktest.watchface.drawer.WatchFaceDrawer;
@@ -23,8 +24,9 @@ public class PixelDrawer extends ModeFaceDrawer<SuperTimeWrapper> {
     protected void onDraw(Canvas c, SuperTimeWrapper args) throws ScheduleDrawException, TimeException {
         if(!displaySeconds()) return;
 
-        c.drawColor(getColor(args.getPercentageDone()));
-
+        Paint p = new Paint();
+        p.setColor(getColor(args.getPercentageDone()));
+        c.drawRect(0, LINE_START, width, LINE_START + LINE_HEIGHT, p);
     }
 
     @Override

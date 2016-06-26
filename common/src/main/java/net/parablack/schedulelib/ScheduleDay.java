@@ -20,13 +20,19 @@ public class ScheduleDay {
     private ArrayList<ScheduleEvent> events = new ArrayList<>();
 
 
-    public ScheduleDay(int id) {
+    public ScheduleDay(int id, Schedule mainSchedule) {
         this.id = id;
+        this.mainSchedule = mainSchedule;
     }
 
     public void addEvent(ScheduleEvent event){
         events.add(event);
         Collections.sort(events);
+    }
+
+    public void removeEvent(ScheduleEvent scheduleEvent){
+        events.remove(scheduleEvent);
+        reloadEvents();
     }
 
     public ScheduleDay(JSONObject json, Schedule mainSchedule) throws JSONException {
@@ -75,6 +81,8 @@ public class ScheduleDay {
         _current = _loadCurrent();
     }
 
+    private boolean _nextIsToday = false;
+
     private WearEvent _loadCurrent() {
         long dayMillis = TimeUtils.dayMillis();
 
@@ -95,7 +103,8 @@ public class ScheduleDay {
 
         if (_next instanceof ScheduleEvent) {
             ScheduleEvent ne = (ScheduleEvent) _next;
-            return new WearEvent.NothingUpEvent(ne.getBegin()).setLabel("Frei bis morgen!");
+            if(_nextIsToday) return new WearEvent.NothingUpEvent(ne.getBegin()).setLabel("Pause");
+                else return new WearEvent.NothingUpEvent(ne.getBegin()).setLabel("Frei bis morgen!");
         }
 
 //        if (nextDayEvents.size() >= 1)
@@ -111,10 +120,10 @@ public class ScheduleDay {
     private WearEvent _loadNext() {
         long dayMillis = TimeUtils.dayMillis();
 
-
         for (ScheduleEvent each : events) {
             if (dayMillis < each.getBegin()) {
                 // No current event, this is the next one
+                _nextIsToday = true;
                 return each;
             }
         }
@@ -122,9 +131,11 @@ public class ScheduleDay {
         if (mainSchedule.getDayAfter(id).events == null) {
             return new WearEvent.NothingUpEvent().setLabel("Error (nDE=null)!");
         }
-        if (mainSchedule.getDayAfter(id).events.size() >= 1)
+        if (mainSchedule.getDayAfter(id).events.size() >= 1) {
+            _nextIsToday = false;
             return mainSchedule.getDayAfter(id).events.get(0);
-        else {
+        }
+            else {
             return new WearEvent.NothingUpEvent().setLabel("Morgen frei!");
         }
     }

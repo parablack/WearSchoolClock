@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ClockTest</string>
+    <string name="app_name">SchoolClock</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -12,6 +12,16 @@
         <item>Stundenplan</item>
         <item>Internal</item>
     </string-array>
+    <string-array name="days_array">
+        <item>Sonntag</item>
+        <item>Montag</item>
+        <item>Dienstag</item>
+        <item>Mittwoch</item>
+        <item>Donnerstag</item>
+        <item>Freitag</item>
+        <item>Samstag</item>
+    </string-array>
+
     <string name="title_activity_navigation">NavigationActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -22,6 +32,16 @@
     <string name="parse">Parse</string>
     <string name="kvfg_import">Von KvFG</string>
     <string name="kvfg_exportierten_stundenplan_einf_gen">KvFG: exportierten Stundenplan einfügen:</string>
+    <string name="new_event">Neues Event</string>
+    <string name="delete_clock">Auf Uhr löschen</string>
+    <string name="start">Start:</string>
+    <string name="end">Ende</string>
+    <string name="edit_event">Event bearbeiten</string>
+    <string name="event_name">Name des Events</string>
+    <string name="vibrate">Vibrieren</string>
+    <string name="delete">Löschen</string>
+    <string name="export">Exportieren</string>
+    <string name="schedule_import">Importieren</string>
 
 
 </resources>

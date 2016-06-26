@@ -8,6 +8,10 @@
     "defaultValue": "#FFFFFF",
     "displayName": "Zeit"
   },
+  "date":{
+    "defaultValue": "#FFFFFF",
+    "displayName": "Datum"
+  },
   "secondsTime":{
     "defaultValue": "#FFFFFF",
     "displayName": "Sekunden"

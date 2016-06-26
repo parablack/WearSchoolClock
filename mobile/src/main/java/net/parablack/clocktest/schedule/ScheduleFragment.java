@@ -2,12 +2,11 @@ package net.parablack.clocktest.schedule;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,10 +18,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import net.parablack.clocktest.MainActivity;
 import net.parablack.clocktest.R;
 import net.parablack.clocktest.schedule.kvfgparser.KvFGParser;
 import net.parablack.schedulelib.Schedule;
-import net.parablack.schedulelib.ScheduleDay;
+import net.parablack.schedulelib.ScheduleEvent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,12 +40,16 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    public void updateSchedule(Schedule s){
+    public void updateSchedule(Schedule s) {
         this.schedule = s;
         adapter = drawer.getAdapter(s);
-        if(getView() != null)
-        getView().invalidate();
+        if (getView() != null)
+            getView().invalidate();
         save();
+    }
+
+    public void updateSchedule() {
+        updateSchedule(this.schedule);
     }
 
     @Override
@@ -55,26 +59,8 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
         setHasOptionsMenu(true);
 
         drawer = new ScheduleDrawer(this);
-        pref = getActivity().getSharedPreferences("SchoolClock_Schedule", Context.MODE_PRIVATE);
-        String json = pref.getString("schedule_json", "Error");
-        Log.d("Clock", "[Schedule] Preferences loaded: [" + json + "]");
+        schedule = Schedule.fromSharedPrefs(getActivity());
 
-        try {
-            schedule = new Schedule(new JSONObject(json));
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e("Clock", "No saved schedule found!");
-            Schedule schedule = new Schedule();
-
-            schedule.addDay(new ScheduleDay(1)); //SUNDAY
-            schedule.addDay(new ScheduleDay(2));
-            schedule.addDay(new ScheduleDay(3));
-            schedule.addDay(new ScheduleDay(4));
-            schedule.addDay(new ScheduleDay(5));
-            schedule.addDay(new ScheduleDay(6));
-            schedule.addDay(new ScheduleDay(7));
-            this.schedule = schedule;
-        }
         updateSchedule(schedule);
 
     }
@@ -83,13 +69,17 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.layout_schedule, container, false);
+
         Button b = (Button) view.findViewById(R.id.upload_schedule);
         b.setOnClickListener(this);
+        Button b1 = (Button) view.findViewById(R.id.schedule_create_new);
+        b1.setOnClickListener(this);
 
         scheduleList = (ListView) view.findViewById(R.id.scheduleList);
-        if(adapter == null) updateSchedule(schedule);
+        if (adapter == null) updateSchedule(schedule);
         scheduleList.setAdapter(adapter);
-
+        scheduleList.setLongClickable(true);
+        scheduleList.setOnItemLongClickListener(drawer.new ScheduleItemClickListener());
 
         return view;
     }
@@ -98,8 +88,16 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
 
         if (v.getId() == R.id.upload_schedule) {
-            // Upload
+            String json = schedule.toJSON().toString();
+            MainActivity.instance.getCommunicator().sendNewSchedule(json);
         }
+        if (v.getId() == R.id.schedule_create_new) {
+            ScheduleEvent event = new ScheduleEvent("", -1, -1, -1, -1);
+
+            new EventChangeDialog(event, this).display();
+
+        }
+
 
     }
 
@@ -116,27 +114,46 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
         int id = item.getItemId();
 
         if (id == R.id.parse_kvfg) {
-            LayoutInflater li = LayoutInflater.from(getActivity());
-            View promptsView = li.inflate(R.layout.kvfg_text_input, null);
+            KvFGParser.displayDialog(this);
+            return true;
+        }
+        if (id == R.id.schedule_clear) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("Stundenplan löschen?").
+                    setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            updateSchedule(Schedule.emptySchedule());
+                        }
+                    })
+                    .setNegativeButton("Nein", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    }).show();
+        }
+        if (id == R.id.schedule_export) {
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, schedule.toJSON().toString());
+            sendIntent.setType("text/plain");
+            startActivity(sendIntent);
+        }
+        if (id == R.id.schedule_import) {
+            final EditText promptsView = new EditText(getActivity());
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                     getActivity());
-
             alertDialogBuilder.setView(promptsView);
-
-            final EditText userInput = (EditText) promptsView
-                    .findViewById(R.id.editTextDialogUserInput);
-
             alertDialogBuilder
                     .setCancelable(true)
-                    .setPositiveButton("OK",
+                    .setPositiveButton("Importieren",
                             new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog,int id) {
-                                    String json = userInput.getText().toString();
-
+                                public void onClick(DialogInterface dialog, int id) {
+                                    String json = promptsView.getText().toString();
                                     try {
-                                        Schedule schedule = KvFGParser.getFromKvFGJSON(json);
+                                        Schedule schedule = new Schedule(new JSONObject(json));
                                         updateSchedule(schedule);
-
                                     } catch (JSONException e) {
                                         new AlertDialog.Builder(getActivity())
                                                 .setTitle("Ungültiges Format")
@@ -144,29 +161,27 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
                                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                                 .show();
                                     }
-
                                 }
                             })
                     .setNegativeButton("Abbruch",
                             new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog,int id) {
+                                public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
                                 }
                             });
 
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
-
-
-            return true;
         }
-
 
         return super.onOptionsItemSelected(item);
     }
 
-    public void save(){
-        pref.edit().putString("schedule_json", schedule.toJSON().toString()).apply();
+    public void save() {
+        schedule.toPrefs(getActivity());
     }
 
+    public Schedule getSchedule() {
+        return schedule;
+    }
 }

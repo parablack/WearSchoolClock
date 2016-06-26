@@ -3,9 +3,9 @@ package net.parablack.clocktest.watchface.drawer.mode;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
-import net.parablack.clocktest.json.JSONColors;
 import net.parablack.clocktest.watchface.drawer.WatchFaceDrawer;
 import net.parablack.clocktest.watchface.drawer.mode.wrapper.TimeException;
+import net.parablack.schedulelib.color.ScheduleColors;
 
 
 public abstract class ModeFaceDrawer<T> {
@@ -49,8 +49,8 @@ public abstract class ModeFaceDrawer<T> {
 
     protected int getColors(String name) {
 
-        JSONColors colors = drawer.getColors();
-        return colors.getColorByName(name);
+        ScheduleColors colors = drawer.getColors();
+        return colors.getColor(name);
 
 
     }

@@ -11,7 +11,7 @@ import net.parablack.clocktest.watchface.drawer.mode.wrapper.TimeException;
 /**
  * Draws the time left in one line, also the percentage done
  */
-public class FullLineDrawer extends ModeFaceDrawer<SuperTimeWrapper>{
+public class FullLineDrawer extends ModeFaceDrawer<SuperTimeWrapper> {
 
 
     static Paint donePaint = new Paint(), todoPaint = new Paint(), percentagePaint = new Paint();
@@ -20,7 +20,7 @@ public class FullLineDrawer extends ModeFaceDrawer<SuperTimeWrapper>{
     public FullLineDrawer(WatchFaceDrawer drawer) {
         super(drawer);
 
-       reloadColors();
+        reloadColors();
 
     }
 
@@ -41,18 +41,20 @@ public class FullLineDrawer extends ModeFaceDrawer<SuperTimeWrapper>{
     }
 
 
-    private void drawLine(Canvas c, double currentPercentage, float y, float height){
+    private void drawLine(Canvas c, double currentPercentage, float y, float height) {
 
-        float sP = (float) (width * currentPercentage);
+        float Y_START = y;
+        float Y_END = y + height;
 
-        c.drawRect(0, y, sP, y + height, donePaint);
-        c.drawRect(sP, y, width, y + height, todoPaint);
+        float anteilGruen = (float) (width * currentPercentage);
+
+        c.drawRect(0, Y_START, anteilGruen, Y_END, donePaint);
+        c.drawRect(anteilGruen, Y_START, width, Y_END, todoPaint);
         float f;
-        if(displaySeconds()) {
+        if (displaySeconds()) {
             int a = (int) (currentPercentage * 1000);
             f = a / 10F;
-        }
-        else f = Math.round(currentPercentage * 100);
+        } else f = Math.round(currentPercentage * 100);
 
         Rect bounds = new Rect();
         percentagePaint.getTextBounds(f + "", 0, 2, bounds);

@@ -52,7 +52,7 @@ public class ClockCommunicator implements
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.i("Clock", "Connection supsendend {" + i + "}.");
+        Log.i("Clock", "Connection suspended {" + i + "}.");
     }
 
     @Override
@@ -66,13 +66,13 @@ public class ClockCommunicator implements
     }
 
     public void sendNewColorPreset(String json) {
-        Log.d("Clock", "Sending " + json);
+        Log.d("Clock", "Sending new Colors: " + json);
         PutDataMapRequest request = PutDataMapRequest.create("/clock/color");
 
         request.getDataMap().putString("color", json);
 
         PutDataRequest rawRequest = request.asPutDataRequest();
-   //     rawRequest.setUrgent();
+       rawRequest.setUrgent();
         PendingResult<DataApi.DataItemResult> pendingResult = Wearable.DataApi.putDataItem(mGoogleApiClient, rawRequest);
         pendingResult.setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
             @Override
@@ -97,6 +97,24 @@ public class ClockCommunicator implements
 //
 //            }
 //        });
+
+    }
+
+    public void sendNewSchedule(String json) {
+        Log.d("Clock", "Sending new Schedule: " + json);
+        PutDataMapRequest request = PutDataMapRequest.create("/clock/schedule");
+
+        request.getDataMap().putString("schedule", json);
+
+        PutDataRequest rawRequest = request.asPutDataRequest();
+        rawRequest.setUrgent();
+        PendingResult<DataApi.DataItemResult> pendingResult = Wearable.DataApi.putDataItem(mGoogleApiClient, rawRequest);
+        pendingResult.setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
+            @Override
+            public void onResult(@NonNull  DataApi.DataItemResult dataItemResult) {
+                Log.d("Clock", "Result: " + dataItemResult.getStatus());
+            }
+        });
 
     }
 

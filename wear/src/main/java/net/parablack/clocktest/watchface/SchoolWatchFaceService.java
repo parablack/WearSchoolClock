@@ -1,5 +1,6 @@
 package net.parablack.clocktest.watchface;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.os.AsyncTask;
@@ -10,13 +11,13 @@ import android.support.wearable.watchface.CanvasWatchFaceService;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
-import net.parablack.clocktest.json.InvalidDataException;
-import net.parablack.clocktest.json.JSONReader;
-import net.parablack.clocktest.json.JSONSchedule;
 import net.parablack.clocktest.transfer.ScheduleAssetListener;
 import net.parablack.clocktest.watchface.drawer.WatchFaceDrawer;
+import net.parablack.schedulelib.Schedule;
+import net.parablack.schedulelib.color.ScheduleColors;
 
-import java.io.IOException;
+import org.json.JSONException;
+
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -59,8 +60,9 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
 
         private ScheduleAssetListener assetListener;
 
-        private JSONReader mainReader;
-        private JSONSchedule mainSchedule;
+        //     private JSONReader mainReader;
+        //    private JSONSchedule mainSchedule;
+        private Schedule mainSchedule;
 
         private boolean scheduleEnabled = true;
 
@@ -102,7 +104,7 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
             super.onCreate(holder);
             /* initialize your watch face */
 
-            mainReader = new JSONReader();
+            //mainReader = new JSONReader();
 
             tapper = new WatchFaceTapper(this);
 
@@ -114,18 +116,12 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
             AsyncTask<Void, Void, Void> as = new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
-                    try {
-                        mainReader.parseData(getAssets());
-                        mainSchedule = mainReader.getSchedule();
-                        scheduleEnabled = true;
-                        drawer.updateColors(getAssets().open("colors.json"), getSharedPreferences("SchoolClock_pref", MODE_PRIVATE));
-                    } catch (InvalidDataException e) {
-                        e.printStackTrace();
-                        scheduleEnabled = false;
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        Log.w("Schedule", "Falling back into default colors!");
-                    }
+                    mainSchedule = Schedule.fromSharedPrefs(SchoolWatchFaceService.this);
+                    scheduleEnabled = true;
+
+                    ScheduleColors colors = new ScheduleColors();
+                    colors.loadFromPreferences(SchoolWatchFaceService.this);
+                    drawer.updateColors(colors);
 
                     return null;
                 }
@@ -164,7 +160,7 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
             burnInProtection = properties.getBoolean(PROPERTY_BURN_IN_PROTECTION,
                     false);
             lowBitAmbient = properties.getBoolean(PROPERTY_LOW_BIT_AMBIENT, false);
-            System.out.println("burnInProtection = " + burnInProtection + "; lowBitAmbient = " + lowBitAmbient);
+            Log.v("Clock","burnInProtection = " + burnInProtection + "; lowBitAmbient = " + lowBitAmbient);
         }
 
 
@@ -226,8 +222,12 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
         /**
          * @return The Main-Schedule of the clock
          */
-        public JSONSchedule getMainSchedule() {
+        public Schedule getMainSchedule() {
             return mainSchedule;
+        }
+
+        public void setMainSchedule(Schedule mainSchedule) {
+            this.mainSchedule = mainSchedule;
         }
 
         public boolean shouldTimerBeRunning() {
@@ -236,7 +236,12 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
 
         public void reload() {
             reloading = true;
-            mainSchedule.reload();
+            try {
+                mainSchedule.reload();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                scheduleEnabled = false;
+            }
         }
 
         private void updateTimer() {
@@ -283,9 +288,9 @@ public class SchoolWatchFaceService extends CanvasWatchFaceService {
             return false;
         }
 
-        public JSONReader getMainReader() {
-            return mainReader;
-        }
+//        public JSONReader getMainReader() {
+//            return mainReader;
+//        }
 
         public WatchFaceDrawer getDrawer() {
             return drawer;

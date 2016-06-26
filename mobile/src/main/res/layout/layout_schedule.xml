@@ -17,24 +17,37 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         tools:context=".MainActivity">
 
-        <Button
-            android:id="@+id/upload_schedule"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/upload"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignRight="@+id/scheduleList"
-            android:layout_alignEnd="@+id/scheduleList" />
-
         <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/scheduleList"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/upload_schedule" />
+            android:layout_below="@+id/linearLayout" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:weightSum="1"
+            android:layout_alignRight="@+id/scheduleList"
+            android:layout_alignEnd="@+id/scheduleList"
+            android:id="@+id/linearLayout">
+
+            <Button
+                android:id="@+id/upload_schedule"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/upload"
+                android:layout_weight="0.68" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/new_event"
+                android:id="@+id/schedule_create_new"
+                android:layout_weight="0.29" />
+        </LinearLayout>
     </RelativeLayout>
 
 
